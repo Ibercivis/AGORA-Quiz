@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeFragment">
+
+    <!-- Header con imagen de fondo, texto y avatar -->
+    <RelativeLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/header_background_image"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewUserAvatar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_user_avatar"
+            android:contentDescription="User Avatar" />
+
+        <LinearLayout
+            android:id="@+id/textViewContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/imageViewUserAvatar"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="32dp">
+
+            <!-- Texto principal "Hi user name," -->
+            <TextView
+                android:id="@+id/textViewUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hi user name,"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/content_secondary" />
+
+            <!-- Texto secundario "Great to see you again" -->
+            <TextView
+                android:id="@+id/textViewWelcomeBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Great to see you again!"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/content_secondary" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- Información de usuario: nivel y puntos -->
+    <LinearLayout
+        android:id="@+id/userInfoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerContainer"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <!-- Nivel del usuario -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_stars" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Master"
+                android:textColor="@color/content_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Level"
+                android:textColor="@color/content_quaternary" />
+        </LinearLayout>
+
+        <!-- Puntos del usuario -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_trophy" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="730"
+                android:textColor="@color/content_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Points"
+                android:textColor="@color/content_quaternary" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Lista de modos de juego -->
+    <TextView
+        android:id="@+id/textViewGameModes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userInfoContainer"
+        android:layout_margin="16dp"
+        android:text="Game modes"
+        android:textSize="18sp"
+        android:textColor="@color/content_primary" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewGameModes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewGameModes"
+        android:scrollbars="none"
+        android:paddingBottom="56dp"
+        android:clipToPadding="false"/>
+</RelativeLayout>

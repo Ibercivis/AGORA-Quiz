@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Cabecera -->
+    <RelativeLayout
+        android:id="@+id/headerClassic"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="16dp"
+        android:background="@drawable/header_plain">
+
+            <RelativeLayout
+                android:id="@+id/titleContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp">
+                <!-- Botón de cerrar -->
+                <ImageView
+                    android:id="@+id/closeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_close_white"
+                    android:contentDescription="Close"
+                    android:padding="16dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    />
+
+                <!-- Icono del juego "Classic" -->
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_classic_title"
+                    android:layout_toStartOf="@id/gameTitle"
+                    android:padding="8dp"
+                    android:layout_centerVertical="true"
+                    />
+
+                <!-- Título del juego "Classic" -->
+                <TextView
+                    android:id="@+id/gameTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Classic"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:textColor="@color/content_secondary"
+                    android:layout_marginStart="8dp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/progressContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleContainer"
+                android:layout_marginTop="24dp">
+
+                    <!-- Icono de nivel -->
+                    <ImageView
+                        android:id="@+id/iconLevel"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_level_rookie"
+                        android:layout_marginStart="16dp"
+                        android:layout_centerVertical="true" />
+
+                    <!-- Barra de progreso -->
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="156dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:progressDrawable="@drawable/progress_bar_progress"
+                        android:indeterminate="false"
+                        android:max="90"
+                        android:progress="50"
+                        android:minHeight="10dp"
+                        android:maxHeight="10dp"
+                        android:background="@drawable/progress_bar_background"
+                        />
+
+                    <!-- Contador de preguntas -->
+                    <ImageView
+                        android:id="@+id/checkImage"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_check_green"
+                        android:layout_marginEnd="8dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/questionCount"/>
+
+                    <TextView
+                        android:id="@+id/questionCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8/9"
+                        android:textColor="@color/content_secondary"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="16dp" />
+
+            </RelativeLayout>
+
+    </RelativeLayout>
+
+    <!-- Imagen decorativa -->
+    <ImageView
+        android:id="@+id/decorativeImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="-20dp"
+        android:background="@drawable/image_frame"
+        android:src="@drawable/image_example"
+        android:layout_below="@id/headerClassic"
+        android:scaleType="centerCrop" />
+
+    <!-- Texto de la pregunta -->
+    <TextView
+        android:id="@+id/questionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit?"
+        android:textSize="18sp"
+        android:textColor="@color/content_primary"
+        android:layout_below="@id/decorativeImage"
+        android:gravity="center_horizontal"
+        android:padding="16dp" />
+
+    <!-- Opciones de respuesta -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/answersRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/questionText"
+        android:paddingTop="16dp"
+        android:paddingBottom="56dp"
+        android:clipToPadding="false" />
+
+</RelativeLayout>
