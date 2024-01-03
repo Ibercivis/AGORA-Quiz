@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Agora</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0;
+  }
+  .header img {
+    width: 100%; /* Ancho completo del contenedor */
+    height: auto; /* Altura automática para mantener la relación de aspecto */
+  }
+  .content {
+    padding: 20px;
+    text-align: center;
+  }
+  .footer {
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+  }
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #008CBA;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://geonity.ibercivis.es/static/img/header_geonity.png" alt="Cabecera Geonity" width="100" height="50"/>
+    </div>
+    <div class="content">
+      <h1>Welcome {{ user.username }}!</h1>
+      <p>We're delighted to welcome you aboard!</p>
+      <p>Congratulations on signing up for Agora! We're excited to have you join our global community where you can have fun while learning about climate change misinformation. Ágora is a gamified quiz app that not only educates but also connects you with a worldwide network of learners.</p>
+      <p><strong>{{ user.username }}</strong>, get ready to challenge yourself, debunk myths, and access a wealth of resources as you navigate through quizzes and engage with others. Your journey into understanding and combating climate change misinformation begins here.</p>
+      <p>To kickstart your adventure, please click the button below to activate your account.</p>
+      <a href="{{ request.scheme }}://{{ request.get_host }}/api/users/activate-account/{{ key }}" class="button">Activate your account</a>
+    </div>
+    <div class="footer">
+      <p>This is an automated email, please do not reply.</p>
+    </div>
+  </div>
+</body>
+</html>
