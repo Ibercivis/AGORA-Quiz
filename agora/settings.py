@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 
     #My apps
     'users',
+    'classic_game',
 ]
 
 MIDDLEWARE = [
