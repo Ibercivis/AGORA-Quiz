@@ -16,6 +16,11 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.AnswerVi
         this.answers = answers;
     }
 
+    public void setAnswers(String[] newAnswers) {
+        this.answers = newAnswers;
+        notifyDataSetChanged();  // Notificar al adaptador que los datos han cambiado
+    }
+
     @NonNull
     @Override
     public AnswerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

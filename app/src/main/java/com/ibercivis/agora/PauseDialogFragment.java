@@ -80,8 +80,8 @@ public class PauseDialogFragment extends DialogFragment {
             dismiss();
         });
         dialogView.findViewById(R.id.btnQuit).setOnClickListener(v -> {
-            listener.onQuitGame();
-            dismiss();
+            listener.onQuitGame(); // Llama al método en la actividad cuando se presiona el botón
+            dismiss(); // Cierra el diálogo
         });
 
         builder.setView(dialogView);
