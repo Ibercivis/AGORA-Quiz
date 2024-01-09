@@ -2,6 +2,7 @@ package com.ibercivis.agora;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -12,8 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ibercivis.agora.classes.Game;
 import com.ibercivis.agora.classes.Question;
+import com.ibercivis.agora.serializers.QuestionDeserializer;
 
 public class ClassicGameActivity extends AppCompatActivity implements PauseDialogFragment.PauseDialogListener {
 
@@ -33,7 +37,7 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
 
         // Se crea el array de respuestas y se carga en el adapter
         String[] answers = {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
-        AnswersAdapter answersAdapter = new AnswersAdapter(answers);
+        answersAdapter = new AnswersAdapter(answers);
 
         RecyclerView answersRecyclerView = findViewById(R.id.answersRecyclerView);
         answersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -58,13 +62,24 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
             new PauseDialogFragment().show(getSupportFragmentManager(), "pauseDialog");
         });
 
-        // Comprobar si hay un ID de juego pasado por la actividad anterior
+        // Comprobar si hay un objeto game pasado por la actividad anterior
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey("GAME_ID")) {
-            currentGameId = extras.getInt("GAME_ID");
-            // Aquí se debe llamar a un método para reanudar el juego anterior
+        if (extras != null && extras.containsKey("GAME_OBJECT")) {
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Question.class, new QuestionDeserializer())
+                    .create();
+            String gameJson = getIntent().getStringExtra("GAME_OBJECT");
+            if (gameJson != null) {
+                Game game = gson.fromJson(gameJson, Game.class);
+                String nextQuestionJson = getIntent().getStringExtra("NEXT_QUESTION");
+                Log.w("Game recibido del intent: ", gameJson.toString());
+                Log.w("Question recibido del intent: ", nextQuestionJson.toString());
+                if (nextQuestionJson != null) {
+                    Question nextQuestion = gson.fromJson(nextQuestionJson, Question.class);
+                    updateUIWithQuestion(nextQuestion);
+                }
+            }
         } else {
-            // Si no hay ID, se comienza un nuevo juego
             startGame();
         }
     }

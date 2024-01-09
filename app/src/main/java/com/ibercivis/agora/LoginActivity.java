@@ -2,6 +2,7 @@ package com.ibercivis.agora;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.content.Intent;
@@ -20,18 +21,38 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
-
+    // Creamos una instancia de sessionManager
+    SessionManager sessionManager;
     // Inicializar TextInputLayouts y botones
-    TextInputLayout usernameTextInputLayout = findViewById(R.id.usernameTextInputLayout);
-    TextInputLayout passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
-    Button loginButton = findViewById(R.id.loginButton);
-    TextView createAccountText = findViewById(R.id.createAccountText);
-    TextView forgotPasswordText = findViewById(R.id.forgotPasswordText);
+    TextInputLayout usernameTextInputLayout;
+    TextInputLayout passwordTextInputLayout;
+    Button loginButton;
+    TextView createAccountText;
+    TextView forgotPasswordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Verifica si el usuario ya está logeado
+        sessionManager = new SessionManager(LoginActivity.this);
+        if (sessionManager.getIsLogged()) {
+            // Usuario ya logeado, redirigir a MainActivity
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish(); // Finaliza LoginActivity para que el usuario no regrese a esta pantalla
+            return; // Importante para evitar que el resto del código de onCreate se ejecute
+        }
+
         setContentView(R.layout.activity_login);
+
+        // Asignamos identificadores a las vistas
+        usernameTextInputLayout = findViewById(R.id.usernameTextInputLayout);
+        passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
+        loginButton = findViewById(R.id.loginButton);
+        createAccountText = findViewById(R.id.createAccountText);
+        forgotPasswordText = findViewById(R.id.forgotPasswordText);
+
 
         // Manejar clic del botón de login
         loginButton.setOnClickListener(view -> {
@@ -112,7 +133,6 @@ public class LoginActivity extends AppCompatActivity {
                     String token = jsonResponse.getString("key");
 
                     // Guarda el nombre de usuario y el token en SessionManager
-                    SessionManager sessionManager = new SessionManager(LoginActivity.this);
                     sessionManager.createLoginSession(username, token);
 
                     // Navegar a MainActivity
@@ -132,6 +152,8 @@ public class LoginActivity extends AppCompatActivity {
                     errorMessage = new String(error.networkResponse.data); // Obtén el mensaje de error del servidor
                 }
                 Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+                Log.e("LoginError", "Error: " + error.toString());
             }
         }) {
             @Override
@@ -147,5 +169,6 @@ public class LoginActivity extends AppCompatActivity {
 
         queue.add(stringRequest);
     }
+
 }
 

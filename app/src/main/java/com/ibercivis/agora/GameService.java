@@ -32,7 +32,7 @@ public class GameService {
     public void startGame(String token, final Response.Listener<Game> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                BASE_URL + "games/start/",
+                BASE_URL + "/api/games/start/",
                 null,
                 response -> {
                     // Analizar la respuesta y convertirla en una instancia de Game
@@ -67,7 +67,7 @@ public class GameService {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                BASE_URL + "games/" + gameId + "/answer/",
+                BASE_URL + "/api/games/" + gameId + "/answer/",
                 requestBody,
                 listener,
                 errorListener
@@ -87,7 +87,7 @@ public class GameService {
     public void checkForInProgressGame(String token, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                BASE_URL + "games/resume/",
+                BASE_URL + "/api/games/resume/",
                 null,
                 listener,
                 errorListener
@@ -107,7 +107,7 @@ public class GameService {
     public void abandonGame(String token, int gameId, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                BASE_URL + "games/" + gameId + "/abandon/",
+                BASE_URL + "/api/games/" + gameId + "/abandon/",
                 null,
                 listener,
                 errorListener

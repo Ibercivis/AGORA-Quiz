@@ -2,6 +2,7 @@ package com.ibercivis.agora;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -11,9 +12,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.ibercivis.agora.classes.Game;
+import com.ibercivis.agora.classes.Question;
 import com.ibercivis.agora.databinding.ActivityMainBinding;
+import com.ibercivis.agora.serializers.QuestionDeserializer;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,11 +51,27 @@ public class MainActivity extends AppCompatActivity {
 
         new GameService(this).checkForInProgressGame(token, response -> {
             try {
-                if (response.has("id")) {  // Asumiendo que la API devuelve el ID del juego en curso si existe
-                    int gameId = response.getInt("id");
-                    Intent intent = new Intent(this, ClassicGameActivity.class);
-                    intent.putExtra("GAME_ID", gameId);
-                    startActivity(intent);
+                if (response.has("game")) {  // Verifica si la respuesta contiene el objeto 'game'
+                    if (response.has("next_question")) {
+                        JSONObject gameJson = response.getJSONObject("game");
+
+                        // Usar Gson para convertir el objeto JSON en un objeto Game
+                        //Gson gson = new GsonBuilder()
+                        //        .registerTypeAdapter(Question.class, new QuestionDeserializer())
+                        //        .create();
+                        //Game game = gson.fromJson(gameJson.toString(), Game.class);
+
+                        // Question nextQuestion = null;
+                        JSONObject nextQuestionJson = response.getJSONObject("next_question");
+                        //nextQuestion = gson.fromJson(nextQuestionJson.toString(), Question.class);
+
+                        // Pasar el objeto Game a ClassicGameActivity
+                        Intent intent = new Intent(this, ClassicGameActivity.class);
+                        intent.putExtra("GAME_OBJECT", gameJson.toString());  // Convertir el objeto Game a JSON para pasarlo como String
+                        intent.putExtra("NEXT_QUESTION", nextQuestionJson.toString());
+
+                        startActivity(intent);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
