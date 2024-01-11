@@ -50,7 +50,11 @@ class GameViewSet(viewsets.ModelViewSet):
             if not any(r['question_id'] == question.id for r in game.responses):
                 next_question = question
                 break
-        #return Response(self.get_serializer(game).data)
+        
+        # Actualizar el perfil del usuario
+        profile = UserProfile.objects.get(user=game.player)
+        profile.update_on_game_end(abandoned=False)
+
         response_data = {
         'game': GameSerializer(game).data,
         'score': game.score,
@@ -87,6 +91,9 @@ class GameViewSet(viewsets.ModelViewSet):
             game.score += 5  # puntos por respuesta correcta
         else:
             game.score -= 3  # puntos por respuesta incorrecta
+        # Actualizar el perfil del usuario
+        profile = UserProfile.objects.get(user=game.player)
+        profile.update_on_answer(correct=correct)
 
         # Registrar la respuesta
         game.responses.append({'question_id': question_id, 'answer': answer, 'correct': correct})
@@ -157,4 +164,9 @@ class GameViewSet(viewsets.ModelViewSet):
         game = self.get_object()
         game.status = 'incomplete'
         game.save()
+
+        # Actualizar el perfil del usuario
+        profile = UserProfile.objects.get(user=game.player)
+        profile.update_on_game_end(abandoned=True)
+
         return Response({'status': 'Game marked as incomplete.'}, status=status.HTTP_200_OK)

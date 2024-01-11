@@ -13,6 +13,9 @@ from django.views import View
 from django.http import HttpResponse
 from rest_framework.permissions import AllowAny
 from dj_rest_auth.registration.views import ConfirmEmailView
+from rest_framework import generics
+from users.models import UserProfile
+from users.api.serializers import UserProfileSerializer
 import re
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -76,3 +79,10 @@ class EmailRecoveryView(View):
 class RecoverySuccess(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'recovery_success.html')
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+
+    def get_object(self):
+        return self.request.user.profile
