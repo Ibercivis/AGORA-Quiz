@@ -93,7 +93,7 @@
             android:id="@+id/tvConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Are you sure you want to leave the game?\nAll points earned will be lost"
+            android:text="Are you sure you want to leave the game?"
             android:gravity="center"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="36dp"

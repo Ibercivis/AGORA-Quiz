@@ -17,14 +17,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-public class PauseDialogFragment extends DialogFragment {
+public class GameCompleteDialogFragment extends DialogFragment {
 
     private static final String ARG_SCORE = "score";
-    private PauseDialogListener listener;
+    private GameCompleteDialogListener listener;
 
     // Añadir un método estático para instanciar el diálogo con el score como argumento
-    public static PauseDialogFragment newInstance(int score) {
-        PauseDialogFragment fragment = new PauseDialogFragment();
+    public static GameCompleteDialogFragment newInstance(int score) {
+        GameCompleteDialogFragment fragment = new GameCompleteDialogFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SCORE, score);
         fragment.setArguments(args);
@@ -64,9 +64,9 @@ public class PauseDialogFragment extends DialogFragment {
         super.onAttach(context);
         // Asegúrate de que el host implemente la interfaz de callback
         try {
-            listener = (PauseDialogListener) context;
+            listener = (GameCompleteDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement PauseDialogListener");
+            throw new ClassCastException(context.toString() + " must implement GameCompleteDialogListener");
         }
     }
 
@@ -78,15 +78,11 @@ public class PauseDialogFragment extends DialogFragment {
         // Inflar y establecer el layout para el diálogo
         // Pasar null como padre es aceptable porque este layout va en el diálogo
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_pause, null);
+        View dialogView = inflater.inflate(R.layout.dialog_complete, null);
 
         // Configurar los botones y acciones del diálogo
-        dialogView.findViewById(R.id.btnContinue).setOnClickListener(v -> {
-            listener.onContinueGame();
-            dismiss();
-        });
         dialogView.findViewById(R.id.btnQuit).setOnClickListener(v -> {
-            listener.onQuitGame(); // Llama al método en la actividad cuando se presiona el botón
+            listener.onCompleteGame(); // Llama al método en la actividad cuando se presiona el botón
             dismiss(); // Cierra el diálogo
         });
 
@@ -99,9 +95,7 @@ public class PauseDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    public interface PauseDialogListener {
-        void onContinueGame();
-        void onQuitGame();
+    public interface GameCompleteDialogListener {
+        void onCompleteGame();
     }
 }
-

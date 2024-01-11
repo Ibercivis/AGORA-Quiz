@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game complete!"
+        android:textSize="18sp"
+        android:textColor="@color/content_secondary"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp" />
+
+    <RelativeLayout
+        android:id="@+id/pointsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <!-- Círculo con la cantidad de puntos -->
+        <TextView
+            android:id="@+id/tvPoints"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/background_circle_white"
+            android:text="10"
+            android:textSize="36sp"
+            android:textColor="#000"
+            android:gravity="center"
+            android:layout_below="@id/tvCurrentPoints"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-12dp"/>
+
+        <LinearLayout
+            android:id="@+id/tvCurrentPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/background_rounded_gradient"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp">
+
+
+
+            <!-- Texto de puntos actuales -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Points scored"
+                android:textColor="@color/content_secondary" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_trophy_small"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- Botón de salir del juego -->
+    <Button
+        android:id="@+id/btnQuit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quit"
+        android:background="@drawable/background_button_white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="52dp" />
+
+</RelativeLayout>
