@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="4dp">
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp">
 
         <!-- Texto de la respuesta -->
         <LinearLayout
+            android:id="@+id/answerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_answer"
@@ -38,3 +45,4 @@
 
 
     </RelativeLayout>
+</FrameLayout>

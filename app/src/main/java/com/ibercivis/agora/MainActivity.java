@@ -3,7 +3,14 @@ package com.ibercivis.agora;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,33 +60,47 @@ public class MainActivity extends AppCompatActivity {
             try {
                 if (response.has("game")) {  // Verifica si la respuesta contiene el objeto 'game'
                     if (response.has("next_question")) {
-                        JSONObject gameJson = response.getJSONObject("game");
+                        if (response.has("current_question_index")){
+                            JSONObject gameJson = response.getJSONObject("game");
+                            JSONObject nextQuestionJson = response.getJSONObject("next_question");
+                            int currentQuestionIndex = response.getInt("current_question_index");
+                            int correctAnswersCount = response.getInt("correct_answers_count");
 
-                        // Usar Gson para convertir el objeto JSON en un objeto Game
-                        //Gson gson = new GsonBuilder()
-                        //        .registerTypeAdapter(Question.class, new QuestionDeserializer())
-                        //        .create();
-                        //Game game = gson.fromJson(gameJson.toString(), Game.class);
+                            // Pasar Extras a ClassicGameActivity
+                            Intent intent = new Intent(this, ClassicGameActivity.class);
+                            intent.putExtra("GAME_OBJECT", gameJson.toString());
+                            intent.putExtra("NEXT_QUESTION", nextQuestionJson.toString());
+                            intent.putExtra("CURRENT_QUESTION_INDEX", currentQuestionIndex);
+                            intent.putExtra("CORRECT_ANSWERS_COUNT", correctAnswersCount);
 
-                        // Question nextQuestion = null;
-                        JSONObject nextQuestionJson = response.getJSONObject("next_question");
-                        //nextQuestion = gson.fromJson(nextQuestionJson.toString(), Question.class);
-
-                        // Pasar el objeto Game a ClassicGameActivity
-                        Intent intent = new Intent(this, ClassicGameActivity.class);
-                        intent.putExtra("GAME_OBJECT", gameJson.toString());  // Convertir el objeto Game a JSON para pasarlo como String
-                        intent.putExtra("NEXT_QUESTION", nextQuestionJson.toString());
-
-                        startActivity(intent);
+                            startActivity(intent);
+                        }
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 // Manejar error
             }
-        }, error -> {
-            // Manejar error, podría ser que no haya juego en curso o un error de red
-        });
+        }, error -> handleError(error));
     }
 
+    private void handleError(VolleyError error) {
+        String errorMessage;
+        if (error instanceof NetworkError || error instanceof NoConnectionError) {
+            errorMessage = "Cannot connect to the server. Please check your internet connection.";
+        } else if (error instanceof TimeoutError) {
+            errorMessage = "Request timeout. Please try again.";
+        } else if (error instanceof ServerError) {
+            errorMessage = "Server error. Please try again later.";
+        } else if (error instanceof AuthFailureError) {
+            errorMessage = "Authentication error. Please log in again.";
+        } else {
+            errorMessage = "An unknown error occurred. Please try again later.";
+        }
+        showToast(errorMessage);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
 }

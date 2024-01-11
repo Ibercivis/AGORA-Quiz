@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Cabecera -->
+    <!-- Cabecera Pregunta -->
     <RelativeLayout
         android:id="@+id/headerClassic"
         android:layout_width="match_parent"
@@ -70,19 +70,37 @@
                         android:layout_centerVertical="true" />
 
                     <!-- Barra de progreso -->
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="156dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/progress_bar_background"
-                    android:indeterminate="false"
-                    android:max="90"
-                    android:maxHeight="10dp"
-                    android:minHeight="10dp"
-                    android:progress="50"
-                    android:progressDrawable="@drawable/progress_bar_progress" />
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true">
+
+                        <TextView
+                            android:id="@+id/txtCurrentQuestionIndex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1 of 9 questions"
+                            android:textSize="13sp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="6dp"
+                            android:textColor="@color/content_secondary"/>
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:layout_width="156dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/progress_bar_background"
+                            android:indeterminate="false"
+                            android:max="90"
+                            android:maxHeight="10dp"
+                            android:minHeight="10dp"
+                            android:progress="50"
+                            android:progressDrawable="@drawable/progress_bar_progress" />
+
+                </LinearLayout>
+
 
                     <!-- Contador de preguntas -->
                     <ImageView
@@ -98,13 +116,101 @@
                         android:id="@+id/questionCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8/9"
+                        android:text="1"
                         android:textColor="@color/content_secondary"
                         android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="16dp" />
 
             </RelativeLayout>
+
+    </RelativeLayout>
+
+    <!-- Cabecera Respuesta Correcta -->
+    <RelativeLayout
+        android:id="@+id/headerCorrect"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="16dp"
+        android:background="@drawable/header_correct"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:id="@+id/correctContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Texto que indica "Correct" -->
+            <TextView
+                android:id="@+id/correctTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Correct!"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/content_secondary"
+                android:layout_marginStart="8dp"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:id="@+id/correctPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+5 Pts"
+                android:textSize="14sp"
+                android:background="@drawable/background_button_white"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/content_primary"
+                android:layout_below="@id/correctTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="56dp"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <!-- Cabecera Respuesta Incorrecta -->
+    <RelativeLayout
+        android:id="@+id/headerIncorrect"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="16dp"
+        android:background="@drawable/header_incorrect"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:id="@+id/incorrectContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Texto que indica "Correct" -->
+            <TextView
+                android:id="@+id/incorrectTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Incorrect"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/content_secondary"
+                android:layout_marginStart="8dp"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:id="@+id/incorrectPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-3 Pts"
+                android:textSize="14sp"
+                android:background="@drawable/background_button_white"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/content_primary"
+                android:layout_below="@id/incorrectTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="56dp"/>
+        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -126,7 +232,7 @@
         android:id="@+id/questionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit?"
+        android:text=""
         android:textSize="18sp"
         android:textColor="@color/content_primary"
         android:layout_below="@id/decorativeImage"

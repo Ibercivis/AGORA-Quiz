@@ -29,16 +29,12 @@ public class GameService {
     }
 
     //Iniciar una partida
-    public void startGame(String token, final Response.Listener<Game> listener, Response.ErrorListener errorListener) {
+    public void startGame(String token, final Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 BASE_URL + "/api/games/start/",
                 null,
-                response -> {
-                    // Analizar la respuesta y convertirla en una instancia de Game
-                    Game game = parseGameFromResponse(response);
-                    listener.onResponse(game);
-                },
+                listener, // Devuelve la respuesta como cadena
                 errorListener
         ) {
             @Override
@@ -50,13 +46,6 @@ public class GameService {
         };
 
         requestQueue.add(jsonObjectRequest);
-    }
-
-    private Game parseGameFromResponse(JSONObject response) {
-        // Analiza el JSON para crear y devolver una instancia de Game
-        Gson gson = new Gson();
-        Game game = gson.fromJson(response.toString(), Game.class);
-        return game;
     }
 
     //Responder una pregunta
