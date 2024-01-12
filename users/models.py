@@ -14,15 +14,15 @@ class UserProfile(models.Model):
 
     def update_on_answer(self, correct):
         if correct:
-            self.correct_answers += 1
+            self.total_correct_answers += 1
             self.total_points += 5  # Cantidad de puntos por respuesta correcta
         else:
-            self.incorrect_answers += 1
+            self.total_incorrect_answers += 1
             self.total_points -= 3  # Cantidad de puntos por respuesta incorrecta
         self.save()
 
     def update_on_game_end(self, abandoned=False):
-        self.games_played += 1
+        self.total_games_played += 1
         if abandoned:
-            self.games_abandoned += 1
+            self.total_games_abandoned += 1
         self.save()

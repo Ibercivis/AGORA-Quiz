@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from classic_game.models import Question, Game
 from .serializers import QuestionSerializer, GameSerializer  
+from users.models import UserProfile
 
 import random
 
