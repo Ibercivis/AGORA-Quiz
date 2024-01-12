@@ -1,22 +1,476 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.notifications.NotificationsFragment">
 
-    <TextView
-        android:id="@+id/text_notifications"
+    <!-- Header con imagen de fondo, texto y avatar -->
+    <RelativeLayout
+        android:id="@+id/headerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:background="@drawable/header_background_image"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:id="@+id/textViewContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginEnd="32dp">
+
+            <!-- Texto principal "Ranking" -->
+            <TextView
+                android:id="@+id/textViewRankingTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/content_secondary" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- Perfil del Usuario -->
+    <RelativeLayout
+        android:id="@+id/profileSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="4dp"
+        android:layout_below="@id/headerContainer"
+        android:layout_marginTop="-92dp">
+
+        <!-- Avatar y Nombre de Usuario -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/cardUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:padding="16dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_avatar_ranking_yellow" />
+
+                    <Button
+                        android:id="@+id/btnLogout"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:text="Logout"
+                        android:textSize="12sp"
+                        android:textAllCaps="false"
+                        android:padding="0dp"
+                        android:background="@drawable/background_button_profile"/>
+                </LinearLayout>
+
+
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User name"
+                    android:layout_marginTop="16dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/content_primary"
+                    android:layout_toEndOf="@id/cardUser"
+                    android:layout_marginStart="32dp"/>
+
+                <ImageView
+                    android:id="@+id/iconPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_stars_small"
+                    android:layout_toEndOf="@id/cardUser"
+                    android:layout_below="@id/tvUsername"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00 Points"
+                    android:textSize="12sp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/iconPoints"
+                    android:layout_below="@id/tvUsername"/>
+
+                <ImageView
+                    android:id="@+id/iconLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_ranking_small"
+                    android:layout_toEndOf="@id/cardUser"
+                    android:layout_below="@id/tvPoints"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Master Level"
+                    android:textSize="12sp"
+                    android:textColor="#888"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/iconLevel"
+                    android:layout_below="@id/tvPoints"/>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <!-- Aquí comienza la definición del ViewPager -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/profileSection">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Sección de Stats Generales -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_margin="16dp"
+                android:elevation="24dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/titleStats"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@color/background_secondary">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="6dp"
+                            android:text="Stats"
+                            android:textColor="@color/content_secondary"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txCorrectAnswers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/titleStats"
+                        android:text="Correct answers"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txIncorrectAnswers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/txCorrectAnswers"
+                        android:text="Incorrect answers"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txTotalQuestions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/txIncorrectAnswers"
+                        android:text="Total questions"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txTotalGames"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/txTotalQuestions"
+                        android:text="Total games"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txTotalPoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/txTotalGames"
+                        android:text="Total points"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/ptCorrectAnswers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/titleStats"
+                        android:text="00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="32dp"/>
+
+                    <TextView
+                        android:id="@+id/ptIncorrectAnswers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/ptCorrectAnswers"
+                        android:text="00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="32dp"/>
+
+                    <TextView
+                        android:id="@+id/ptTotalQuestions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/ptIncorrectAnswers"
+                        android:text="00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="32dp"/>
+
+                    <TextView
+                        android:id="@+id/ptTotalGames"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/ptTotalQuestions"
+                        android:text="00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="32dp"/>
+
+                    <TextView
+                        android:id="@+id/ptTotalPoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/ptTotalGames"
+                        android:text="00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="32dp"/>
+
+                    <!-- Time trial Stats -->
+                    <LinearLayout
+                        android:id="@+id/titleTimeTrial"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@color/background_secondary"
+                        android:layout_marginTop="12dp"
+                        android:layout_below="@id/ptTotalPoints">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="6dp"
+                            android:text="Time trial"
+                            android:textColor="@color/content_secondary"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txBestGame"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/titleTimeTrial"
+                        android:text="Best game"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txBestTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/txBestGame"
+                        android:text="Best time"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/ptBestGame"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/titleTimeTrial"
+                        android:text="00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="32dp"/>
+
+                    <TextView
+                        android:id="@+id/ptBestTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/ptBestGame"
+                        android:text="00:00:00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="32dp"/>
+
+                    <!-- Multiplayer Stats -->
+                    <LinearLayout
+                        android:id="@+id/titleMultiplayer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@color/background_secondary"
+                        android:layout_marginTop="12dp"
+                        android:layout_below="@id/ptBestTime">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="6dp"
+                            android:text="Multiplayer"
+                            android:textColor="@color/content_secondary"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txWins"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/titleMultiplayer"
+                        android:text="Wins"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txDefeats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/txWins"
+                        android:text="Defeats"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txTotalGamesMultiplayer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/txDefeats"
+                        android:text="Total games"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="16dp"/>
+
+                    <TextView
+                        android:id="@+id/ptWins"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/titleMultiplayer"
+                        android:text="00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="32dp"/>
+
+                    <TextView
+                        android:id="@+id/ptDefeats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/ptWins"
+                        android:text="00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="32dp"/>
+
+                    <TextView
+                        android:id="@+id/ptTotalGamesMultiplayer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/ptDefeats"
+                        android:text="00"
+                        android:textSize="12dp"
+                        android:textColor="@color/content_primary"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="12dp"/>
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>
