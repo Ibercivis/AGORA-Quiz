@@ -30,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
         TextInputLayout confirmPasswordSignUpTextInputLayout = findViewById(R.id.confirmPasswordSignUpTextInputLayout);
         Button createAccountButton = findViewById(R.id.createAccountButton);
         TextView backToLoginText = findViewById(R.id.backToLoginText);
+        Button loginButton = findViewById(R.id.loginButton);
 
         // Manejar clic del botón de crear cuenta
         createAccountButton.setOnClickListener(view -> {
@@ -61,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         // Manejar clic en volver al login
-        backToLoginText.setOnClickListener(view -> {
+        loginButton.setOnClickListener(view -> {
             // Finalizar esta actividad para volver al Login
             finish();
         });

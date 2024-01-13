@@ -20,13 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements RecoveryDialogFragment.RecoveryDialogListener {
     // Creamos una instancia de sessionManager
     SessionManager sessionManager;
     // Inicializar TextInputLayouts y botones
     TextInputLayout usernameTextInputLayout;
     TextInputLayout passwordTextInputLayout;
     Button loginButton;
+    Button signUpButton;
     TextView createAccountText;
     TextView forgotPasswordText;
 
@@ -50,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
         usernameTextInputLayout = findViewById(R.id.usernameTextInputLayout);
         passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
         loginButton = findViewById(R.id.loginButton);
-        createAccountText = findViewById(R.id.createAccountText);
         forgotPasswordText = findViewById(R.id.forgotPasswordText);
+        signUpButton = findViewById(R.id.createAccountButton);
 
 
         // Manejar clic del botón de login
@@ -88,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // Manejar clic en crear cuenta
-        createAccountText.setOnClickListener(view -> {
+        signUpButton.setOnClickListener(view -> {
             // Navegar a la actividad de creación de cuenta
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(intent);
@@ -97,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         // Manejar clic en olvidé mi contraseña
         forgotPasswordText.setOnClickListener(view -> {
             // Implementar lógica para cambiar la contraseña
+            showRecoveryDialog();
         });
     }
 
@@ -170,5 +172,19 @@ public class LoginActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    private void showRecoveryDialog() {
+        RecoveryDialogFragment recoveryDialogFragment = new RecoveryDialogFragment();
+        recoveryDialogFragment.show(getSupportFragmentManager(), "pauseDialog");
+    }
+
+    @Override
+    public void onCloseDialog() {
+
+    }
+
+    @Override
+    public void onRecoveryPassword() {
+
+    }
 }
 

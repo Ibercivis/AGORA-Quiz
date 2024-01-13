@@ -5,6 +5,7 @@
     <color name="background_secondary">#091968</color>
     <color name="background_tertiary">#EF006D</color>
     <color name="background_quaternary">#0F79D8</color>
+    <color name="background_quaternary_transparent">#4D4D71F1</color>
 
     <!-- Pop-up Colors -->
     <color name="popup_primary">#4DFFFFFF</color>
