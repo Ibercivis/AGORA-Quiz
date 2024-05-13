@@ -7,12 +7,14 @@
 
 import SwiftUI
 
-struct FilledButton: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+struct FilledButton: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeOut, value: configuration.isPressed)
     }
-}
-
-#Preview {
-    FilledButton()
 }

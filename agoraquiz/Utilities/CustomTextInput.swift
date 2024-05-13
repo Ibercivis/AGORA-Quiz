@@ -8,11 +8,31 @@
 import SwiftUI
 
 struct CustomTextInput: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    var placeholder: String
+    @Binding var text: String
+    var systemImage: String
+    var isSecure: Bool = false  // Para manejar campos de texto seguros (contraseñas)
 
-#Preview {
-    CustomTextInput()
+    var body: some View {
+        HStack {
+            Image(systemName: systemImage)
+                .foregroundColor(.gray)
+                .padding(.leading, 10)
+            if isSecure {
+                SecureField(placeholder, text: $text)
+                    .foregroundColor(.white)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+            } else {
+                TextField(placeholder, text: $text)
+                    .foregroundColor(.white)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+            }
+        }
+        .padding()
+        .background(Color.secondary.opacity(0.2))
+        .cornerRadius(10)
+        .padding(.horizontal)
+    }
 }
