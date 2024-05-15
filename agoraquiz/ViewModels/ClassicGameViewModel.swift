@@ -18,21 +18,23 @@ class ClassicGameViewModel: ObservableObject {
     @Published var isCorrectAnswerVisible = false
     @Published var isIncorrectAnswerVisible = false
     @Published var isClassicHeaderVisible = true
-
+    
     private var gameService: GameService
     private var currentGameId: Int = 0
     private var currentQuestion: Question?
-
+    private var game: Game?
+    
     init(gameService: GameService) {
         self.gameService = gameService
         startGame()
     }
-
+    
     func startGame() {
         gameService.startGame { result in
             switch result {
             case .success(let gameResponse):
                 DispatchQueue.main.async {
+                    self.game = gameResponse.game
                     self.currentGameId = gameResponse.game.id
                     self.totalQuestions = gameResponse.totalQuestions
                     self.updateUIWithQuestion(gameResponse.nextQuestion, currentQuestionIndex: 1, correctAnswersCount: 0)
@@ -43,17 +45,17 @@ class ClassicGameViewModel: ObservableObject {
             }
         }
     }
-
+    
     func onAnswerSelected(_ index: Int) {
         selectedAnswer = index
         if currentQuestion == nil { return }
         sendAnswerToServer(selectedAnswer: index + 1)
     }
-
+    
     private func sendAnswerToServer(selectedAnswer: Int) {
-        guard let currentQuestion = currentQuestion else { return }
-
-        gameService.answerQuestion(gameId: currentGameId, questionId: currentQuestion.id, answerIndex: selectedAnswer) { result in
+        guard let question = currentQuestion else { return }
+        
+        gameService.answerQuestion(gameId: currentGameId, questionId: question.id, answerIndex: selectedAnswer) { result in
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {
@@ -65,7 +67,7 @@ class ClassicGameViewModel: ObservableObject {
             }
         }
     }
-
+    
     private func handleAnswerResponse(_ response: AnswerResponse) {
         if response.correct {
             self.correctAnswersCount += 1
@@ -73,20 +75,20 @@ class ClassicGameViewModel: ObservableObject {
         } else {
             showIncorrectAnswer()
         }
-
+        
         if response.status == "completed" {
             // Manejar la finalización del juego
         } else {
             loadNextQuestion(response: response)
         }
     }
-
+    
     private func loadNextQuestion(response: AnswerResponse) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.updateUIWithQuestion(response.nextQuestion, currentQuestionIndex: response.currentQuestionIndex, correctAnswersCount: self.correctAnswersCount)
         }
     }
-
+    
     private func updateUIWithQuestion(_ question: Question, currentQuestionIndex: Int, correctAnswersCount: Int) {
         self.currentQuestion = question
         self.questionText = question.questionText
@@ -97,14 +99,15 @@ class ClassicGameViewModel: ObservableObject {
         self.isCorrectAnswerVisible = false
         self.isIncorrectAnswerVisible = false
     }
-
+    
     private func showCorrectAnswer() {
         isClassicHeaderVisible = false
         isCorrectAnswerVisible = true
     }
-
+    
     private func showIncorrectAnswer() {
         isClassicHeaderVisible = false
         isIncorrectAnswerVisible = true
     }
+    
 }

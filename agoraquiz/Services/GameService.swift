@@ -96,7 +96,7 @@ class GameService {
             }
         }.resume()
     }
-
+    
     func checkForInProgressGame(completion: @escaping (Result<GameResponse, Error>) -> Void) {
         guard let url = URL(string: URLs.APIPath.checkInProgressGame, relativeTo: URLs.baseURL) else {
             completion(.failure(NetworkError.invalidURL))
