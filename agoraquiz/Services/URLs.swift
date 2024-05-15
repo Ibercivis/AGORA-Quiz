@@ -13,5 +13,9 @@ struct URLs {
     struct APIPath {
         static let login = "/api/login"
         static let signUp = "/api/signup"
+        static let startGame = "/api/games/start/"
+        static let answerQuestion = "/api/games/%d/answer/"
+        static let checkInProgressGame = "/api/games/resume/"
+        static let abandonGame = "/api/games/%d/abandon/"
     }
 }

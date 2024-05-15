@@ -14,6 +14,12 @@
 		97124C9A2BEB8B1D00E65467 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C992BEB8B1D00E65467 /* SessionManager.swift */; };
 		97124C9D2BEB8C9400E65467 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C9C2BEB8C9400E65467 /* URLs.swift */; };
 		974CE1B92BF4A512001967B8 /* ClassicGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1B82BF4A512001967B8 /* ClassicGameView.swift */; };
+		974CE1BB2BF51B50001967B8 /* GameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1BA2BF51B50001967B8 /* GameService.swift */; };
+		974CE1BD2BF51B9A001967B8 /* ClassicGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1BC2BF51B9A001967B8 /* ClassicGameViewModel.swift */; };
+		974CE1C02BF529C4001967B8 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1BF2BF529C4001967B8 /* Game.swift */; };
+		974CE1C22BF529DB001967B8 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1C12BF529DB001967B8 /* Question.swift */; };
+		974CE1C42BF529EF001967B8 /* GameResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1C32BF529EF001967B8 /* GameResponse.swift */; };
+		974CE1C62BF52A07001967B8 /* AnswerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1C52BF52A07001967B8 /* AnswerResponse.swift */; };
 		979275352BF28043009ACAF9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979275342BF28043009ACAF9 /* MainView.swift */; };
 		979275372BF28A59009ACAF9 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979275362BF28A59009ACAF9 /* AppTabView.swift */; };
 		97E9AE362BEA340C0057A835 /* agoraquizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E9AE352BEA340C0057A835 /* agoraquizApp.swift */; };
@@ -52,6 +58,12 @@
 		97124C992BEB8B1D00E65467 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		97124C9C2BEB8C9400E65467 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
 		974CE1B82BF4A512001967B8 /* ClassicGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicGameView.swift; sourceTree = "<group>"; };
+		974CE1BA2BF51B50001967B8 /* GameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameService.swift; sourceTree = "<group>"; };
+		974CE1BC2BF51B9A001967B8 /* ClassicGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicGameViewModel.swift; sourceTree = "<group>"; };
+		974CE1BF2BF529C4001967B8 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		974CE1C12BF529DB001967B8 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
+		974CE1C32BF529EF001967B8 /* GameResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameResponse.swift; sourceTree = "<group>"; };
+		974CE1C52BF52A07001967B8 /* AnswerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerResponse.swift; sourceTree = "<group>"; };
 		979275342BF28043009ACAF9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		979275362BF28A59009ACAF9 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
 		97E9AE322BEA340C0057A835 /* agoraquiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = agoraquiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,8 +119,20 @@
 			isa = PBXGroup;
 			children = (
 				97124C9C2BEB8C9400E65467 /* URLs.swift */,
+				974CE1BA2BF51B50001967B8 /* GameService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		974CE1BE2BF51FA8001967B8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				974CE1BF2BF529C4001967B8 /* Game.swift */,
+				974CE1C12BF529DB001967B8 /* Question.swift */,
+				974CE1C32BF529EF001967B8 /* GameResponse.swift */,
+				974CE1C52BF52A07001967B8 /* AnswerResponse.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		97E9AE292BEA340C0057A835 = {
@@ -134,6 +158,7 @@
 		97E9AE342BEA340C0057A835 /* agoraquiz */ = {
 			isa = PBXGroup;
 			children = (
+				974CE1BE2BF51FA8001967B8 /* Models */,
 				97124C9B2BEB8C7F00E65467 /* Services */,
 				97124C922BEB7D2F00E65467 /* Utilities */,
 				97E9AE622BEA3BB20057A835 /* ViewModels */,
@@ -188,6 +213,7 @@
 			children = (
 				97E9AE632BEA3BCF0057A835 /* LoginViewModel.swift */,
 				97124C902BEB776A00E65467 /* SignUpViewModel.swift */,
+				974CE1BC2BF51B9A001967B8 /* ClassicGameViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -322,11 +348,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				974CE1C62BF52A07001967B8 /* AnswerResponse.swift in Sources */,
 				97E9AE642BEA3BCF0057A835 /* LoginViewModel.swift in Sources */,
+				974CE1BB2BF51B50001967B8 /* GameService.swift in Sources */,
 				97124C982BEB7EC000E65467 /* FilledButton.swift in Sources */,
+				974CE1C22BF529DB001967B8 /* Question.swift in Sources */,
 				97124C9A2BEB8B1D00E65467 /* SessionManager.swift in Sources */,
+				974CE1BD2BF51B9A001967B8 /* ClassicGameViewModel.swift in Sources */,
 				97124C8F2BEB774E00E65467 /* SignUpView.swift in Sources */,
 				97E9AE612BEA3BAD0057A835 /* LoginView.swift in Sources */,
+				974CE1C42BF529EF001967B8 /* GameResponse.swift in Sources */,
 				97124C9D2BEB8C9400E65467 /* URLs.swift in Sources */,
 				979275372BF28A59009ACAF9 /* AppTabView.swift in Sources */,
 				97E9AE382BEA340C0057A835 /* ContentView.swift in Sources */,
@@ -335,6 +366,7 @@
 				97124C912BEB776A00E65467 /* SignUpViewModel.swift in Sources */,
 				97E9AE362BEA340C0057A835 /* agoraquizApp.swift in Sources */,
 				974CE1B92BF4A512001967B8 /* ClassicGameView.swift in Sources */,
+				974CE1C02BF529C4001967B8 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

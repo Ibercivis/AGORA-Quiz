@@ -8,10 +8,7 @@
 import SwiftUI
 
 struct ClassicGameView: View {
-    @State private var currentQuestionIndex = 1
-    @State private var totalQuestions = 9
-    @State private var questionText = "How much CO2 is absorbed annually by forests, in Europe and worldwide, compared to total greenhouse gas emissions?"
-    @State private var selectedAnswer: Int? = nil
+    @StateObject private var viewModel = ClassicGameViewModel(gameService: GameService())
 
     var body: some View {
         VStack(spacing: 0) {
@@ -23,7 +20,7 @@ struct ClassicGameView: View {
         }
         .navigationBarBackButtonHidden(true)
     }
-    
+
     var headerView: some View {
         ZStack {
             Image("headerPlain")
@@ -31,9 +28,8 @@ struct ClassicGameView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: UIScreen.main.bounds.width)
                 .clipped()
-            
-            VStack{
-                
+
+            VStack {
                 HStack {
                     Button(action: {
                         // Acción para cerrar la vista
@@ -45,71 +41,65 @@ struct ClassicGameView: View {
                             .clipShape(Circle())
                     }
                     .padding(.leading, 16)
-                    
+
                     Spacer()
-                    
-                    
-                    
+
                     Text("Classic")
                         .font(.title)
                         .bold()
                         .foregroundColor(.white)
-                    
-                    
+
                     Spacer()
-                    
                     Spacer()
                 }
-                
+
                 questionProgressView
-                
             }
-            
-            
+        }
+        .opacity(viewModel.isClassicHeaderVisible ? 1 : 0)
+    }
+
+    var questionProgressView: some View {
+        VStack {
+            Text("\(viewModel.currentQuestionIndex) of \(viewModel.totalQuestions) questions")
+                .font(.subheadline)
+                .padding(.top, 8)
+                .foregroundColor(.white)
+
+            GeometryReader { geometry in
+                HStack {
+                    Spacer()
+
+                    ProgressBar(value: CGFloat(viewModel.currentQuestionIndex) / CGFloat(viewModel.totalQuestions))
+                        .frame(width: geometry.size.width * 0.6, height: 10)
+                        .padding(.horizontal, 16)
+
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle")
+                            .foregroundColor(.green)
+
+                        Text("\(viewModel.correctAnswersCount)")
+                            .foregroundColor(.white)
+                    }
+                    .padding(.trailing, 24)
+                }
+            }
+            .frame(height: 20) // Ajusta según sea necesario
         }
     }
-    
-    var questionProgressView: some View {
-           VStack {
-               Text("\(currentQuestionIndex) of \(totalQuestions) questions")
-                   .font(.subheadline)
-                   .padding(.top, 8)
-                   .foregroundColor(.white)
-               
-               GeometryReader { geometry in
-                   HStack {
-                       Spacer()
-                       
-                       ProgressBar(value: CGFloat(currentQuestionIndex) / CGFloat(totalQuestions))
-                           .frame(width: geometry.size.width * 0.6, height: 10)
-                           .padding(.horizontal, 16)
-                       
-                       HStack(spacing: 8) {
-                           Image(systemName: "checkmark.circle")
-                               .foregroundColor(.green)
-                           
-                           Text("0")
-                               .foregroundColor(.white)
-                       }
-                       .padding(.trailing, 24)
-                   }
-               }
-               .frame(height: 20) // Ajusta según sea necesario
-           }
-       }
-    
+
     var questionTextView: some View {
-        Text(questionText)
+        Text(viewModel.questionText)
             .font(.headline)
             .padding()
             .multilineTextAlignment(.center)
     }
-    
+
     var answerOptionsView: some View {
         VStack(spacing: 16) {
-            ForEach(0..<4) { index in
-                AnswerOptionView(index: index, text: "Answer \(index + 1)", isSelected: selectedAnswer == index) {
-                    selectedAnswer = index
+            ForEach(viewModel.answers.indices, id: \.self) { index in
+                AnswerOptionView(index: index, text: viewModel.answers[index], isSelected: viewModel.selectedAnswer == index) {
+                    viewModel.onAnswerSelected(index)
                 }
             }
         }
@@ -129,7 +119,7 @@ struct ProgressBar: View {
                 
                 Rectangle().frame(width: min(geometry.size.width, geometry.size.width * value), height: geometry.size.height)
                     .foregroundColor(Color.orange)
-                    .animation(.linear)
+                    .animation(.linear, value: value)
             }
             .cornerRadius(45.0)
         }
