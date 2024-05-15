@@ -16,8 +16,8 @@ struct ClassicGameView: View {
     var body: some View {
         VStack(spacing: 0) {
             headerView
-            questionProgressView
             questionTextView
+            Spacer()
             answerOptionsView
             Spacer()
         }
@@ -26,67 +26,77 @@ struct ClassicGameView: View {
     
     var headerView: some View {
         ZStack {
-            Image("headerBackgroundImage")
+            Image("headerPlain")
                 .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(height: 200)
+                .aspectRatio(contentMode: .fit)
+                .frame(width: UIScreen.main.bounds.width)
                 .clipped()
             
-            HStack {
-                Button(action: {
-                    // Acción para cerrar la vista
-                }) {
-                    Image(systemName: "xmark")
-                        .padding()
-                        .background(Color.white.opacity(0.2))
-                        .clipShape(Circle())
-                }
-                .padding(.leading, 16)
+            VStack{
                 
-                Spacer()
-                
-                VStack {
-                    Image(systemName: "gamecontroller.fill")
-                        .padding(8)
+                HStack {
+                    Button(action: {
+                        // Acción para cerrar la vista
+                    }) {
+                        Image(systemName: "xmark")
+                            .padding()
+                            .background(Color.white.opacity(0.2))
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
+                    }
+                    .padding(.leading, 16)
+                    
+                    Spacer()
+                    
+                    
+                    
                     Text("Classic")
                         .font(.title)
                         .bold()
                         .foregroundColor(.white)
+                    
+                    
+                    Spacer()
+                    
+                    Spacer()
                 }
                 
-                Spacer()
+                questionProgressView
                 
-                Image(systemName: "star.fill")
-                    .padding()
-                    .background(Color.white.opacity(0.2))
-                    .clipShape(Circle())
-                    .padding(.trailing, 16)
             }
+            
+            
         }
     }
     
     var questionProgressView: some View {
-        VStack {
-            Text("\(currentQuestionIndex) of \(totalQuestions) questions")
-                .font(.subheadline)
-                .padding(.top, 8)
-                .foregroundColor(.gray)
-            
-            ProgressBar(value: CGFloat(currentQuestionIndex) / CGFloat(totalQuestions))
-                .frame(height: 10)
-                .padding(.horizontal, 16)
-            
-            HStack {
-                Image(systemName: "checkmark.circle")
-                    .foregroundColor(.green)
-                    .padding(.leading, 16)
-                Spacer()
-                Text("0")
-                    .foregroundColor(.gray)
-                    .padding(.trailing, 16)
-            }
-        }
-    }
+           VStack {
+               Text("\(currentQuestionIndex) of \(totalQuestions) questions")
+                   .font(.subheadline)
+                   .padding(.top, 8)
+                   .foregroundColor(.white)
+               
+               GeometryReader { geometry in
+                   HStack {
+                       Spacer()
+                       
+                       ProgressBar(value: CGFloat(currentQuestionIndex) / CGFloat(totalQuestions))
+                           .frame(width: geometry.size.width * 0.6, height: 10)
+                           .padding(.horizontal, 16)
+                       
+                       HStack(spacing: 8) {
+                           Image(systemName: "checkmark.circle")
+                               .foregroundColor(.green)
+                           
+                           Text("0")
+                               .foregroundColor(.white)
+                       }
+                       .padding(.trailing, 24)
+                   }
+               }
+               .frame(height: 20) // Ajusta según sea necesario
+           }
+       }
     
     var questionTextView: some View {
         Text(questionText)
@@ -118,7 +128,7 @@ struct ProgressBar: View {
                     .foregroundColor(Color.gray)
                 
                 Rectangle().frame(width: min(geometry.size.width, geometry.size.width * value), height: geometry.size.height)
-                    .foregroundColor(Color.blue)
+                    .foregroundColor(Color.orange)
                     .animation(.linear)
             }
             .cornerRadius(45.0)
