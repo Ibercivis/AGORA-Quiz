@@ -13,6 +13,7 @@
 		97124C982BEB7EC000E65467 /* FilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C972BEB7EC000E65467 /* FilledButton.swift */; };
 		97124C9A2BEB8B1D00E65467 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C992BEB8B1D00E65467 /* SessionManager.swift */; };
 		97124C9D2BEB8C9400E65467 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C9C2BEB8C9400E65467 /* URLs.swift */; };
+		974CE1B92BF4A512001967B8 /* ClassicGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1B82BF4A512001967B8 /* ClassicGameView.swift */; };
 		979275352BF28043009ACAF9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979275342BF28043009ACAF9 /* MainView.swift */; };
 		979275372BF28A59009ACAF9 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979275362BF28A59009ACAF9 /* AppTabView.swift */; };
 		97E9AE362BEA340C0057A835 /* agoraquizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E9AE352BEA340C0057A835 /* agoraquizApp.swift */; };
@@ -50,6 +51,7 @@
 		97124C972BEB7EC000E65467 /* FilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledButton.swift; sourceTree = "<group>"; };
 		97124C992BEB8B1D00E65467 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		97124C9C2BEB8C9400E65467 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
+		974CE1B82BF4A512001967B8 /* ClassicGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicGameView.swift; sourceTree = "<group>"; };
 		979275342BF28043009ACAF9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		979275362BF28A59009ACAF9 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
 		97E9AE322BEA340C0057A835 /* agoraquiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = agoraquiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +178,7 @@
 				97124C8E2BEB774E00E65467 /* SignUpView.swift */,
 				979275342BF28043009ACAF9 /* MainView.swift */,
 				979275362BF28A59009ACAF9 /* AppTabView.swift */,
+				974CE1B82BF4A512001967B8 /* ClassicGameView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				97124C962BEB7D8100E65467 /* CustomTextInput.swift in Sources */,
 				97124C912BEB776A00E65467 /* SignUpViewModel.swift in Sources */,
 				97E9AE362BEA340C0057A835 /* agoraquizApp.swift in Sources */,
+				974CE1B92BF4A512001967B8 /* ClassicGameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
