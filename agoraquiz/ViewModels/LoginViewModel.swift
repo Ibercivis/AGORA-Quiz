@@ -6,14 +6,14 @@
 //
 
 import Foundation
+import Combine
 
 class LoginViewModel: ObservableObject {
     @Published var username = ""
     @Published var password = ""
     @Published var isLoggedIn = SessionManager.shared.isLogged
-    
+
     func login() {
-        // Aquí se implementa la llamada al API
         let url = URLs.baseURL.appendingPathComponent(URLs.APIPath.login)
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -27,15 +27,50 @@ class LoginViewModel: ObservableObject {
         request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any], let token = json["token"] as? String {
+            if let error = error {
                 DispatchQueue.main.async {
-                    SessionManager.shared.createLoginSession(username: self.username, token: token)
-                    self.isLoggedIn = true
+                    print("Network error: \(error.localizedDescription)")
                 }
-            } else {
-                // Manejar error
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
                 DispatchQueue.main.async {
-                    // Actualizar algún estado para mostrar un error, etc.
+                    print("Invalid response from server")
+                }
+                return
+            }
+            
+            guard httpResponse.statusCode == 200 else {
+                DispatchQueue.main.async {
+                    print("Server returned status code: \(httpResponse.statusCode)")
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    print("No data received from server")
+                }
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let token = json["key"] as? String {  // Cambiado de "token" a "key"
+                    DispatchQueue.main.async {
+                        SessionManager.shared.createLoginSession(username: self.username, token: token)
+                        self.isLoggedIn = true
+                        print("Login successful: \(self.isLoggedIn)")
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        print("Invalid JSON structure: \(String(data: data, encoding: .utf8) ?? "")")
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    print("JSON parsing error: \(error.localizedDescription)")
                 }
             }
         }.resume()

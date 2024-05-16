@@ -8,10 +8,9 @@
 import Foundation
 
 struct AnswerResponse: Codable {
-    var correct: Bool
-    var score: Int
-    var status: String
-    var nextQuestion: Question
-    var currentQuestionIndex: Int
-    var correctAnswersCount: Int
+    let correct: Bool
+    let nextQuestion: Question?
+    let currentQuestionIndex: Int
+    let correctAnswersCount: Int
+    let status: String
 }

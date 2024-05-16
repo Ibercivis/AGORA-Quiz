@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct MainView: View {
-    
-    var sessionManager = SessionManager.shared
+    @StateObject private var viewModel = MainViewModel(gameService: GameService())
+    @State private var showClassicGameView = false
 
     var body: some View {
         NavigationView {
@@ -24,6 +24,12 @@ struct MainView: View {
             .navigationBarHidden(true)
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $viewModel.navigateToClassicGame) {
+            if let gameData = viewModel.gameData {
+                ClassicGameView(viewModel: ClassicGameViewModel(gameService: GameService(), gameData: gameData))
+            }
+        }
+        .toast(isPresented: $viewModel.showToast, message: viewModel.toastMessage)
     }
 
     var header: some View {
@@ -35,7 +41,7 @@ struct MainView: View {
                 .clipped()
 
             VStack(alignment: .leading, spacing: 5) {
-                Text("Hi \(sessionManager.username ?? "user name"),")
+                Text("Hi \(SessionManager.shared.username ?? "user name"),")
                     .font(.title)
                     .foregroundColor(.white)
                 Text("Great to see you again!")
@@ -47,25 +53,34 @@ struct MainView: View {
     }
 
     var userInfo: some View {
-            HStack {
-                Spacer()
-                UserStatView(iconName: "star.fill", title: "Master", subtitle: "Level")
-                Spacer()
-                UserStatView(iconName: "trophy.fill", title: "730", subtitle: "Points")
-                Spacer()
-            }
-            .padding()
+        HStack {
+            Spacer()
+            UserStatView(iconName: "star.fill", title: "Master", subtitle: "Level")
+            Spacer()
+            UserStatView(iconName: "trophy.fill", title: "730", subtitle: "Points")
+            Spacer()
         }
+        .padding()
+    }
 
-        var gameModesSection: some View {
-            VStack(alignment: .leading) {
-                Text("Game modes")
-                    .font(.headline)
-                    .padding(.horizontal)
+    var gameModesSection: some View {
+        VStack(alignment: .leading) {
+            Text("Game modes")
+                .font(.headline)
+                .padding(.horizontal)
 
-                // Example game modes, replace with actual data and navigation
-                ForEach(GameMode.allCases, id: \.self) { mode in
-                    NavigationLink(destination: Text("Navigating to \(mode.rawValue)")) {
+            ForEach(GameMode.allCases, id: \.self) { mode in
+                if mode == .classic {
+                    NavigationLink(destination: EmptyView()) {
+                        GameModeView(mode: mode)
+                    }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        viewModel.startNewGame()
+                    })
+                } else {
+                    Button(action: {
+                        viewModel.showUnavailableToast()
+                    }) {
                         GameModeView(mode: mode)
                     }
                 }
@@ -73,7 +88,6 @@ struct MainView: View {
         }
     }
 
-    // Additional views
     struct UserStatView: View {
         var iconName: String
         var title: String
@@ -115,9 +129,9 @@ struct MainView: View {
         }
     }
 
-    // Preview
     struct MainView_Previews: PreviewProvider {
         static var previews: some View {
             MainView()
         }
     }
+}

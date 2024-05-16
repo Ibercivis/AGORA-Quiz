@@ -8,6 +8,7 @@
 import Foundation
 
 struct Game: Codable {
-    var id: Int
-    var score: Int
+    let id: Int
+    let score: Int
+    let status: String
 }

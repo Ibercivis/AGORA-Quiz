@@ -8,7 +8,8 @@
 import Foundation
 
 struct GameResponse: Codable {
-    var game: Game
-    var nextQuestion: Question
-    var totalQuestions: Int
+    let game: Game
+    let nextQuestion: Question
+    let currentQuestionIndex: Int
+    let correctAnswersCount: Int
 }

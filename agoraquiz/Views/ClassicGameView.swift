@@ -8,38 +8,46 @@
 import SwiftUI
 
 struct ClassicGameView: View {
-    @StateObject private var viewModel = ClassicGameViewModel(gameService: GameService())
+    @StateObject private var viewModel: ClassicGameViewModel
     @State private var showPauseModal = false
-    
+
+    init(viewModel: ClassicGameViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                headerView
-                questionTextView
-                Spacer()
-                answerOptionsView
-                Spacer()
-            }
-            .navigationBarBackButtonHidden(true)
-            
-            if viewModel.isPaused {
-                PauseView(score: viewModel.correctAnswersCount) {
-                    viewModel.quitGame()
-                }
-            }
+        VStack(spacing: 0) {
+            headerView
+            questionTextView
+            Spacer()
+            answerOptionsView
+            Spacer()
         }
+        .navigationBarBackButtonHidden(true)
         .fullScreenCover(isPresented: $viewModel.isPaused) {
             PauseView(score: viewModel.correctAnswersCount) {
                 viewModel.quitGame()
             }
         }
-        .onChange(of: viewModel.isGameCompleted) { isCompleted in
-            if isCompleted {
-                // Aquí puedes mostrar un modal de finalización del juego si es necesario
+        .fullScreenCover(isPresented: $viewModel.isGameCompleted) {
+            GameCompletedView(score: viewModel.correctAnswersCount) {
+                viewModel.quitGame()
+            }
+        }
+        .onChange(of: viewModel.navigateToMain) { navigate, _ in
+            if navigate {
+                DispatchQueue.main.async {
+                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                        if let window = windowScene.windows.first {
+                            window.rootViewController = UIHostingController(rootView: AppTabView())
+                            window.makeKeyAndVisible()
+                        }
+                    }
+                }
             }
         }
     }
-    
+
     var headerView: some View {
         ZStack {
             Image("headerPlain")
@@ -47,7 +55,7 @@ struct ClassicGameView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: UIScreen.main.bounds.width)
                 .clipped()
-            
+
             VStack {
                 HStack {
                     Button(action: {
@@ -60,43 +68,43 @@ struct ClassicGameView: View {
                             .clipShape(Circle())
                     }
                     .padding(.leading, 16)
-                    
+
                     Spacer()
-                    
+
                     Text("Classic")
                         .font(.title)
                         .bold()
                         .foregroundColor(.white)
-                    
+
                     Spacer()
                     Spacer()
                 }
-                
+
                 questionProgressView
             }
         }
         .opacity(viewModel.isClassicHeaderVisible ? 1 : 0)
     }
-    
+
     var questionProgressView: some View {
         VStack {
             Text("\(viewModel.currentQuestionIndex) of \(viewModel.totalQuestions) questions")
                 .font(.subheadline)
                 .padding(.top, 8)
                 .foregroundColor(.white)
-            
+
             GeometryReader { geometry in
                 HStack {
                     Spacer()
-                    
+
                     ProgressBar(value: CGFloat(viewModel.currentQuestionIndex) / CGFloat(viewModel.totalQuestions))
                         .frame(width: geometry.size.width * 0.6, height: 10)
                         .padding(.horizontal, 16)
-                    
+
                     HStack(spacing: 8) {
                         Image(systemName: "checkmark.circle")
                             .foregroundColor(.green)
-                        
+
                         Text("\(viewModel.correctAnswersCount)")
                             .foregroundColor(.white)
                     }
@@ -106,14 +114,14 @@ struct ClassicGameView: View {
             .frame(height: 20) // Ajusta según sea necesario
         }
     }
-    
+
     var questionTextView: some View {
         Text(viewModel.questionText)
             .font(.headline)
             .padding()
             .multilineTextAlignment(.center)
     }
-    
+
     var answerOptionsView: some View {
         VStack(spacing: 16) {
             ForEach(viewModel.answers.indices, id: \.self) { index in
@@ -128,6 +136,7 @@ struct ClassicGameView: View {
 
 struct ProgressBar: View {
     var value: CGFloat
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
@@ -149,6 +158,7 @@ struct AnswerOptionView: View {
     var text: String
     var isSelected: Bool
     var action: () -> Void
+    
     var body: some View {
         Button(action: action) {
             HStack {
@@ -173,6 +183,11 @@ struct AnswerOptionView: View {
 
 struct ClassicGameView_Previews: PreviewProvider {
     static var previews: some View {
-        ClassicGameView()
+        ClassicGameView(viewModel: ClassicGameViewModel(gameService: GameService(), gameData: GameResponse(
+            game: Game(id: 1, score: 0, status: "in-progress"),
+            nextQuestion: Question(id: 1, questionText: "Sample question?", answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"], correctAnswer: 1),
+            currentQuestionIndex: 1,
+            correctAnswersCount: 0
+        )))
     }
 }

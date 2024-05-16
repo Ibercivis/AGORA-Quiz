@@ -8,8 +8,8 @@
 import Foundation
 
 struct Question: Codable {
-    var id: Int
-    var questionText: String
-    var answers: [String]
-    var correctAnswer: Int
+    let id: Int
+    let questionText: String
+    let answers: [String]
+    let correctAnswer: Int
 }

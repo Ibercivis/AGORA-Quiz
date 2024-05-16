@@ -20,54 +20,64 @@ class ClassicGameViewModel: ObservableObject {
     @Published var isClassicHeaderVisible = true
     @Published var isPaused = false
     @Published var isGameCompleted = false
+    @Published var navigateToMain = false
 
     private var gameService: GameService
-    private var currentGameId: Int = 0
+    private var currentGameId: Int
     private var currentQuestion: Question?
-    private var game: Game?
+    private var game: Game
+    private var cancellables = Set<AnyCancellable>()
 
-    init(gameService: GameService) {
+    init(gameService: GameService, gameData: GameResponse) {
         self.gameService = gameService
-        startGame()
+        self.game = gameData.game
+        self.currentGameId = gameData.game.id
+        self.totalQuestions = gameData.currentQuestionIndex
+        self.currentQuestion = gameData.nextQuestion
+        self.correctAnswersCount = gameData.correctAnswersCount
+        self.currentQuestionIndex = gameData.currentQuestionIndex
+
+        if let question = self.currentQuestion {
+            self.questionText = question.questionText
+            self.answers = question.answers
+        }
     }
 
     func startGame() {
-        gameService.startGame { result in
-            switch result {
-            case .success(let gameResponse):
-                DispatchQueue.main.async {
-                    self.game = gameResponse.game
-                    self.currentGameId = gameResponse.game.id
-                    self.totalQuestions = gameResponse.totalQuestions
-                    self.updateUIWithQuestion(gameResponse.nextQuestion, currentQuestionIndex: 1, correctAnswersCount: 0)
+        gameService.startGame()
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("Error starting new game: \(error)")
                 }
-            case .failure(let error):
-                // Manejar el error
-                print(error)
-            }
-        }
+            }, receiveValue: { [weak self] gameResponse in
+                DispatchQueue.main.async {
+                    self?.game = gameResponse.game
+                    self?.currentGameId = gameResponse.game.id
+                    self?.updateUIWithQuestion(gameResponse.nextQuestion, currentQuestionIndex: 1, correctAnswersCount: 0)
+                }
+            })
+            .store(in: &cancellables)
     }
 
     func onAnswerSelected(_ index: Int) {
         selectedAnswer = index
-        if currentQuestion == nil { return }
+        guard let currentQuestion = currentQuestion else { return }
         sendAnswerToServer(selectedAnswer: index + 1)
     }
 
     private func sendAnswerToServer(selectedAnswer: Int) {
-        guard let question = currentQuestion else { return }
-
-        gameService.answerQuestion(gameId: currentGameId, questionId: question.id, answerIndex: selectedAnswer) { result in
-            switch result {
-            case .success(let response):
-                DispatchQueue.main.async {
-                    self.handleAnswerResponse(response)
+        guard let token = SessionManager.shared.token, let question = currentQuestion else { return }
+        gameService.answerQuestion(gameId: game.id, questionId: question.id, answerIndex: selectedAnswer)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("Error sending answer: \(error)")
                 }
-            case .failure(let error):
-                // Manejar el error
-                print(error)
-            }
-        }
+            }, receiveValue: { [weak self] answerResponse in
+                DispatchQueue.main.async {
+                    self?.handleAnswerResponse(answerResponse)
+                }
+            })
+            .store(in: &cancellables)
     }
 
     private func handleAnswerResponse(_ response: AnswerResponse) {
@@ -80,6 +90,9 @@ class ClassicGameViewModel: ObservableObject {
 
         if response.status == "completed" {
             isGameCompleted = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.navigateToMain = true
+            }
         } else {
             loadNextQuestion(response: response)
         }
@@ -87,7 +100,9 @@ class ClassicGameViewModel: ObservableObject {
 
     private func loadNextQuestion(response: AnswerResponse) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.updateUIWithQuestion(response.nextQuestion, currentQuestionIndex: response.currentQuestionIndex, correctAnswersCount: self.correctAnswersCount)
+            if let nextQuestion = response.nextQuestion {
+                self.updateUIWithQuestion(nextQuestion, currentQuestionIndex: response.currentQuestionIndex, correctAnswersCount: self.correctAnswersCount)
+            }
         }
     }
 
@@ -113,17 +128,17 @@ class ClassicGameViewModel: ObservableObject {
     }
 
     func quitGame() {
-        guard let gameId = game?.id else { return }
-        gameService.abandonGame(gameId: gameId) { result in
-            switch result {
-            case .success:
-                DispatchQueue.main.async {
-                    // Manejar la lógica después de abandonar el juego, como regresar a la pantalla principal
+        guard let token = SessionManager.shared.token else { return }
+        gameService.abandonGame(gameId: game.id)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("Error abandoning game: \(error)")
                 }
-            case .failure(let error):
-                // Manejar el error
-                print(error)
-            }
-        }
+            }, receiveValue: { [weak self] _ in
+                DispatchQueue.main.async {
+                    self?.navigateToMain = true
+                }
+            })
+            .store(in: &cancellables)
     }
 }

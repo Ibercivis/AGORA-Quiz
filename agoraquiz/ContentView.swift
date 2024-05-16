@@ -8,17 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isLoggedIn: Bool = SessionManager.shared.token != nil
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            if isLoggedIn {
+                AppTabView()
+            } else {
+                LoginView()
+            }
         }
-        .padding()
+        .onAppear {
+            isLoggedIn = SessionManager.shared.token != nil
+        }
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
+
