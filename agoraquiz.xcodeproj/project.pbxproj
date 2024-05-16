@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		970704822BF60E1100073C4C /* PauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970704812BF60E1100073C4C /* PauseView.swift */; };
 		97124C8F2BEB774E00E65467 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C8E2BEB774E00E65467 /* SignUpView.swift */; };
 		97124C912BEB776A00E65467 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C902BEB776A00E65467 /* SignUpViewModel.swift */; };
 		97124C962BEB7D8100E65467 /* CustomTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C952BEB7D8100E65467 /* CustomTextInput.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		970704812BF60E1100073C4C /* PauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseView.swift; sourceTree = "<group>"; };
 		97124C8E2BEB774E00E65467 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		97124C902BEB776A00E65467 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		97124C952BEB7D8100E65467 /* CustomTextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextInput.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 				979275342BF28043009ACAF9 /* MainView.swift */,
 				979275362BF28A59009ACAF9 /* AppTabView.swift */,
 				974CE1B82BF4A512001967B8 /* ClassicGameView.swift */,
+				970704812BF60E1100073C4C /* PauseView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				974CE1C22BF529DB001967B8 /* Question.swift in Sources */,
 				97124C9A2BEB8B1D00E65467 /* SessionManager.swift in Sources */,
 				974CE1BD2BF51B9A001967B8 /* ClassicGameViewModel.swift in Sources */,
+				970704822BF60E1100073C4C /* PauseView.swift in Sources */,
 				97124C8F2BEB774E00E65467 /* SignUpView.swift in Sources */,
 				97E9AE612BEA3BAD0057A835 /* LoginView.swift in Sources */,
 				974CE1C42BF529EF001967B8 /* GameResponse.swift in Sources */,

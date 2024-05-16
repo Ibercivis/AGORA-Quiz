@@ -11,4 +11,5 @@ struct Question: Codable {
     var id: Int
     var questionText: String
     var answers: [String]
+    var correctAnswer: Int
 }

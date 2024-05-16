@@ -9,18 +9,37 @@ import SwiftUI
 
 struct ClassicGameView: View {
     @StateObject private var viewModel = ClassicGameViewModel(gameService: GameService())
-
+    @State private var showPauseModal = false
+    
     var body: some View {
-        VStack(spacing: 0) {
-            headerView
-            questionTextView
-            Spacer()
-            answerOptionsView
-            Spacer()
+        ZStack {
+            VStack(spacing: 0) {
+                headerView
+                questionTextView
+                Spacer()
+                answerOptionsView
+                Spacer()
+            }
+            .navigationBarBackButtonHidden(true)
+            
+            if viewModel.isPaused {
+                PauseView(score: viewModel.correctAnswersCount) {
+                    viewModel.quitGame()
+                }
+            }
         }
-        .navigationBarBackButtonHidden(true)
+        .fullScreenCover(isPresented: $viewModel.isPaused) {
+            PauseView(score: viewModel.correctAnswersCount) {
+                viewModel.quitGame()
+            }
+        }
+        .onChange(of: viewModel.isGameCompleted) { isCompleted in
+            if isCompleted {
+                // Aquí puedes mostrar un modal de finalización del juego si es necesario
+            }
+        }
     }
-
+    
     var headerView: some View {
         ZStack {
             Image("headerPlain")
@@ -28,11 +47,11 @@ struct ClassicGameView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: UIScreen.main.bounds.width)
                 .clipped()
-
+            
             VStack {
                 HStack {
                     Button(action: {
-                        // Acción para cerrar la vista
+                        viewModel.isPaused.toggle()
                     }) {
                         Image(systemName: "xmark")
                             .padding()
@@ -41,43 +60,43 @@ struct ClassicGameView: View {
                             .clipShape(Circle())
                     }
                     .padding(.leading, 16)
-
+                    
                     Spacer()
-
+                    
                     Text("Classic")
                         .font(.title)
                         .bold()
                         .foregroundColor(.white)
-
+                    
                     Spacer()
                     Spacer()
                 }
-
+                
                 questionProgressView
             }
         }
         .opacity(viewModel.isClassicHeaderVisible ? 1 : 0)
     }
-
+    
     var questionProgressView: some View {
         VStack {
             Text("\(viewModel.currentQuestionIndex) of \(viewModel.totalQuestions) questions")
                 .font(.subheadline)
                 .padding(.top, 8)
                 .foregroundColor(.white)
-
+            
             GeometryReader { geometry in
                 HStack {
                     Spacer()
-
+                    
                     ProgressBar(value: CGFloat(viewModel.currentQuestionIndex) / CGFloat(viewModel.totalQuestions))
                         .frame(width: geometry.size.width * 0.6, height: 10)
                         .padding(.horizontal, 16)
-
+                    
                     HStack(spacing: 8) {
                         Image(systemName: "checkmark.circle")
                             .foregroundColor(.green)
-
+                        
                         Text("\(viewModel.correctAnswersCount)")
                             .foregroundColor(.white)
                     }
@@ -87,14 +106,14 @@ struct ClassicGameView: View {
             .frame(height: 20) // Ajusta según sea necesario
         }
     }
-
+    
     var questionTextView: some View {
         Text(viewModel.questionText)
             .font(.headline)
             .padding()
             .multilineTextAlignment(.center)
     }
-
+    
     var answerOptionsView: some View {
         VStack(spacing: 16) {
             ForEach(viewModel.answers.indices, id: \.self) { index in
@@ -109,7 +128,6 @@ struct ClassicGameView: View {
 
 struct ProgressBar: View {
     var value: CGFloat
-    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
@@ -131,7 +149,6 @@ struct AnswerOptionView: View {
     var text: String
     var isSelected: Bool
     var action: () -> Void
-    
     var body: some View {
         Button(action: action) {
             HStack {
