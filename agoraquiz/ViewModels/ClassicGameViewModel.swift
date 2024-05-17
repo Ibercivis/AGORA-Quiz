@@ -120,6 +120,7 @@ class ClassicGameViewModel: ObservableObject {
         self.isClassicHeaderVisible = true
         self.isCorrectAnswerVisible = false
         self.isIncorrectAnswerVisible = false
+        self.selectedAnswer = nil  
     }
 
     private func showCorrectAnswer() {

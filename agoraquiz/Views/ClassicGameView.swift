@@ -37,74 +37,144 @@ struct ClassicGameView: View {
             }
         }
         .onAppear {
-                    viewModel.configure(gameService: gameService, navigationManager: navigationManager)
-                }
+            viewModel.configure(gameService: gameService, navigationManager: navigationManager)
+        }
     }
 
     var headerView: some View {
-        ZStack {
-            Image("headerPlain")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: UIScreen.main.bounds.width)
-                .clipped()
-
-            VStack {
-                HStack {
-                    Button(action: {
-                        viewModel.isPaused.toggle()
-                    }) {
-                        Image(systemName: "xmark")
-                            .padding()
-                            .background(Color.white.opacity(0.2))
-                            .foregroundColor(.white)
-                            .clipShape(Circle())
-                    }
-                    .padding(.leading, 16)
-
-                    Spacer()
-
-                    Text("Classic")
-                        .font(.title)
-                        .bold()
-                        .foregroundColor(.white)
-
-                    Spacer()
-                    Spacer()
-                }
-
-                questionProgressView
+        Group {
+            if viewModel.isCorrectAnswerVisible {
+                HeaderCorrect()
+            } else if viewModel.isIncorrectAnswerVisible {
+                HeaderIncorrect()
+            } else {
+                HeaderRegular(isPaused: $viewModel.isPaused, currentQuestionIndex: viewModel.currentQuestionIndex, totalQuestions: viewModel.totalQuestions, correctAnswersCount: viewModel.correctAnswersCount)
             }
         }
-        .opacity(viewModel.isClassicHeaderVisible ? 1 : 0)
     }
+    
+    struct HeaderRegular: View {
+        @Binding var isPaused: Bool
+        var currentQuestionIndex: Int
+        var totalQuestions: Int
+        var correctAnswersCount: Int
 
-    var questionProgressView: some View {
-        VStack {
-            Text("\(viewModel.currentQuestionIndex) of \(viewModel.totalQuestions) questions")
-                .font(.subheadline)
-                .padding(.top, 8)
-                .foregroundColor(.white)
-
-            GeometryReader { geometry in
-                HStack {
-                    Spacer()
-
-                    ProgressBar(value: CGFloat(viewModel.currentQuestionIndex) / CGFloat(viewModel.totalQuestions))
-                        .frame(width: geometry.size.width * 0.6, height: 10)
-                        .padding(.horizontal, 16)
-
-                    HStack(spacing: 8) {
-                        Image(systemName: "checkmark.circle")
-                            .foregroundColor(.green)
-
-                        Text("\(viewModel.correctAnswersCount)")
+        var body: some View {
+            ZStack {
+                Image("headerPlain")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: UIScreen.main.bounds.width)
+                    .clipped()
+                
+                VStack {
+                    HStack {
+                        Button(action: {
+                            isPaused.toggle()
+                        }) {
+                            Image(systemName: "xmark")
+                                .padding()
+                                .background(Color.white.opacity(0.2))
+                                .foregroundColor(.white)
+                                .clipShape(Circle())
+                        }
+                        .padding(.leading, 16)
+                        
+                        Spacer()
+                        
+                        Text("Classic")
+                            .font(.title)
+                            .bold()
                             .foregroundColor(.white)
+                        
+                        Spacer()
+                        Spacer()
                     }
-                    .padding(.trailing, 24)
+                    
+                    questionProgressView
                 }
             }
-            .frame(height: 20) // Ajusta según sea necesario
+        }
+
+        var questionProgressView: some View {
+            VStack {
+                Text("\(currentQuestionIndex) of \(totalQuestions) questions")
+                    .font(.subheadline)
+                    .padding(.top, 8)
+                    .foregroundColor(.white)
+
+                GeometryReader { geometry in
+                    HStack {
+                        Spacer()
+
+                        ProgressBar(value: CGFloat(currentQuestionIndex - 1) / CGFloat(totalQuestions))
+                            .frame(width: geometry.size.width * 0.6, height: 10)
+                            .padding(.horizontal, 16)
+
+                        HStack(spacing: 8) {
+                            Image(systemName: "checkmark.circle")
+                                .foregroundColor(.green)
+
+                            Text("\(correctAnswersCount)")
+                                .foregroundColor(.white)
+                        }
+                        .padding(.trailing, 24)
+                    }
+                }
+                .frame(height: 20) // Ajusta según sea necesario
+            }
+        }
+    }
+    
+    struct HeaderCorrect: View {
+        var body: some View {
+            ZStack {
+                Image("headerCorrect")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: UIScreen.main.bounds.width)
+                    .clipped()
+                
+                VStack {
+                    Text("Correct!")
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .padding()
+                    Text("+5 Pts")
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .padding([.leading, .trailing], 20)
+                        .padding([.top, .bottom], 10)
+                        .background(Color.white)
+                        .cornerRadius(20)
+                }
+            }
+        }
+    }
+    
+    struct HeaderIncorrect: View {
+        var body: some View {
+            ZStack {
+                Image("headerIncorrect")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: UIScreen.main.bounds.width)
+                    .clipped()
+                
+                VStack {
+                    Text("Incorrect")
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .padding()
+                    Text("-3 Pts")
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .padding([.leading, .trailing], 20)
+                        .padding([.top, .bottom], 10)
+                        .background(Color.white)
+                        .cornerRadius(20)
+                }
+            }
         }
     }
 
@@ -118,13 +188,18 @@ struct ClassicGameView: View {
     var answerOptionsView: some View {
         VStack(spacing: 16) {
             ForEach(viewModel.answers.indices, id: \.self) { index in
-                AnswerOptionView(index: index, text: viewModel.answers[index], isSelected: viewModel.selectedAnswer == index) {
+                AnswerOptionView(index: index,
+                                 text: viewModel.answers[index],
+                                 isSelected: viewModel.selectedAnswer == index,
+                                 isCorrect: viewModel.isCorrectAnswerVisible && viewModel.selectedAnswer == index,
+                                 isIncorrect: viewModel.isIncorrectAnswerVisible && viewModel.selectedAnswer == index) {
                     viewModel.onAnswerSelected(index)
                 }
             }
         }
         .padding(.horizontal, 16)
     }
+    
 }
 
 struct ProgressBar: View {
@@ -150,7 +225,19 @@ struct AnswerOptionView: View {
     var index: Int
     var text: String
     var isSelected: Bool
+    var isCorrect: Bool
+    var isIncorrect: Bool
     var action: () -> Void
+    
+    var backgroundColor: Color {
+        if isCorrect {
+            return .green.opacity(0.2)
+        } else if isIncorrect {
+            return .red.opacity(0.2)
+        } else {
+            return isSelected ? Color.blue.opacity(0.2) : Color.white
+        }
+    }
     
     var body: some View {
         Button(action: action) {
@@ -164,7 +251,7 @@ struct AnswerOptionView: View {
                 Spacer()
             }
             .padding()
-            .background(isSelected ? Color.blue.opacity(0.2) : Color.white)
+            .background(backgroundColor)
             .cornerRadius(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
