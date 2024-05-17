@@ -113,6 +113,15 @@ class GameService {
 
         return session.dataTaskPublisher(for: request)
             .tryMap { result -> GameResponse in
+                // Imprimir la respuesta completa del servidor
+                if let responseString = String(data: result.data, encoding: .utf8) {
+                    print("Server response: \(responseString)")
+                }
+
+                guard let httpResponse = result.response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                    throw NetworkError.unexpectedResponse
+                }
+
                 let decoder = JSONDecoder()
                 return try decoder.decode(GameResponse.self, from: result.data)
             }

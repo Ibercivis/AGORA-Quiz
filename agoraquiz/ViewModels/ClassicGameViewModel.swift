@@ -32,7 +32,6 @@ class ClassicGameViewModel: ObservableObject {
         self.gameService = gameService
         self.game = gameData.game
         self.currentGameId = gameData.game.id
-        self.totalQuestions = gameData.currentQuestionIndex
         self.currentQuestion = gameData.nextQuestion
         self.correctAnswersCount = gameData.correctAnswersCount
         self.currentQuestionIndex = gameData.currentQuestionIndex
@@ -136,7 +135,9 @@ class ClassicGameViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] _ in
                 DispatchQueue.main.async {
+                    print(self?.navigateToMain as Any)
                     self?.navigateToMain = true
+                    print(self?.navigateToMain as Any)
                 }
             })
             .store(in: &cancellables)

@@ -30,6 +30,7 @@ class MainViewModel: ObservableObject {
                     print("Error checking for in-progress game: \(error)")
                 }
             }, receiveValue: { [weak self] gameResponse in
+                print("Game Response received: \(gameResponse)") // Debug
                 self?.gameData = gameResponse
                 self?.navigateToClassicGame = true
             })

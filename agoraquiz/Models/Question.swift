@@ -12,4 +12,45 @@ struct Question: Codable {
     let questionText: String
     let answers: [String]
     let correctAnswer: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case questionText = "question_text"
+        case correctAnswer = "correct_answer"
+        case answer1, answer2, answer3, answer4
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        questionText = try container.decode(String.self, forKey: .questionText)
+        correctAnswer = try container.decode(Int.self, forKey: .correctAnswer)
+        
+        // Almacenar respuestas en un array
+        var answersArray = [String]()
+        for i in 1...4 {
+            let key = CodingKeys(rawValue: "answer\(i)")
+            if let answerKey = key, let answer = try container.decodeIfPresent(String.self, forKey: answerKey) {
+                answersArray.append(answer)
+            }
+        }
+        answers = answersArray
+    }
+    
+    init(id: Int, questionText: String, answers: [String], correctAnswer: Int) {
+        self.id = id
+        self.questionText = questionText
+        self.answers = answers
+        self.correctAnswer = correctAnswer
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(questionText, forKey: .questionText)
+        try container.encode(correctAnswer, forKey: .correctAnswer)
+        for (index, answer) in answers.enumerated() {
+            try container.encode(answer, forKey: .init(stringValue: "answer\(index + 1)")!)
+        }
+    }
 }

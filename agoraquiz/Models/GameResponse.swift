@@ -12,4 +12,11 @@ struct GameResponse: Codable {
     let nextQuestion: Question
     let currentQuestionIndex: Int
     let correctAnswersCount: Int
+
+    enum CodingKeys: String, CodingKey {
+        case game
+        case nextQuestion = "next_question"
+        case currentQuestionIndex = "current_question_index"
+        case correctAnswersCount = "correct_answers_count"
+    }
 }
