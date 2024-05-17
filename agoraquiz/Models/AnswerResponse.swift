@@ -13,4 +13,12 @@ struct AnswerResponse: Codable {
     let currentQuestionIndex: Int
     let correctAnswersCount: Int
     let status: String
+    
+    enum CodingKeys: String, CodingKey {
+        case correct
+        case nextQuestion = "next_question"
+        case currentQuestionIndex = "current_question_index"
+        case correctAnswersCount = "correct_answers_count"
+        case status
+    }
 }
