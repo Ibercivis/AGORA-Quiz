@@ -2,7 +2,7 @@
 //  SessionManager.swift
 //  agoraquiz
 //
-//  Created by Ibercivis on 8/5/24.
+//  Created by Ibercivis on 17/5/24.
 //
 
 import Foundation
@@ -42,4 +42,3 @@ class SessionManager {
         defaults.set(false, forKey: keyIsLogged)
     }
 }
-

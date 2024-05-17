@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class GameService {
+class GameService: ObservableObject {
     private let session = URLSession.shared
 
     func startGame() -> AnyPublisher<GameResponse, Error> {

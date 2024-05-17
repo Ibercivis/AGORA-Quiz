@@ -22,14 +22,15 @@ class ClassicGameViewModel: ObservableObject {
     @Published var isGameCompleted = false
     @Published var navigateToMain = false
 
-    private var gameService: GameService
+    var gameService: GameService!
+    var navigationManager: NavigationManager!
+    
     private var currentGameId: Int
     private var currentQuestion: Question?
     private var game: Game
     private var cancellables = Set<AnyCancellable>()
 
-    init(gameService: GameService, gameData: GameResponse) {
-        self.gameService = gameService
+    init(gameData: GameResponse) {
         self.game = gameData.game
         self.currentGameId = gameData.game.id
         self.currentQuestion = gameData.nextQuestion
@@ -41,6 +42,11 @@ class ClassicGameViewModel: ObservableObject {
             self.answers = question.answers
         }
     }
+    
+    func configure(gameService: GameService, navigationManager: NavigationManager) {
+            self.gameService = gameService
+            self.navigationManager = navigationManager
+        }
 
     func startGame() {
         gameService.startGame()
@@ -135,9 +141,8 @@ class ClassicGameViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] _ in
                 DispatchQueue.main.async {
-                    print(self?.navigateToMain as Any)
-                    self?.navigateToMain = true
-                    print(self?.navigateToMain as Any)
+                    guard let strongSelf = self else { return }
+                    strongSelf.navigationManager.currentPage = .mainTab
                 }
             })
             .store(in: &cancellables)

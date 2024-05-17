@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SignUpView: View {
+    @EnvironmentObject var navigationManager: NavigationManager
     @StateObject private var viewModel = SignUpViewModel()
 
     var body: some View {
@@ -23,7 +24,11 @@ struct SignUpView: View {
                         .foregroundColor(.red)
                 }
                 signUpButton
-                alreadyHaveAccount
+                Button("Already have an account? Login") {
+                    navigationManager.currentPage = .login
+                }
+                .foregroundColor(.blue)
+                .padding(.top, 24)
             }
             .padding(.horizontal, 24)
         }
@@ -31,7 +36,7 @@ struct SignUpView: View {
         .navigationBarTitle("Sign Up", displayMode: .inline)
         .navigationBarBackButtonHidden(true)
     }
-
+    
     var header: some View {
         ZStack {
             Image("headerPrimary")
@@ -54,23 +59,12 @@ struct SignUpView: View {
         .buttonStyle(FilledButton())
         .padding(.top, 24)
     }
-    
-    var alreadyHaveAccount: some View {
-        VStack {
-            Text("Already have an account?")
-                .foregroundColor(.primary)
-            // Navigation to Login
-            NavigationLink(destination: LoginView()) {
-                                Text("Login")
-                            }.foregroundColor(.blue)
-        }
-        .padding(.top, 24)
-    }
 }
 
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
         SignUpView()
+            .environmentObject(NavigationManager())
     }
 }
 

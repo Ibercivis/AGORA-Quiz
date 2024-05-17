@@ -11,9 +11,13 @@ import Combine
 class LoginViewModel: ObservableObject {
     @Published var username = ""
     @Published var password = ""
-    @Published var isLoggedIn = SessionManager.shared.isLogged
-
+    var navigationManager: NavigationManager?
+    
     func login() {
+        guard let navigationManager = navigationManager else {
+                    print("NavigationManager not set")
+                    return
+                }
         let url = URLs.baseURL.appendingPathComponent(URLs.APIPath.login)
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -60,8 +64,7 @@ class LoginViewModel: ObservableObject {
                    let token = json["key"] as? String {  // Cambiado de "token" a "key"
                     DispatchQueue.main.async {
                         SessionManager.shared.createLoginSession(username: self.username, token: token)
-                        self.isLoggedIn = true
-                        print("Login successful: \(self.isLoggedIn)")
+                        navigationManager.currentPage = .mainTab
                     }
                 } else {
                     DispatchQueue.main.async {
@@ -78,7 +81,6 @@ class LoginViewModel: ObservableObject {
     
     func logout() {
         SessionManager.shared.logoutUser()
-        isLoggedIn = false
     }
 }
 

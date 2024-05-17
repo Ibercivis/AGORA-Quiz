@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct agoraquizApp: App {
+    var gameService = GameService()
+    var navigationManager = NavigationManager()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(gameService)
+                .environmentObject(navigationManager)
         }
     }
 }

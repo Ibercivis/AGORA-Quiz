@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject private var viewModel = MainViewModel(gameService: GameService())
-    @State private var showClassicGameView = false
+    @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var gameService: GameService
+    @StateObject private var viewModel = MainViewModel()
 
     var body: some View {
         NavigationView {
@@ -24,12 +25,10 @@ struct MainView: View {
             .navigationBarHidden(true)
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .fullScreenCover(isPresented: $viewModel.navigateToClassicGame) {
-            if let gameData = viewModel.gameData {
-                ClassicGameView(viewModel: ClassicGameViewModel(gameService: GameService(), gameData: gameData))
-            }
-        }
         .toast(isPresented: $viewModel.showToast, message: viewModel.toastMessage)
+        .onAppear {
+                    viewModel.configure(gameService: gameService, navigationManager: navigationManager)
+                }
     }
 
     var header: some View {
@@ -70,19 +69,10 @@ struct MainView: View {
                 .padding(.horizontal)
 
             ForEach(GameMode.allCases, id: \.self) { mode in
-                if mode == .classic {
-                    NavigationLink(destination: EmptyView()) {
-                        GameModeView(mode: mode)
-                    }
-                    .simultaneousGesture(TapGesture().onEnded {
-                        viewModel.startNewGame()
-                    })
-                } else {
-                    Button(action: {
-                        viewModel.showUnavailableToast()
-                    }) {
-                        GameModeView(mode: mode)
-                    }
+                Button(action: {
+                    mode == .classic ? viewModel.startNewGame() : viewModel.showUnavailableToast()
+                }) {
+                    GameModeView(mode: mode)
                 }
             }
         }
@@ -108,13 +98,6 @@ struct MainView: View {
         }
     }
 
-    enum GameMode: String, CaseIterable {
-        case classic = "Classic"
-        case timeTrial = "Time Trial"
-        case categories = "Categories"
-        case multiplayer = "Multiplayer"
-    }
-
     struct GameModeView: View {
         var mode: GameMode
 
@@ -131,7 +114,12 @@ struct MainView: View {
 
     struct MainView_Previews: PreviewProvider {
         static var previews: some View {
+            let gameService = GameService()
+            let navigationManager = NavigationManager()
+            
             MainView()
+                .environmentObject(navigationManager)
+                .environmentObject(gameService)
         }
     }
 }

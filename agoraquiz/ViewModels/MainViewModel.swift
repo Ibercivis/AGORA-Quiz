@@ -9,21 +9,22 @@ import SwiftUI
 import Combine
 
 class MainViewModel: ObservableObject {
-    @Published var navigateToClassicGame: Bool = false
     @Published var gameData: GameResponse?
     @Published var showToast: Bool = false
     @Published var toastMessage: String = ""
 
-    private var gameService: GameService
-    private var cancellables = Set<AnyCancellable>()
+    var gameService: GameService?
+    var navigationManager: NavigationManager?
+    var cancellables = Set<AnyCancellable>()
 
-    init(gameService: GameService) {
+    func configure(gameService: GameService, navigationManager: NavigationManager) {
         self.gameService = gameService
+        self.navigationManager = navigationManager
         checkForInProgressGame()
     }
 
     func checkForInProgressGame() {
-        guard let token = SessionManager.shared.token else { return }
+        guard let gameService = gameService, let token = SessionManager.shared.token else { return }
         gameService.checkForInProgressGame()
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
@@ -31,22 +32,20 @@ class MainViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] gameResponse in
                 print("Game Response received: \(gameResponse)") // Debug
-                self?.gameData = gameResponse
-                self?.navigateToClassicGame = true
+                self?.navigationManager?.navigateToClassicGame(gameData: gameResponse)
             })
             .store(in: &cancellables)
     }
 
     func startNewGame() {
-        guard let token = SessionManager.shared.token else { return }
+        guard let gameService = gameService, let token = SessionManager.shared.token else { return }
         gameService.startGame()
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
                     print("Error starting new game: \(error)")
                 }
             }, receiveValue: { [weak self] gameResponse in
-                self?.gameData = gameResponse
-                self?.navigateToClassicGame = true
+                self?.navigationManager?.navigateToClassicGame(gameData: gameResponse)
             })
             .store(in: &cancellables)
     }

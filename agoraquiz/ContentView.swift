@@ -8,25 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var isLoggedIn: Bool = SessionManager.shared.token != nil
+    @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var gameService: GameService
 
     var body: some View {
-        NavigationView {
-            if isLoggedIn {
-                AppTabView()
-            } else {
-                LoginView()
-            }
+        switch navigationManager.currentPage {
+        case .login:
+            LoginView()
+                .environmentObject(navigationManager)
+        case .signUp:
+            SignUpView()
+                .environmentObject(navigationManager)
+        case .mainTab, .settings, .profile:
+            AppTabView(selectedTab: $navigationManager.selectedTab)
+                .environmentObject(navigationManager)
+                .environmentObject(gameService)
+        case .classicGame(let gameData):
+            ClassicGameView(viewModel: ClassicGameViewModel(gameData: gameData))
+                .environmentObject(navigationManager)
+                .environmentObject(gameService)
         }
-        .onAppear {
-            isLoggedIn = SessionManager.shared.token != nil
-        }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
 

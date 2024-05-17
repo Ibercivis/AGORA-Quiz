@@ -8,30 +8,34 @@
 import SwiftUI
 
 struct AppTabView: View {
+    @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var gameService: GameService
+    @Binding var selectedTab: Int
+
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             MainView()
+                .environmentObject(navigationManager)
+                .environmentObject(gameService)
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Home")
                 }
+                .tag(0)
 
             Text("Settings")
                 .tabItem {
                     Image(systemName: "gear")
                     Text("Settings")
                 }
+                .tag(1)
 
             Text("Profile")
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("Profile")
                 }
+                .tag(2)
         }
     }
-}
-
-
-#Preview {
-    AppTabView()
 }

@@ -8,12 +8,9 @@
 import SwiftUI
 
 struct ClassicGameView: View {
-    @StateObject private var viewModel: ClassicGameViewModel
-    @State private var showPauseModal = false
-
-    init(viewModel: ClassicGameViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
+    @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var gameService: GameService
+    @StateObject var viewModel: ClassicGameViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -36,16 +33,12 @@ struct ClassicGameView: View {
         }
         .onChange(of: viewModel.navigateToMain) { navigate, _ in
             if navigate {
-                DispatchQueue.main.async {
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                        if let window = windowScene.windows.first {
-                            window.rootViewController = UIHostingController(rootView: AppTabView())
-                            window.makeKeyAndVisible()
-                        }
-                    }
-                }
+                navigationManager.currentPage = .mainTab
             }
         }
+        .onAppear {
+                    viewModel.configure(gameService: gameService, navigationManager: navigationManager)
+                }
     }
 
     var headerView: some View {
@@ -183,11 +176,19 @@ struct AnswerOptionView: View {
 
 struct ClassicGameView_Previews: PreviewProvider {
     static var previews: some View {
-        ClassicGameView(viewModel: ClassicGameViewModel(gameService: GameService(), gameData: GameResponse(
+        let gameService = GameService()
+        let navigationManager = NavigationManager()
+        let gameData = GameResponse(
             game: Game(id: 1, score: 0, status: "in-progress"),
             nextQuestion: Question(id: 1, questionText: "Sample question?", answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"], correctAnswer: 1),
             currentQuestionIndex: 1,
             correctAnswersCount: 0
-        )))
+        )
+        let viewModel = ClassicGameViewModel(gameData: gameData)
+        viewModel.configure(gameService: gameService, navigationManager: navigationManager)
+
+        return ClassicGameView(viewModel: viewModel)
+            .environmentObject(gameService)
+            .environmentObject(navigationManager)
     }
 }
