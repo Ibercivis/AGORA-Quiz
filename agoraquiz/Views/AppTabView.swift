@@ -30,7 +30,9 @@ struct AppTabView: View {
                 }
                 .tag(1)
 
-            Text("Profile")
+            ProfileView()
+                .environmentObject(navigationManager)
+                .environmentObject(gameService)
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("Profile")

@@ -151,6 +151,28 @@ class GameService: ObservableObject {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
+    
+    func getUserProfile(token: String) -> AnyPublisher<UserProfile, Error> {
+        guard let url = URL(string: URLs.APIPath.getProfile, relativeTo: URLs.baseURL) else {
+            return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+        }
+            
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+            
+        return session.dataTaskPublisher(for: request)
+            .tryMap { result -> UserProfile in
+                if let jsonString = String(data: result.data, encoding: .utf8) {
+                    print("Server response JSON: \(jsonString)")
+                }
+                let decoder = JSONDecoder()
+                return try decoder.decode(UserProfile.self, from: result.data)
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+        }
 }
 
 enum NetworkError: Error {

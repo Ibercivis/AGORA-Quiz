@@ -16,6 +16,9 @@
 		97124C962BEB7D8100E65467 /* CustomTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C952BEB7D8100E65467 /* CustomTextInput.swift */; };
 		97124C982BEB7EC000E65467 /* FilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C972BEB7EC000E65467 /* FilledButton.swift */; };
 		97124C9D2BEB8C9400E65467 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97124C9C2BEB8C9400E65467 /* URLs.swift */; };
+		9716CFAC2BF8828800909484 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9716CFAB2BF8828800909484 /* ProfileView.swift */; };
+		9716CFAE2BF88C2900909484 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9716CFAD2BF88C2900909484 /* ProfileViewModel.swift */; };
+		9716CFB02BF88E3100909484 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9716CFAF2BF88E3100909484 /* UserProfile.swift */; };
 		972983F52BF7AAD0009086AE /* NavigationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 972983F42BF7AAD0009086AE /* NavigationManager.swift */; };
 		972983F72BF7ABFA009086AE /* GameMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 972983F62BF7ABFA009086AE /* GameMode.swift */; };
 		972983F92BF7AFB9009086AE /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 972983F82BF7AFB9009086AE /* SessionManager.swift */; };
@@ -67,6 +70,9 @@
 		97124C952BEB7D8100E65467 /* CustomTextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextInput.swift; sourceTree = "<group>"; };
 		97124C972BEB7EC000E65467 /* FilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledButton.swift; sourceTree = "<group>"; };
 		97124C9C2BEB8C9400E65467 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
+		9716CFAB2BF8828800909484 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		9716CFAD2BF88C2900909484 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		9716CFAF2BF88E3100909484 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		972983F42BF7AAD0009086AE /* NavigationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationManager.swift; sourceTree = "<group>"; };
 		972983F62BF7ABFA009086AE /* GameMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMode.swift; sourceTree = "<group>"; };
 		972983F82BF7AFB9009086AE /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
@@ -154,6 +160,7 @@
 				974CE1C32BF529EF001967B8 /* GameResponse.swift */,
 				974CE1C52BF52A07001967B8 /* AnswerResponse.swift */,
 				972983F62BF7ABFA009086AE /* GameMode.swift */,
+				9716CFAF2BF88E3100909484 /* UserProfile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -231,6 +238,7 @@
 				974CE1B82BF4A512001967B8 /* ClassicGameView.swift */,
 				970704812BF60E1100073C4C /* PauseView.swift */,
 				970704832BF647FA00073C4C /* GameCompletedView.swift */,
+				9716CFAB2BF8828800909484 /* ProfileView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -242,6 +250,7 @@
 				97124C902BEB776A00E65467 /* SignUpViewModel.swift */,
 				974CE1BC2BF51B9A001967B8 /* ClassicGameViewModel.swift */,
 				970704872BF6605900073C4C /* MainViewModel.swift */,
+				9716CFAD2BF88C2900909484 /* ProfileViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -379,6 +388,7 @@
 				974CE1C62BF52A07001967B8 /* AnswerResponse.swift in Sources */,
 				97E9AE642BEA3BCF0057A835 /* LoginViewModel.swift in Sources */,
 				974CE1BB2BF51B50001967B8 /* GameService.swift in Sources */,
+				9716CFAE2BF88C2900909484 /* ProfileViewModel.swift in Sources */,
 				97124C982BEB7EC000E65467 /* FilledButton.swift in Sources */,
 				974CE1C22BF529DB001967B8 /* Question.swift in Sources */,
 				972983F52BF7AAD0009086AE /* NavigationManager.swift in Sources */,
@@ -390,6 +400,8 @@
 				972983F92BF7AFB9009086AE /* SessionManager.swift in Sources */,
 				974CE1C42BF529EF001967B8 /* GameResponse.swift in Sources */,
 				97124C9D2BEB8C9400E65467 /* URLs.swift in Sources */,
+				9716CFAC2BF8828800909484 /* ProfileView.swift in Sources */,
+				9716CFB02BF88E3100909484 /* UserProfile.swift in Sources */,
 				979275372BF28A59009ACAF9 /* AppTabView.swift in Sources */,
 				972983F72BF7ABFA009086AE /* GameMode.swift in Sources */,
 				97E9AE382BEA340C0057A835 /* ContentView.swift in Sources */,
