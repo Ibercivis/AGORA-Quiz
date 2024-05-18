@@ -83,6 +83,7 @@ class RecoverySuccess(View):
 class UserProfileView(generics.RetrieveUpdateAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_object(self):
         return self.request.user.profile

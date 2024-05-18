@@ -1,8 +1,16 @@
 from django.conf import settings
 from django.db import models
+import os 
+
+def user_profile_image_path(instance, filename):
+    # File will be uploaded to MEDIA_ROOT/profile_images/profile_<user_id>.<file_extension>
+    extension = filename.split('.')[-1]
+    filename = f'profile_{instance.user.id}.{extension}'
+    return os.path.join('profile_images', filename)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    profile_image = models.ImageField(upload_to=user_profile_image_path, blank=True, null=True)
     total_points = models.IntegerField(default=0)
     total_games_played = models.IntegerField(default=0)
     total_games_abandoned = models.IntegerField(default=0)
