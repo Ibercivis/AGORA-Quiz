@@ -1,0 +1,6 @@
+framework module Pods_agoraquiz {
+  umbrella header "Pods-agoraquiz-umbrella.h"
+
+  export *
+  module * { export * }
+}

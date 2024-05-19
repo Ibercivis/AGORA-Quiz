@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class GameService: ObservableObject {
     private let session = URLSession.shared
@@ -173,6 +174,85 @@ class GameService: ObservableObject {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
         }
+    
+    func uploadProfileImage(image: UIImage, token: String) -> AnyPublisher<Void, Error> {
+        guard let url = URL(string: URLs.APIPath.getProfile, relativeTo: URLs.baseURL) else {
+            return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        let data = createBody(with: image, boundary: boundary)
+        
+        return session.uploadTaskPublisher(for: request, from: data)
+            .tryMap { result in
+                guard let httpResponse = result.response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                    throw NetworkError.unexpectedResponse
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    
+    func deleteProfileImage(token: String) -> AnyPublisher<Void, Error> {
+        guard let url = URL(string: URLs.APIPath.getProfile, relativeTo: URLs.baseURL) else {
+            return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body = ["profile_image": NSNull()]
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+        } catch {
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+        
+        return session.dataTaskPublisher(for: request)
+            .tryMap { result in
+                guard let httpResponse = result.response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                    throw NetworkError.unexpectedResponse
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    
+    private func createBody(with image: UIImage, boundary: String) -> Data {
+        var body = Data()
+        
+        let filename = "profile.jpg"
+        let mimetype = "image/jpeg"
+        let fieldName = "profile_image"
+        
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: \(mimetype)\r\n\r\n".data(using: .utf8)!)
+        body.append(image.jpegData(compressionQuality: 1.0)!)
+        body.append("\r\n".data(using: .utf8)!)
+        
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        return body
+    }
+    
+}
+
+extension URLSession {
+    func uploadTaskPublisher(for request: URLRequest, from bodyData: Data) -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
+        var request = request
+        request.httpBody = bodyData
+        return self.dataTaskPublisher(for: request).eraseToAnyPublisher()
+    }
 }
 
 enum NetworkError: Error {

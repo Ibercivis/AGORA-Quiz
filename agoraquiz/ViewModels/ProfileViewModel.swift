@@ -5,8 +5,8 @@
 //  Created by Ibercivis on 18/5/24.
 //
 
-import Foundation
 import Combine
+import SwiftUI
 
 class ProfileViewModel: ObservableObject {
     @Published var username: String = "username"
@@ -20,6 +20,7 @@ class ProfileViewModel: ObservableObject {
     @Published var wins: Int = 0
     @Published var defeats: Int = 0
     @Published var totalMultiplayerGames: Int = 0
+    @Published var profileImageUrl: String?
     
     @Published var errorMessage: String?
     @Published var showToast: Bool = false
@@ -61,6 +62,39 @@ class ProfileViewModel: ObservableObject {
         self.totalGamesAbandoned = userProfile.totalGamesAbandoned
         self.totalCorrectAnswers = userProfile.totalCorrectAnswers
         self.totalIncorrectAnswers = userProfile.totalIncorrectAnswers
+        self.profileImageUrl = userProfile.profileImageUrl
+    }
+    
+    func uploadProfileImage(_ image: UIImage) {
+        guard let gameService = gameService, let token = SessionManager.shared.token else { return }
+        
+        gameService.uploadProfileImage(image: image, token: token)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    self.loadUserProfile()  // Reload profile to get updated image
+                case .failure(let error):
+                    self.errorMessage = self.handleError(error: error)
+                    self.showToast = true
+                }
+            }, receiveValue: { _ in })
+            .store(in: &cancellables)
+    }
+    
+    func deleteProfileImage() {
+        guard let gameService = gameService, let token = SessionManager.shared.token else { return }
+        
+        gameService.deleteProfileImage(token: token)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    self.loadUserProfile()  // Reload profile to remove deleted image
+                case .failure(let error):
+                    self.errorMessage = self.handleError(error: error)
+                    self.showToast = true
+                }
+            }, receiveValue: { _ in })
+            .store(in: &cancellables)
     }
     
     func logout() {
