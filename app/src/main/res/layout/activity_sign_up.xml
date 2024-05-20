@@ -30,7 +30,7 @@
                 android:id="@+id/textViewRankingTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="Sign up"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/content_secondary" />
 

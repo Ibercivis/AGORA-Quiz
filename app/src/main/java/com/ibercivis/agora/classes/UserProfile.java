@@ -6,15 +6,17 @@ public class UserProfile {
     private int totalGamesAbandoned;
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;
+    private String profileImageUrl;
 
     // Constructor, getters y setters
     public UserProfile(int totalPoints, int totalGamesPlayed, int totalGamesAbandoned,
-                       int totalCorrectAnswers, int totalIncorrectAnswers) {
+                       int totalCorrectAnswers, int totalIncorrectAnswers, String profileImageUrl) {
         this.totalPoints = totalPoints;
         this.totalGamesPlayed = totalGamesPlayed;
         this.totalGamesAbandoned = totalGamesAbandoned;
         this.totalCorrectAnswers = totalCorrectAnswers;
         this.totalIncorrectAnswers = totalIncorrectAnswers;
+        this.profileImageUrl = profileImageUrl;
     }
 
     public int getTotalPoints() {
@@ -55,5 +57,13 @@ public class UserProfile {
 
     public void setTotalIncorrectAnswers(int totalIncorrectAnswers) {
         this.totalIncorrectAnswers = totalIncorrectAnswers;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

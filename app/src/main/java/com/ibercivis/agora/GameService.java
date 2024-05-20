@@ -104,6 +104,7 @@ public class GameService {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
+
                 headers.put("Authorization", "Token " + token);
                 return headers;
             }
