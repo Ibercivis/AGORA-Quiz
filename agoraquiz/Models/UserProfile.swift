@@ -8,7 +8,7 @@
 import Foundation
 
 struct UserProfile: Codable {
-    let profileImageUrl: String
+    let profileImageUrl: String?
     let totalPoints: Int
     let totalGamesPlayed: Int
     let totalGamesAbandoned: Int

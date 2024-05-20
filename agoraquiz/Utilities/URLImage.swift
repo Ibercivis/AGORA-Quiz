@@ -11,7 +11,7 @@ struct URLImage: View {
     @ObservedObject private var imageLoader: ImageLoader
     private let placeholder: Image
 
-    init(url: URL, placeholder: Image = Image(systemName: "person.circle")) {
+    init(url: URL, placeholder: Image = Image("avatarPlain")) {
         self.imageLoader = ImageLoader()
         self.placeholder = placeholder
         self.imageLoader.load(from: url)

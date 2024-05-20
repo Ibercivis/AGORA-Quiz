@@ -207,16 +207,19 @@ class GameService: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("Token \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let body = ["profile_image": NSNull()]
-        
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
-        } catch {
-            return Fail(error: error).eraseToAnyPublisher()
-        }
-        
+
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+        let boundaryPrefix = "--\(boundary)\r\n"
+        body.append(boundaryPrefix.data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"profile_image\"\r\n\r\n".data(using: .utf8)!)
+        body.append("\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
+        request.httpBody = body
+
         return session.dataTaskPublisher(for: request)
             .tryMap { result in
                 guard let httpResponse = result.response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
