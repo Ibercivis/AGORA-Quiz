@@ -31,6 +31,7 @@
 
         </activity>
         <activity android:name=".ClassicGameActivity"></activity>
+        <activity android:name=".TimeTrialGameActivity"></activity>
     </application>
 
 </manifest>

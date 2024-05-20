@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.ibercivis.agora.ClassicGameActivity;
+import com.ibercivis.agora.TimeTrialGameActivity;
 import com.ibercivis.agora.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -34,6 +35,9 @@ public class HomeFragment extends Fragment {
             public void onGameModeClick(int position) {
                 if (position == 0) { // Posición 0 para el modo "Classic"
                     Intent intent = new Intent(getActivity(), ClassicGameActivity.class);
+                    startActivity(intent);
+                } else if (position == 1) { // Posición 0 para el modo "Time trial"
+                    Intent intent = new Intent(getActivity(), TimeTrialGameActivity.class);
                     startActivity(intent);
                 }
             }

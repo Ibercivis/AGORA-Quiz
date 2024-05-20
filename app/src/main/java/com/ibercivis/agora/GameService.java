@@ -48,6 +48,26 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
+    // Iniciar una partida contrarreloj
+    public void startTimeTrialGame(String token, final Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/api/games/start_time_trial/",
+                null,
+                listener,
+                errorListener
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Token " + token);
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
     //Responder una pregunta
     public void answerQuestion(String token, int gameId, int questionId, int answer, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) throws JSONException {
         JSONObject requestBody = new JSONObject();
@@ -57,6 +77,31 @@ public class GameService {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 BASE_URL + "/api/games/" + gameId + "/answer/",
+                requestBody,
+                listener,
+                errorListener
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Token " + token);
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    // Responder una pregunta en partida contrarreloj
+    public void answerTimeTrialQuestion(String token, int gameId, int questionId, int answer, long timeLeft, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) throws JSONException {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("question_id", questionId);
+        requestBody.put("answer", answer);
+        requestBody.put("time_left", timeLeft);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/api/games/" + gameId + "/answer_time_trial/",
                 requestBody,
                 listener,
                 errorListener
