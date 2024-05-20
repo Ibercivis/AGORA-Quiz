@@ -11,9 +11,14 @@ class Question(models.Model):
 
 class Game(models.Model):
     STATUS_CHOICES = [
-        ('in_progress', 'En Progreso'),
-        ('completed', 'Completada'),
-        ('incomplete', 'Incompleta'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('incomplete', 'Incompleted'),
+    ]
+
+    GAME_TYPE_CHOICES = [
+        ('classic', 'Classic'),
+        ('time_trial', 'Time Trial'),
     ]
 
     player = models.ForeignKey('auth.User', related_name='games', on_delete=models.CASCADE)
@@ -22,3 +27,16 @@ class Game(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=11, choices=STATUS_CHOICES, default='in_progress')
     responses = models.JSONField(default=list)  # Almacena las respuestas como [{'question_id': x, 'answer': y}]
+    game_type = models.CharField(max_length=11, choices=GAME_TYPE_CHOICES, default='classic')
+    time_left = models.IntegerField(default=60)  # Tiempo en segundos para la partida contrarreloj
+
+    def update_on_correct_answer(self):
+        self.score += 5
+        self.time_left += 5
+
+    def update_on_incorrect_answer(self):
+        self.score -= 3
+        self.time_left -= 3
+
+    def is_time_over(self):
+        return self.time_left <= 0
