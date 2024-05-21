@@ -137,6 +137,26 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
+    // Finalizar una partida
+    public void finishGame(String token, int gameId, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/api/games/" + gameId + "/finish_game/",
+                null,
+                listener,
+                errorListener
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Token " + token);
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
     //Abandonar una partida
     public void abandonGame(String token, int gameId, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(

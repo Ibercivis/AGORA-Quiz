@@ -8,6 +8,8 @@ public class Game {
     private int score;
     private String status;
 
+    private int timeLeft;
+
     // Constructor, getters y setters
 
     public Game(int id, List<Question> questions, int score, String status) {
@@ -47,5 +49,13 @@ public class Game {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
     }
 }

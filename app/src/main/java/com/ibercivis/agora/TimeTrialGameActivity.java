@@ -97,9 +97,12 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
                 currentQuestionIndex = getIntent().getIntExtra("CURRENT_QUESTION_INDEX", 1);
                 currentGameId = game.getId();
                 correctAnswersCount = getIntent().getIntExtra("CORRECT_ANSWERS_COUNT", 0);
+                long timeLeftInSeconds = getIntent().getIntExtra("TIME_LEFT", 60);
+                timeLeftInMillis = timeLeftInSeconds * 1000;
                 if (nextQuestionJson != null) {
                     Question nextQuestion = gson.fromJson(nextQuestionJson, Question.class);
                     updateUIWithQuestion(nextQuestion, currentQuestionIndex, correctAnswersCount);
+                    startTimer(); // Iniciar el temporizador con el tiempo restante
                 }
             }
         } else {
@@ -143,7 +146,10 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
         animateQuestionIndex(currentQuestionIndex);
 
         answersAdapter.setAnswerState(-2, -2);
-        startTimer();
+
+        if (countDownTimer == null) {
+            startTimer();
+        }
     }
 
     private int calculateProgress() {
@@ -184,8 +190,10 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
         SessionManager sessionManager = new SessionManager(this);
         String token = sessionManager.getToken();
 
+        long timeLeftInSeconds = Math.round(timeLeftInMillis / 1000.0);
+
         try {
-            gameService.answerTimeTrialQuestion(token, currentGameId, currentQuestion.getId(), selectedAnswer, timeLeftInMillis, response -> {
+            gameService.answerTimeTrialQuestion(token, currentGameId, currentQuestion.getId(), selectedAnswer, timeLeftInSeconds, response -> {
                 handleAnswerResponse(response);
             }, this::handleError);
         } catch (JSONException e) {
@@ -202,13 +210,16 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
             correctAnswersCount = response.getInt("correct_answers_count");
 
             game.setScore(score);
+            countDownTimer.cancel();
 
             if (correct) {
                 answersAdapter.setAnswerState(currentQuestion.getCorrectAnswer(), currentQuestion.getCorrectAnswer());
                 showCorrectAnswer(response, currentQuestionIndex, correctAnswersCount);
+                updateTimer(5000);  // Añadir 5 segundos al tiempo restante
             } else {
                 answersAdapter.setAnswerState(currentQuestion.getCorrectAnswer(), selectedAnswer);
                 showIncorrectAnswer(response, currentQuestionIndex, correctAnswersCount);
+                updateTimer(-3000);  // Restar 3 segundos al tiempo restante
             }
 
         } catch (JSONException e) {
@@ -217,10 +228,13 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
     }
 
     private void finishGame() {
-        showToast("Game completed!");
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        // Llamar al endpoint finish_game en el servidor
+        SessionManager sessionManager = new SessionManager(this);
+        String token = sessionManager.getToken();
+
+        gameService.finishGame(token, currentGameId, response -> {
+            showGameCompleteDialog();
+        }, this::handleError);
     }
 
     private void loadNextQuestion(JSONObject response, int currentQuestionIndex, int correctAnswersCount) throws JSONException {
@@ -293,6 +307,7 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
             public void onFinish() {
                 timeLeftInMillis = 0;
                 updateCountDownText();
+                countDownTimer.cancel();
                 endGame();
             }
         }.start();
@@ -303,6 +318,24 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
         int seconds = (int) (timeLeftInMillis / 1000) % 60;
         String timeFormatted = String.format("%02d:%02d", minutes, seconds);
         timerTextView.setText(timeFormatted);
+    }
+
+    private void updateTimer(long additionalTimeInMillis) {
+        // Cancelar el temporizador actual
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        // Actualizar el tiempo restante
+        timeLeftInMillis += additionalTimeInMillis;
+
+        // Asegurarse de que el tiempo no sea negativo
+        if (timeLeftInMillis < 0) {
+            timeLeftInMillis = 0;
+        }
+
+        // Iniciar un nuevo temporizador con el tiempo actualizado
+        startTimer();
     }
 
     private void endGame() {

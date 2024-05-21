@@ -65,13 +65,28 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject nextQuestionJson = response.getJSONObject("next_question");
                             int currentQuestionIndex = response.getInt("current_question_index");
                             int correctAnswersCount = response.getInt("correct_answers_count");
+                            int timeLeftInSeconds = response.getInt("time_left");
 
-                            // Pasar Extras a ClassicGameActivity
-                            Intent intent = new Intent(this, ClassicGameActivity.class);
+                            // Obtener el tipo de juego desde la respuesta JSON
+                            String gameType = gameJson.getString("game_type");
+
+                            Intent intent;
+                            if (gameType.equals("classic")) {
+                                // Pasar Extras a ClassicGameActivity
+                                intent = new Intent(this, ClassicGameActivity.class);
+                            } else if (gameType.equals("time_trial")) {
+                                // Pasar Extras a TimeTrialGameActivity
+                                intent = new Intent(this, TimeTrialGameActivity.class);
+                            } else {
+                                showToast("Unknown game type in progress.");
+                                return;
+                            }
+
                             intent.putExtra("GAME_OBJECT", gameJson.toString());
                             intent.putExtra("NEXT_QUESTION", nextQuestionJson.toString());
                             intent.putExtra("CURRENT_QUESTION_INDEX", currentQuestionIndex);
                             intent.putExtra("CORRECT_ANSWERS_COUNT", correctAnswersCount);
+                            intent.putExtra("TIME_LEFT", timeLeftInSeconds);
 
                             startActivity(intent);
                         }
