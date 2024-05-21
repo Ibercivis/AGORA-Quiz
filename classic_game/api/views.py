@@ -264,8 +264,26 @@ class GameViewSet(viewsets.ModelViewSet):
             'next_question': QuestionSerializer(next_question).data,
             'current_question_index': current_question_index,
             'correct_answers_count': correct_answers_count,
+            'time_left': game.time_left,
         }
+        print(response_data)
         return Response(response_data)
+
+    @action(detail=True, methods=['post'])
+    def finish_game(self, request, pk=None):
+        game = self.get_object()
+
+        if game.status != 'in_progress':
+            return Response({'detail': 'Game is not in progress.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        game.status = 'completed'
+        game.save()
+
+        # Actualizar el perfil del usuario
+        profile = UserProfile.objects.get(user=game.player)
+        profile.update_on_game_end(abandoned=False)
+
+        return Response({'status': 'Game marked as completed.'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def abandon_game(self, request, pk=None):

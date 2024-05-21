@@ -42,5 +42,10 @@ urlpatterns = [
     path('games/<int:pk>/abandon/', GameViewSet.as_view({
         'post': 'abandon_game'
     }), name='game-abandon'),
+
+    # Ruta para finalizar un juego
+    path('games/<int:pk>/finish_game/', GameViewSet.as_view({
+        'post': 'finish_game'
+    }), name='game-finish'),
 ]
 
