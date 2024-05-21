@@ -27,8 +27,8 @@ struct MainView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .toast(isPresented: $viewModel.showToast, message: viewModel.toastMessage)
         .onAppear {
-                    viewModel.configure(gameService: gameService, navigationManager: navigationManager)
-                }
+            viewModel.configure(gameService: gameService, navigationManager: navigationManager)
+        }
     }
 
     var header: some View {
@@ -70,7 +70,16 @@ struct MainView: View {
 
             ForEach(GameMode.allCases, id: \.self) { mode in
                 Button(action: {
-                    mode == .classic ? viewModel.startNewGame() : viewModel.showUnavailableToast()
+                    switch mode {
+                    case .classic:
+                        viewModel.startNewGame()
+                    case .timeTrial:
+                        viewModel.startNewTimeTrialGame()
+                    case .categories:
+                        viewModel.showUnavailableToast()
+                    case .multiplayer:
+                        viewModel.showUnavailableToast()
+                    }
                 }) {
                     GameModeView(mode: mode)
                 }
@@ -116,7 +125,7 @@ struct MainView: View {
         static var previews: some View {
             let gameService = GameService()
             let navigationManager = NavigationManager()
-            
+
             MainView()
                 .environmentObject(navigationManager)
                 .environmentObject(gameService)

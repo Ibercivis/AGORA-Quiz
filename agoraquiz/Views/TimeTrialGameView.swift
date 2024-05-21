@@ -1,16 +1,16 @@
 //
-//  ClassicGameView.swift
+//  TimeTrialGameView.swift
 //  agoraquiz
 //
-//  Created by Ibercivis on 15/5/24.
+//  Created by Ibercivis on 21/5/24.
 //
 
 import SwiftUI
 
-struct ClassicGameView: View {
+struct TimeTrialGameView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @EnvironmentObject var gameService: GameService
-    @StateObject var viewModel: ClassicGameViewModel
+    @StateObject var viewModel: TimeTrialGameViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -48,16 +48,17 @@ struct ClassicGameView: View {
             } else if viewModel.isIncorrectAnswerVisible {
                 HeaderIncorrect()
             } else {
-                HeaderRegular(isPaused: $viewModel.isPaused, currentQuestionIndex: viewModel.currentQuestionIndex, totalQuestions: viewModel.totalQuestions, correctAnswersCount: viewModel.correctAnswersCount)
+                HeaderRegular(isPaused: $viewModel.isPaused, currentQuestionIndex: viewModel.currentQuestionIndex, totalQuestions: viewModel.totalQuestions, correctAnswersCount: viewModel.correctAnswersCount, timeLeft: viewModel.timeLeft)
             }
         }
     }
-    
+
     struct HeaderRegular: View {
         @Binding var isPaused: Bool
         var currentQuestionIndex: Int
         var totalQuestions: Int
         var correctAnswersCount: Int
+        var timeLeft: Int
 
         var body: some View {
             ZStack {
@@ -66,7 +67,7 @@ struct ClassicGameView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: UIScreen.main.bounds.width)
                     .clipped()
-                
+
                 VStack {
                     HStack {
                         Button(action: {
@@ -79,18 +80,19 @@ struct ClassicGameView: View {
                                 .clipShape(Circle())
                         }
                         .padding(.leading, 16)
-                        
+
                         Spacer()
-                        
-                        Text("Classic")
+
+                        Text("Time Trial")
                             .font(.title)
                             .bold()
                             .foregroundColor(.white)
+
+                        Spacer()
+
                         
-                        Spacer()
-                        Spacer()
                     }
-                    
+
                     questionProgressView
                 }
             }
@@ -105,11 +107,13 @@ struct ClassicGameView: View {
 
                 GeometryReader { geometry in
                     HStack {
-                        Spacer()
+                        Text(formatTime(seconds: timeLeft))
+                            .foregroundColor(.white)
+                            .padding(.leading, 36)
 
                         ProgressBar(value: CGFloat(currentQuestionIndex - 1) / CGFloat(totalQuestions))
-                            .frame(width: geometry.size.width * 0.6, height: 10)
-                            .padding(.horizontal, 16)
+                            .frame(width: geometry.size.width * 0.5, height: 10)
+                            .padding(.horizontal, 4)
 
                         HStack(spacing: 8) {
                             Image(systemName: "checkmark.circle")
@@ -124,8 +128,14 @@ struct ClassicGameView: View {
                 .frame(height: 20) // Ajusta según sea necesario
             }
         }
+
+        func formatTime(seconds: Int) -> String {
+            let minutes = seconds / 60
+            let remainingSeconds = seconds % 60
+            return String(format: "%02d:%02d", minutes, remainingSeconds)
+        }
     }
-    
+
     struct HeaderCorrect: View {
         var body: some View {
             ZStack {
@@ -134,7 +144,7 @@ struct ClassicGameView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: UIScreen.main.bounds.width)
                     .clipped()
-                
+
                 VStack {
                     Text("Correct!")
                         .font(.title)
@@ -151,7 +161,7 @@ struct ClassicGameView: View {
             }
         }
     }
-    
+
     struct HeaderIncorrect: View {
         var body: some View {
             ZStack {
@@ -160,7 +170,7 @@ struct ClassicGameView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: UIScreen.main.bounds.width)
                     .clipped()
-                
+
                 VStack {
                     Text("Incorrect")
                         .font(.title)
@@ -199,82 +209,23 @@ struct ClassicGameView: View {
         }
         .padding(.horizontal, 16)
     }
-    
+
 }
 
-struct ProgressBar: View {
-    var value: CGFloat
-    
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Rectangle().frame(width: geometry.size.width, height: geometry.size.height)
-                    .opacity(0.3)
-                    .foregroundColor(Color.gray)
-                
-                Rectangle().frame(width: min(geometry.size.width, geometry.size.width * value), height: geometry.size.height)
-                    .foregroundColor(Color.orange)
-                    .animation(.linear, value: value)
-            }
-            .cornerRadius(45.0)
-        }
-    }
-}
-
-struct AnswerOptionView: View {
-    var index: Int
-    var text: String
-    var isSelected: Bool
-    var isCorrect: Bool
-    var isIncorrect: Bool
-    var action: () -> Void
-    
-    var backgroundColor: Color {
-        if isCorrect {
-            return .green.opacity(0.2)
-        } else if isIncorrect {
-            return .red.opacity(0.2)
-        } else {
-            return isSelected ? Color.blue.opacity(0.2) : Color.white
-        }
-    }
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Text("\(Character(UnicodeScalar(65 + index)!)).")
-                    .font(.title2)
-                    .padding(.horizontal, 8)
-                Text(text)
-                    .font(.title3)
-                    .padding(.horizontal, 8)
-                Spacer()
-            }
-            .padding()
-            .background(backgroundColor)
-            .cornerRadius(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(isSelected ? Color.blue : Color.gray, lineWidth: 2)
-            )
-        }
-    }
-}
-
-struct ClassicGameView_Previews: PreviewProvider {
+struct TimeTrialGameView_Previews: PreviewProvider {
     static var previews: some View {
         let gameService = GameService()
         let navigationManager = NavigationManager()
         let gameData = GameResponse(
-            game: Game(id: 1, score: 0, status: "in-progress", gameType: "classic", timeLeft: 60),
+            game: Game(id: 1, score: 0, status: "in-progress", gameType: "time-trial", timeLeft: 60),
             nextQuestion: Question(id: 1, questionText: "Sample question?", answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"], correctAnswer: 1),
             currentQuestionIndex: 1,
             correctAnswersCount: 0
         )
-        let viewModel = ClassicGameViewModel(gameData: gameData)
+        let viewModel = TimeTrialGameViewModel(gameData: gameData)
         viewModel.configure(gameService: gameService, navigationManager: navigationManager)
 
-        return ClassicGameView(viewModel: viewModel)
+        return TimeTrialGameView(viewModel: viewModel)
             .environmentObject(gameService)
             .environmentObject(navigationManager)
     }

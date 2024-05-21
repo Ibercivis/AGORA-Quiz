@@ -26,6 +26,7 @@ class NavigationManager: ObservableObject {
         case settings
         case profile
         case classicGame(GameResponse)
+        case timeTrialGame(GameResponse) // Añadir esta línea
     }
 
     func navigateToHome() {
@@ -42,8 +43,12 @@ class NavigationManager: ObservableObject {
         currentPage = .mainTab
         selectedTab = 2  // 'Profile'
     }
-    
+
     func navigateToClassicGame(gameData: GameResponse) {
-            currentPage = .classicGame(gameData)
-        }
+        currentPage = .classicGame(gameData)
+    }
+
+    func navigateToTimeTrialGame(gameData: GameResponse) { // Añadir esta función
+        currentPage = .timeTrialGame(gameData)
+    }
 }

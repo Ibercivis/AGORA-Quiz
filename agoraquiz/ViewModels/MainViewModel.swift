@@ -32,7 +32,14 @@ class MainViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] gameResponse in
                 print("Game Response received: \(gameResponse)") // Debug
-                self?.navigationManager?.navigateToClassicGame(gameData: gameResponse)
+                switch gameResponse.game.gameType {
+                case "classic":
+                    self?.navigationManager?.navigateToClassicGame(gameData: gameResponse)
+                case "time_trial":
+                    self?.navigationManager?.navigateToTimeTrialGame(gameData: gameResponse)
+                default:
+                    break
+                }
             })
             .store(in: &cancellables)
     }
@@ -46,6 +53,19 @@ class MainViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] gameResponse in
                 self?.navigationManager?.navigateToClassicGame(gameData: gameResponse)
+            })
+            .store(in: &cancellables)
+    }
+
+    func startNewTimeTrialGame() {
+        guard let gameService = gameService, let token = SessionManager.shared.token else { return }
+        gameService.startTimeTrialGame()
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("Error starting new time trial game: \(error)")
+                }
+            }, receiveValue: { [weak self] gameResponse in
+                self?.navigationManager?.navigateToTimeTrialGame(gameData: gameResponse)
             })
             .store(in: &cancellables)
     }

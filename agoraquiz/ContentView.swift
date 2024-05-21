@@ -27,6 +27,10 @@ struct ContentView: View {
             ClassicGameView(viewModel: ClassicGameViewModel(gameData: gameData))
                 .environmentObject(navigationManager)
                 .environmentObject(gameService)
+        case .timeTrialGame(let gameData):
+            TimeTrialGameView(viewModel: TimeTrialGameViewModel(gameData: gameData))
+                .environmentObject(navigationManager)
+                .environmentObject(gameService)
         }
     }
 }

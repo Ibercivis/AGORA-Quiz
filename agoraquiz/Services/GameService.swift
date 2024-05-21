@@ -58,6 +58,33 @@ class GameService: ObservableObject {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
+    
+    func startTimeTrialGame() -> AnyPublisher<GameResponse, Error> {
+            guard let url = URL(string: URLs.APIPath.startTimeTrialGame, relativeTo: URLs.baseURL) else {
+                return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            if let token = SessionManager.shared.token {
+                request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                return Fail(error: NetworkError.noToken).eraseToAnyPublisher()
+            }
+
+            return session.dataTaskPublisher(for: request)
+                .tryMap { result -> GameResponse in
+                    guard let httpResponse = result.response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                        throw NetworkError.unexpectedResponse
+                    }
+                    let decoder = JSONDecoder()
+                    return try decoder.decode(GameResponse.self, from: result.data)
+                }
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+    }
 
     func answerQuestion(gameId: Int, questionId: Int, answerIndex: Int) -> AnyPublisher<AnswerResponse, Error> {
         let urlString = String(format: URLs.APIPath.answerQuestion, gameId)
@@ -94,6 +121,65 @@ class GameService: ObservableObject {
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
+    }
+    
+    func answerTimeTrialQuestion(gameId: Int, questionId: Int, answerIndex: Int, timeLeft: Int) -> AnyPublisher<AnswerResponse, Error> {
+            let urlString = String(format: URLs.APIPath.answerTimeTrialQuestion, gameId)
+            guard let url = URL(string: urlString, relativeTo: URLs.baseURL) else {
+                return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            if let token = SessionManager.shared.token {
+                request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                return Fail(error: NetworkError.noToken).eraseToAnyPublisher()
+            }
+
+            let parameters: [String: Any] = [
+                "question_id": questionId,
+                "answer": answerIndex,
+                "time_left": timeLeft
+            ]
+
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+            } catch {
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+
+            return session.dataTaskPublisher(for: request)
+                .tryMap { result -> AnswerResponse in
+                    let decoder = JSONDecoder()
+                    return try decoder.decode(AnswerResponse.self, from: result.data)
+                }
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+    }
+
+        func finishGame(gameId: Int) -> AnyPublisher<Bool, Error> {
+            let urlString = String(format: URLs.APIPath.finishGame, gameId)
+            guard let url = URL(string: urlString, relativeTo: URLs.baseURL) else {
+                return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            if let token = SessionManager.shared.token {
+                request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                return Fail(error: NetworkError.noToken).eraseToAnyPublisher()
+            }
+
+            return session.dataTaskPublisher(for: request)
+                .tryMap { _ in true }
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
     }
 
     func checkForInProgressGame() -> AnyPublisher<GameResponse, Error> {
