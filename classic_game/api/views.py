@@ -73,7 +73,7 @@ class GameViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'Ya hay una partida contrarreloj en progreso.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Iniciar un nuevo juego contrarreloj con un conjunto aleatorio de preguntas
-        questions = random.sample(list(Question.objects.all()), 9)
+        questions = random.sample(list(Question.objects.all()), 79)
         game = Game.objects.create(player=request.user, game_type='time_trial')
         game.questions.set(questions)
         game.status = 'in_progress'
