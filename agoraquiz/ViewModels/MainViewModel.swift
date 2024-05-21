@@ -12,6 +12,7 @@ class MainViewModel: ObservableObject {
     @Published var gameData: GameResponse?
     @Published var showToast: Bool = false
     @Published var toastMessage: String = ""
+    @Published var profileImageUrl: String?
 
     var gameService: GameService?
     var navigationManager: NavigationManager?
@@ -20,6 +21,7 @@ class MainViewModel: ObservableObject {
     func configure(gameService: GameService, navigationManager: NavigationManager) {
         self.gameService = gameService
         self.navigationManager = navigationManager
+        loadUserProfile()
         checkForInProgressGame()
     }
 
@@ -42,6 +44,30 @@ class MainViewModel: ObservableObject {
                 }
             })
             .store(in: &cancellables)
+    }
+    
+    func loadUserProfile() {
+        guard let gameService = gameService, let token = SessionManager.shared.token else { return }
+        
+        gameService.getUserProfile(token: token)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self.toastMessage = self.handleError(error: error)
+                    self.showToast = true
+                }
+            }, receiveValue: { userProfile in
+                DispatchQueue.main.async {
+                    self.updateUI(userProfile: userProfile)
+                }
+            })
+            .store(in: &cancellables)
+    }
+    
+    private func updateUI(userProfile: UserProfile) {
+        self.profileImageUrl = userProfile.profileImageUrl
     }
 
     func startNewGame() {
@@ -75,6 +101,28 @@ class MainViewModel: ObservableObject {
         showToast = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.showToast = false
+        }
+    }
+    
+    private func handleError(error: Error) -> String {
+        switch error {
+        case is URLError:
+            return "Cannot connect to the server. Please check your internet connection."
+        case let decodingError as DecodingError:
+            switch decodingError {
+            case .typeMismatch(_, let context):
+                return "Type mismatch: \(context.debugDescription)"
+            case .valueNotFound(_, let context):
+                return "Value not found: \(context.debugDescription)"
+            case .keyNotFound(_, let context):
+                return "Key not found: \(context.debugDescription)"
+            case .dataCorrupted(let context):
+                return "Data corrupted: \(context.debugDescription)"
+            @unknown default:
+                return "Decoding error: \(decodingError.localizedDescription)"
+            }
+        default:
+            return "An unknown error occurred. Please try again later."
         }
     }
 }

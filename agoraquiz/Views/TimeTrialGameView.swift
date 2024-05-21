@@ -39,6 +39,7 @@ struct TimeTrialGameView: View {
         .onAppear {
             viewModel.configure(gameService: gameService, navigationManager: navigationManager)
         }
+        .edgesIgnoringSafeArea(.all)
     }
 
     var headerView: some View {
@@ -80,14 +81,19 @@ struct TimeTrialGameView: View {
                                 .clipShape(Circle())
                         }
                         .padding(.leading, 16)
-
+                        
                         Spacer()
+
+                        Image("ic_timetrial_title")
 
                         Text("Time Trial")
                             .font(.title)
                             .bold()
                             .foregroundColor(.white)
+                            .padding(.trailing, 16)
 
+                        Spacer()
+                        
                         Spacer()
 
                         

@@ -13,22 +13,24 @@ struct MainView: View {
     @StateObject private var viewModel = MainViewModel()
 
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    header
-                    userInfo
-                    gameModesSection
+            NavigationView {
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        header
+                        userInfo
+                        gameModesSection
+                    }
                 }
+                .navigationBarTitle("Home", displayMode: .inline)
+                .navigationBarHidden(true)
+                .edgesIgnoringSafeArea(.all)
             }
-            .navigationBarTitle("Home", displayMode: .inline)
-            .navigationBarHidden(true)
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .toast(isPresented: $viewModel.showToast, message: viewModel.toastMessage)
-        .onAppear {
-            viewModel.configure(gameService: gameService, navigationManager: navigationManager)
-        }
+            .navigationViewStyle(StackNavigationViewStyle())
+            .toast(isPresented: $viewModel.showToast, message: viewModel.toastMessage)
+            .onAppear {
+                viewModel.configure(gameService: gameService, navigationManager: navigationManager)
+            }
+        
     }
 
     var header: some View {
@@ -38,17 +40,44 @@ struct MainView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: UIScreen.main.bounds.width)
                 .clipped()
-
-            VStack(alignment: .leading, spacing: 5) {
-                Text("Hi \(SessionManager.shared.username ?? "user name"),")
-                    .font(.title)
-                    .foregroundColor(.white)
-                Text("Great to see you again!")
-                    .font(.subheadline)
-                    .foregroundColor(.white)
+            
+            VStack{
+                Spacer()
+                
+                
+                HStack{
+                    Spacer()
+                    
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Hi \(SessionManager.shared.username ?? "user name"),")
+                            .font(.title)
+                            .foregroundColor(.white)
+                        Text("Great to see you again!")
+                            .font(.subheadline)
+                            .foregroundColor(.white)
+                    }
+                    
+                    Spacer()
+                    
+                    if let profileImageUrl = viewModel.profileImageUrl, let url = URL(string: profileImageUrl) {
+                        URLImage(url: url)
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
+                    } else {
+                        Image("avatarMain")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .clipShape(Circle())
+                    }
+                    
+                    Spacer()
+                }
+                
+                Spacer()
+                
             }
-            .padding()
-        }
+            
+        }.edgesIgnoringSafeArea(.all)
     }
 
     var userInfo: some View {
@@ -111,24 +140,33 @@ struct MainView: View {
         var mode: GameMode
 
         var body: some View {
-            Text(mode.rawValue)
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.white)
-                .cornerRadius(10)
-                .shadow(radius: 2)
-                .padding(.horizontal)
+            HStack {
+                Image(mode.iconName)
+                    .padding(.leading, 24)
+
+                Text(mode.rawValue)
+                    .foregroundColor(.black)
+                    .padding(.vertical)
+                    .padding(.leading, 8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Spacer()
+            }
+            .background(Color.white)
+            .cornerRadius(10)
+            .shadow(radius: 2)
+            .padding(.horizontal)
         }
     }
+}
 
-    struct MainView_Previews: PreviewProvider {
-        static var previews: some View {
-            let gameService = GameService()
-            let navigationManager = NavigationManager()
+struct MainView_Previews: PreviewProvider {
+    static var previews: some View {
+        let gameService = GameService()
+        let navigationManager = NavigationManager()
 
-            MainView()
-                .environmentObject(navigationManager)
-                .environmentObject(gameService)
-        }
+        MainView()
+            .environmentObject(navigationManager)
+            .environmentObject(gameService)
     }
 }

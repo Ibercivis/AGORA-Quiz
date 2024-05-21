@@ -35,6 +35,7 @@ struct SignUpView: View {
         .background(Color(.systemBackground))
         .navigationBarTitle("Sign Up", displayMode: .inline)
         .navigationBarBackButtonHidden(true)
+        .edgesIgnoringSafeArea(.all)
     }
     
     var header: some View {

@@ -22,7 +22,7 @@ struct ProfileView: View {
                 profileSection
                 statsSection
                 Spacer()
-            }
+            }.edgesIgnoringSafeArea(.all)
         }
         .edgesIgnoringSafeArea(.top)
         .navigationBarTitle("Home", displayMode: .inline)
@@ -38,6 +38,7 @@ struct ProfileView: View {
         .sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
             ImagePicker(image: self.$image)
         }
+        
     }
 
     var headerView: some View {

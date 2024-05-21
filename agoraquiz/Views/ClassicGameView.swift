@@ -82,10 +82,14 @@ struct ClassicGameView: View {
                         
                         Spacer()
                         
+                        Image("ic_classic_title")
+                        
+                        
                         Text("Classic")
                             .font(.title)
                             .bold()
                             .foregroundColor(.white)
+                            .padding(.trailing, 16)
                         
                         Spacer()
                         Spacer()
@@ -94,6 +98,7 @@ struct ClassicGameView: View {
                     questionProgressView
                 }
             }
+            .edgesIgnoringSafeArea(.all)
         }
 
         var questionProgressView: some View {
@@ -242,12 +247,13 @@ struct AnswerOptionView: View {
     var body: some View {
         Button(action: action) {
             HStack {
-                Text("\(Character(UnicodeScalar(65 + index)!)).")
-                    .font(.title2)
-                    .padding(.horizontal, 8)
-                Text(text)
+                Text("\(Character(UnicodeScalar(65 + index)!))")
                     .font(.title3)
                     .padding(.horizontal, 8)
+                    .foregroundColor(.gray)
+                Text(text)
+                    .padding(.horizontal, 8)
+                    .foregroundColor(.black)
                 Spacer()
             }
             .padding()

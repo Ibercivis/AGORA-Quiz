@@ -64,6 +64,7 @@ struct LoginView: View {
         .onAppear {
                     viewModel.navigationManager = navigationManager
                 }
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
