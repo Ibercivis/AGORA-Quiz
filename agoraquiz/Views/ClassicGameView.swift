@@ -28,7 +28,7 @@ struct ClassicGameView: View {
         }
         .fullScreenCover(isPresented: $viewModel.isGameCompleted) {
             GameCompletedView(score: viewModel.correctAnswersCount) {
-                viewModel.quitGame()
+                viewModel.navigateToHome()
             }
         }
         .onChange(of: viewModel.navigateToMain) { navigate, _ in

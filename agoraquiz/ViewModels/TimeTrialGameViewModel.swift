@@ -30,6 +30,7 @@ class TimeTrialGameViewModel: ObservableObject {
     private var game: Game
     private var cancellables = Set<AnyCancellable>()
     private var timer: AnyCancellable?
+    private var maxTimeTrialTime: Int = 60
 
     init(gameData: GameResponse) {
         self.game = gameData.game
@@ -90,9 +91,11 @@ class TimeTrialGameViewModel: ObservableObject {
         if response.correct {
             self.correctAnswersCount += 1
             self.timeLeft += 5
+            self.maxTimeTrialTime += 5
             showCorrectAnswer()
         } else {
             self.timeLeft -= 3
+            self.maxTimeTrialTime -= 3
             showIncorrectAnswer()
         }
 
@@ -149,11 +152,16 @@ class TimeTrialGameViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
+    
+    func navigateToHome(){
+        self.navigationManager.currentPage = .mainTab
+    }
 
     private func endGame() {
         timer?.cancel()
         isGameCompleted = true
-        gameService.finishGame(gameId: currentGameId)
+
+        gameService.finishGame(gameId: currentGameId, maxTimeTrialTime: maxTimeTrialTime)
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
                     print("Error finishing game: \(error)")

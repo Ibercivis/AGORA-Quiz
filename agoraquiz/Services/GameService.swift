@@ -160,26 +160,33 @@ class GameService: ObservableObject {
                 .eraseToAnyPublisher()
     }
 
-        func finishGame(gameId: Int) -> AnyPublisher<Bool, Error> {
-            let urlString = String(format: URLs.APIPath.finishGame, gameId)
-            guard let url = URL(string: urlString, relativeTo: URLs.baseURL) else {
-                return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
-            }
+    func finishGame(gameId: Int, maxTimeTrialTime: Int) -> AnyPublisher<Bool, Error> {
+        let urlString = String(format: URLs.APIPath.finishGame, gameId)
+        guard let url = URL(string: urlString, relativeTo: URLs.baseURL) else {
+            return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+        }
 
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
-            if let token = SessionManager.shared.token {
-                request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-            } else {
-                return Fail(error: NetworkError.noToken).eraseToAnyPublisher()
-            }
+        if let token = SessionManager.shared.token {
+            request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        } else {
+            return Fail(error: NetworkError.noToken).eraseToAnyPublisher()
+        }
 
-            return session.dataTaskPublisher(for: request)
-                .tryMap { _ in true }
-                .receive(on: DispatchQueue.main)
-                .eraseToAnyPublisher()
+        let parameters: [String: Any] = ["max_time_trial_time": maxTimeTrialTime]
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        } catch {
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+
+        return session.dataTaskPublisher(for: request)
+            .tryMap { _ in true }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 
     func checkForInProgressGame() -> AnyPublisher<GameResponse, Error> {

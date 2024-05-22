@@ -132,6 +132,10 @@ class ClassicGameViewModel: ObservableObject {
         isClassicHeaderVisible = false
         isIncorrectAnswerVisible = true
     }
+    
+    func navigateToHome(){
+        self.navigationManager.currentPage = .mainTab
+    }
 
     func quitGame() {
         guard let token = SessionManager.shared.token else { return }
