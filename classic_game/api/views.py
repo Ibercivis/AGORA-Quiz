@@ -276,6 +276,13 @@ class GameViewSet(viewsets.ModelViewSet):
         if game.status != 'in_progress':
             return Response({'detail': 'Game is not in progress.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        if game.game_type == 'time_trial':
+            max_time = request.data.get('max_time_trial_time')
+            if max_time:
+                profile = UserProfile.objects.get(user=game.player)
+                profile.update_max_time_trial_time(int(max_time))
+                game.update_max_time_trial_time(int(max_time))
+
         game.status = 'completed'
         game.save()
 

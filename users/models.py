@@ -16,6 +16,7 @@ class UserProfile(models.Model):
     total_games_abandoned = models.IntegerField(default=0)
     total_correct_answers = models.IntegerField(default=0)
     total_incorrect_answers = models.IntegerField(default=0)
+    max_time_trial_time = models.IntegerField(default=0)
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -28,6 +29,11 @@ class UserProfile(models.Model):
             self.total_incorrect_answers += 1
             self.total_points -= 3  # Cantidad de puntos por respuesta incorrecta
         self.save()
+
+    def update_max_time_trial_time(self, new_time):
+        if new_time > self.max_time_trial_time:
+            self.max_time_trial_time = new_time
+            self.save()
 
     def update_on_game_end(self, abandoned=False):
         self.total_games_played += 1

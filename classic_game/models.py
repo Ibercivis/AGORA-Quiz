@@ -29,6 +29,7 @@ class Game(models.Model):
     responses = models.JSONField(default=list)  # Almacena las respuestas como [{'question_id': x, 'answer': y}]
     game_type = models.CharField(max_length=11, choices=GAME_TYPE_CHOICES, default='classic')
     time_left = models.IntegerField(default=60)  # Tiempo en segundos para la partida contrarreloj
+    max_time_trial_time = models.IntegerField(default=0)
 
     def update_on_correct_answer(self):
         self.score += 5
@@ -40,3 +41,8 @@ class Game(models.Model):
 
     def is_time_over(self):
         return self.time_left <= 0
+
+    def update_max_time_trial_time(self, new_time):
+        if new_time > self.max_time_trial_time:
+            self.max_time_trial_time = new_time
+            self.save()
