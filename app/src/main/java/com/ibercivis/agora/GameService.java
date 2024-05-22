@@ -138,11 +138,11 @@ public class GameService {
     }
 
     // Finalizar una partida
-    public void finishGame(String token, int gameId, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public void finishGame(String token, int gameId, JSONObject params, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 BASE_URL + "/api/games/" + gameId + "/finish_game/",
-                null,
+                params,
                 listener,
                 errorListener
         ) {

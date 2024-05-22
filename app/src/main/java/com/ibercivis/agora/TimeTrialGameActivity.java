@@ -61,6 +61,7 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
     private List<Question> remainingQuestions;
     private CountDownTimer countDownTimer;
     private long timeLeftInMillis = 60000; // 1 minuto en milisegundos
+    private int maxTimeTrialTime = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,10 +218,12 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
             if (correct) {
                 answersAdapter.setAnswerState(currentQuestion.getCorrectAnswer(), currentQuestion.getCorrectAnswer());
                 showCorrectAnswer(response, currentQuestionIndex, correctAnswersCount);
+                maxTimeTrialTime += 5;
                 updateTimer(5000);  // Añadir 5 segundos al tiempo restante
             } else {
                 answersAdapter.setAnswerState(currentQuestion.getCorrectAnswer(), selectedAnswer);
                 showIncorrectAnswer(response, currentQuestionIndex, correctAnswersCount);
+                maxTimeTrialTime -= 3;
                 updateTimer(-3000);  // Restar 3 segundos al tiempo restante
             }
 
@@ -234,7 +237,16 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
         SessionManager sessionManager = new SessionManager(this);
         String token = sessionManager.getToken();
 
-        gameService.finishGame(token, currentGameId, response -> {
+        if (maxTimeTrialTime < 0){ maxTimeTrialTime = 0; } // Asegurar que maxTimeTrialTime no es negativo
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("max_time_trial_time", maxTimeTrialTime);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        gameService.finishGame(token, currentGameId, params, response -> {
             showGameCompleteDialog();
         }, this::handleError);
     }
