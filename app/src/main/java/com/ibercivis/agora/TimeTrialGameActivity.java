@@ -52,7 +52,7 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
     private GameService gameService;
     private int currentGameId;
     private int currentQuestionIndex = 1;
-    private int totalQuestions = 9;
+    private int totalQuestions = 79;
     private int correctAnswersCount = 0;
     private int lastCorrectAnswersCount = 0;
     private int selectedAnswer;

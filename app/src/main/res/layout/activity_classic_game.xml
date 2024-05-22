@@ -67,7 +67,8 @@
                         android:layout_height="40dp"
                         android:src="@drawable/ic_level_rookie"
                         android:layout_marginStart="16dp"
-                        android:layout_centerVertical="true" />
+                        android:layout_centerVertical="true"
+                        android:visibility="invisible"/>
 
                     <!-- Barra de progreso -->
                 <LinearLayout
