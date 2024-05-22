@@ -13,6 +13,7 @@ class MainViewModel: ObservableObject {
     @Published var showToast: Bool = false
     @Published var toastMessage: String = ""
     @Published var profileImageUrl: String?
+    @Published var userPoints: Int = 0
 
     var gameService: GameService?
     var navigationManager: NavigationManager?
@@ -68,6 +69,7 @@ class MainViewModel: ObservableObject {
     
     private func updateUI(userProfile: UserProfile) {
         self.profileImageUrl = userProfile.profileImageUrl
+        self.userPoints = userProfile.totalPoints
     }
 
     func startNewGame() {

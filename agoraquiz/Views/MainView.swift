@@ -85,7 +85,7 @@ struct MainView: View {
             Spacer()
             UserStatView(iconName: "star.fill", title: "Tester", subtitle: "Level")
             Spacer()
-            UserStatView(iconName: "trophy.fill", title: "730", subtitle: "Points")
+            UserStatView(iconName: "trophy.fill", title: "\(viewModel.userPoints)", subtitle: "Points")
             Spacer()
         }
         .padding()
