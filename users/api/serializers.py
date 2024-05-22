@@ -17,3 +17,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 # Eliminar la referencia de la imagen del objeto
                 instance.profile_image = None
         return super().update(instance, validated_data)
+
+class UserRankingSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    profile_image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProfile
+        fields = ['username', 'total_points', 'max_time_trial_time', 'profile_image_url']
+
+    def get_profile_image_url(self, obj):
+        if obj.profile_image:
+            return obj.profile_image.url
+        return None

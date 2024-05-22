@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action 
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,7 +16,7 @@ from rest_framework.permissions import AllowAny
 from dj_rest_auth.registration.views import ConfirmEmailView
 from rest_framework import generics
 from users.models import UserProfile
-from users.api.serializers import UserProfileSerializer
+from users.api.serializers import UserProfileSerializer, UserRankingSerializer
 import re
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -87,3 +88,19 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user.profile
+
+class RankingViewSet(viewsets.ViewSet):
+    @action(detail=False, methods=['get'])
+    def get_rankings(self, request):
+        # Obtener los 10 mejores jugadores por puntos totales
+        top_classic_players = UserProfile.objects.order_by('-total_points')[:10]
+        classic_rankings = UserRankingSerializer(top_classic_players, many=True).data
+
+        # Obtener los 10 mejores jugadores por mayor tiempo en el modo "Time Trial"
+        top_time_trial_players = UserProfile.objects.filter(max_time_trial_time__gt=0).order_by('-max_time_trial_time')[:10]
+        time_trial_rankings = UserRankingSerializer(top_time_trial_players, many=True).data
+
+        return Response({
+            'classic': classic_rankings,
+            'time_trial': time_trial_rankings
+        }, status=status.HTTP_200_OK)
