@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment {
 
     private void updateUI(UserProfile userProfile, String username) {
         binding.textViewUserName.setText("Hi, " + username);
-
+        binding.userPoints.setText(String.valueOf(userProfile.getTotalPoints()));
         RequestOptions requestOptions = new RequestOptions()
                 .transform(new CircleCrop());
 

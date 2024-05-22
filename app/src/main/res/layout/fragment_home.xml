@@ -81,7 +81,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Master"
+                android:text="Tester"
                 android:textColor="@color/content_primary" />
 
             <TextView
@@ -106,6 +106,7 @@
                 android:src="@drawable/ic_trophy" />
 
             <TextView
+                android:id="@+id/userPoints"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="730"

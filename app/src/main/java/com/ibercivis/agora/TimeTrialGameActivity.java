@@ -399,6 +399,8 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
 
     @Override
     public void onQuitGame() {
+        countDownTimer.cancel();
+
         SessionManager sessionManager = new SessionManager(this);
         String token = sessionManager.getToken();
 
