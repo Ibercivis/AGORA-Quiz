@@ -52,7 +52,7 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
     private GameService gameService;
     private int currentGameId;
     private int currentQuestionIndex = 1;
-    private int totalQuestions = 79;
+    private int totalQuestions = 90;
     private int correctAnswersCount = 0;
     private int lastCorrectAnswersCount = 0;
     private int selectedAnswer;
@@ -99,6 +99,7 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
                 correctAnswersCount = getIntent().getIntExtra("CORRECT_ANSWERS_COUNT", 0);
                 long timeLeftInSeconds = getIntent().getIntExtra("TIME_LEFT", 60);
                 timeLeftInMillis = timeLeftInSeconds * 1000;
+                totalQuestions = game.getQuestions().size();
                 if (nextQuestionJson != null) {
                     Question nextQuestion = gson.fromJson(nextQuestionJson, Question.class);
                     updateUIWithQuestion(nextQuestion, currentQuestionIndex, correctAnswersCount);
@@ -125,6 +126,7 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
                             Question nextQuestion = gson.fromJson(String.valueOf(response.getJSONObject("next_question")), Question.class);
                             int currentQuestionIndex = response.getInt("current_question_index");
                             correctAnswersCount = response.getInt("correct_answers_count");
+                            totalQuestions = game.getQuestions().size();
                             updateUIWithQuestion(nextQuestion, currentQuestionIndex, correctAnswersCount);
                         }
                     }
