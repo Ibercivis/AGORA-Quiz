@@ -83,7 +83,7 @@ struct MainView: View {
     var userInfo: some View {
         HStack {
             Spacer()
-            UserStatView(iconName: "star.fill", title: "Master", subtitle: "Level")
+            UserStatView(iconName: "star.fill", title: "Tester", subtitle: "Level")
             Spacer()
             UserStatView(iconName: "trophy.fill", title: "730", subtitle: "Points")
             Spacer()
