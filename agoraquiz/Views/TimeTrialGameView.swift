@@ -223,7 +223,7 @@ struct TimeTrialGameView_Previews: PreviewProvider {
         let gameService = GameService()
         let navigationManager = NavigationManager()
         let gameData = GameResponse(
-            game: Game(id: 1, score: 0, status: "in-progress", gameType: "time-trial", timeLeft: 60),
+            game: Game(id: 1, score: 0, status: "in-progress", gameType: "time-trial", timeLeft: 60, questions: [Question(id: 1, questionText: "Sample question?", answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"], correctAnswer: 1)]),
             nextQuestion: Question(id: 1, questionText: "Sample question?", answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4"], correctAnswer: 1),
             currentQuestionIndex: 1,
             correctAnswersCount: 0

@@ -13,6 +13,7 @@ struct Game: Codable {
     let status: String
     let gameType: String
     let timeLeft: Int
+    let questions: [Question]
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -20,5 +21,6 @@ struct Game: Codable {
         case status
         case gameType = "game_type"
         case timeLeft = "time_left"
+        case questions
     }
 }

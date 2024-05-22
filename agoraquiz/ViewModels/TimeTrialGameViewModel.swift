@@ -38,6 +38,7 @@ class TimeTrialGameViewModel: ObservableObject {
         self.correctAnswersCount = gameData.correctAnswersCount
         self.currentQuestionIndex = gameData.currentQuestionIndex
         self.timeLeft = gameData.game.timeLeft
+        self.totalQuestions = gameData.game.questions.count
 
         if let question = self.currentQuestion {
             self.questionText = question.questionText
