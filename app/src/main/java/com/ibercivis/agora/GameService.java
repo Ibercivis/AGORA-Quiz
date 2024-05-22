@@ -178,5 +178,24 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
+    public void getRankings(String token, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                BASE_URL + "/api/users/rankings/",
+                null,
+                listener,
+                errorListener
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Token " + token);
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
 }
 

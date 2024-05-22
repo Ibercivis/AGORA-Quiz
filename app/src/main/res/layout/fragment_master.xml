@@ -79,9 +79,8 @@
                     android:id="@+id/usernameFirstPlace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username 1"
+                    android:text="Empty"
                     android:layout_gravity="center_horizontal|bottom"
-                    android:textStyle="bold"
                     android:textColor="@color/content_primary"
                     />
             </LinearLayout>
@@ -99,7 +98,7 @@
                     android:id="@+id/scoreFirstPlace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="13000 Pts"
+                    android:text="00 Pts"
                     android:textStyle="bold"
                     android:padding="6dp"
                     android:gravity="center"
@@ -142,9 +141,8 @@
                     android:id="@+id/usernameSecondPlace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username 2"
+                    android:text="Empty"
                     android:layout_gravity="center_horizontal|bottom"
-                    android:textStyle="bold"
                     android:textColor="@color/content_primary"
                     />
             </LinearLayout>
@@ -163,7 +161,7 @@
                     android:id="@+id/scoreSecondPlace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="11000 Pts"
+                    android:text="00 Pts"
                     android:textStyle="bold"
                     android:padding="6dp"
                     android:gravity="center"
@@ -202,9 +200,8 @@
                     android:id="@+id/usernameThirdPlace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username 3"
+                    android:text="Empty"
                     android:layout_gravity="center_horizontal|bottom"
-                    android:textStyle="bold"
                     android:textColor="@color/content_primary"
                     />
             </LinearLayout>
@@ -223,7 +220,7 @@
                     android:id="@+id/scoreThirdPlace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10000 Pts"
+                    android:text="00 Pts"
                     android:textStyle="bold"
                     android:padding="6dp"
                     android:gravity="center"
@@ -251,6 +248,5 @@
                 android:layout_marginHorizontal="16dp"
                 android:scrollbars="vertical" />
     </com.google.android.material.card.MaterialCardView>
-            <!-- You might need a bottom padding or margin depending on your design -->
 </RelativeLayout>
 

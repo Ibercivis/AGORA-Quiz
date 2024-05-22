@@ -70,7 +70,7 @@ public class DashboardFragment extends Fragment {
 
         // Observar el LiveData del ViewModel
         dashboardViewModel.getText().observe(getViewLifecycleOwner(), newText -> {
-            // Aquí puedes actualizar tu UI cuando cambia el texto en LiveData
+            // Actualizar tu UI cuando cambia el texto en LiveData
         });
 
         return root;
@@ -83,19 +83,16 @@ public class DashboardFragment extends Fragment {
         TextView tabTextView = customTab.findViewById(R.id.customtab_textview);
         switch (position) {
             case 0:
-                tabTextView.setText("Master");
+                tabTextView.setText("Classic");
                 tabTextView.setTextColor(getResources().getColor(R.color.content_secondary));
                 break;
             case 1:
-                tabTextView.setText("Universal");
+                tabTextView.setText("Time Trial");
                 break;
         }
 
         return customTab;
     }
-
-    // No necesitas el método setupTabLayout() ya que ahora estás usando el ViewPager
-    // Resto de tu código...
 
     @Override
     public void onDestroyView() {

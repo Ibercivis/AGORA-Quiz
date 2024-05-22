@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.ibercivis.agora.R;
 
 import java.util.List;
@@ -30,9 +31,22 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingV
     public void onBindViewHolder(RankingViewHolder holder, int position) {
         RankingItem currentItem = rankingList.get(position);
         holder.tvRank.setText(String.valueOf(currentItem.getRank()));
-        holder.ivAvatar.setImageResource(currentItem.getAvatarResourceId());
         holder.tvUsername.setText(currentItem.getUsername());
-        holder.tvScore.setText(currentItem.getScore() + " Pts");
+
+        // Check if the ranking is for time_trial or classic
+        if (currentItem.getMaxTimeTrialTime() > 0) {
+            holder.tvScore.setText(currentItem.getFormattedTime());
+        } else {
+            holder.tvScore.setText(currentItem.getScore() + " Pts");
+        }
+
+        if (currentItem.getProfileImageUrl() != null && !currentItem.getProfileImageUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(currentItem.getProfileImageUrl())
+                    .into(holder.ivAvatar);
+        } else {
+            holder.ivAvatar.setImageResource(R.drawable.ic_avatar_ranking_orange);
+        }
     }
 
     @Override
@@ -59,20 +73,48 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingV
 class RankingItem {
     private int rank;
     private String username;
-    private int score;
-    private int avatarResourceId;
+    private int score; // For classic
+    private int maxTimeTrialTime; // For time_trial
+    private String profileImageUrl;
 
-    public RankingItem(int rank, String username, int score, int avatarResourceId) {
+    public RankingItem(int rank, String username, int score, String profileImageUrl) {
         this.rank = rank;
         this.username = username;
         this.score = score;
-        this.avatarResourceId = avatarResourceId;
+        this.profileImageUrl = profileImageUrl;
     }
 
-    // Getters
-    public int getRank() { return rank; }
-    public String getUsername() { return username; }
-    public int getScore() { return score; }
-    public int getAvatarResourceId() { return avatarResourceId; }
+    public RankingItem(int rank, String username, int maxTimeTrialTime, String profileImageUrl, boolean isTimeTrial) {
+        this.rank = rank;
+        this.username = username;
+        this.maxTimeTrialTime = maxTimeTrialTime;
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getMaxTimeTrialTime() {
+        return maxTimeTrialTime;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public String getFormattedTime() {
+        int minutes = maxTimeTrialTime / 60;
+        int seconds = maxTimeTrialTime % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
 }
 

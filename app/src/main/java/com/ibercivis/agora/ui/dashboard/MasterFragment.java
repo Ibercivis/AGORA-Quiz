@@ -4,12 +4,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+import com.ibercivis.agora.GameService;
 import com.ibercivis.agora.R;
+import com.ibercivis.agora.SessionManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +32,11 @@ public class MasterFragment extends Fragment {
     private RecyclerView rankingRecyclerView;
     private RankingAdapter rankingAdapter;
     private List<RankingItem> rankingItems;
+
+    private ImageView avatarFirstPlace, avatarSecondPlace, avatarThirdPlace;
+    private TextView usernameFirstPlace, usernameSecondPlace, usernameThirdPlace;
+    private TextView scoreFirstPlace, scoreSecondPlace, scoreThirdPlace;
+    private String BASE_URL;
 
     public MasterFragment() {
         // Constructor público vacío requerido
@@ -32,14 +50,19 @@ public class MasterFragment extends Fragment {
 
         // Inicializa la lista de items de ranking
         rankingItems = new ArrayList<>();
-        // Aquí agrega tus items al rankingItems, por ejemplo:
-        rankingItems.add(new RankingItem(4, "User 4", 9800, R.drawable.ic_avatar_ranking_green));
-        rankingItems.add(new RankingItem(5, "User 5", 8000, R.drawable.ic_avatar_ranking_yellow));
-        rankingItems.add(new RankingItem(6, "User 6", 7000, R.drawable.ic_avatar_ranking_orange));
-        rankingItems.add(new RankingItem(7, "User 7", 6000, R.drawable.ic_avatar_ranking_green));
-        rankingItems.add(new RankingItem(8, "User 8", 5000, R.drawable.ic_avatar_ranking_yellow));
-        rankingItems.add(new RankingItem(9, "User 9", 4000, R.drawable.ic_avatar_ranking_orange));
-        // ... más items
+
+        // Inicializar las vistas del podio
+        avatarFirstPlace = rootView.findViewById(R.id.avatarFirstPlace);
+        usernameFirstPlace = rootView.findViewById(R.id.usernameFirstPlace);
+        scoreFirstPlace = rootView.findViewById(R.id.scoreFirstPlace);
+
+        avatarSecondPlace = rootView.findViewById(R.id.avatarSecondPlace);
+        usernameSecondPlace = rootView.findViewById(R.id.usernameSecondPlace);
+        scoreSecondPlace = rootView.findViewById(R.id.scoreSecondPlace);
+
+        avatarThirdPlace = rootView.findViewById(R.id.avatarThirdPlace);
+        usernameThirdPlace = rootView.findViewById(R.id.usernameThirdPlace);
+        scoreThirdPlace = rootView.findViewById(R.id.scoreThirdPlace);
 
         // Inicializar el RecyclerView
         rankingRecyclerView = rootView.findViewById(R.id.rankingRecyclerView);
@@ -51,7 +74,70 @@ public class MasterFragment extends Fragment {
         // Establecer el adaptador en el RecyclerView
         rankingRecyclerView.setAdapter(rankingAdapter);
 
+        // Obtener los datos del ranking del servidor
+        BASE_URL = getContext().getString(R.string.base_url);
+        fetchRankingData();
+
         return rootView;
     }
-}
 
+    private void fetchRankingData() {
+        // Llamar al servicio para obtener los datos del ranking
+        SessionManager sessionManager = new SessionManager(getContext());
+        String token = sessionManager.getToken();
+
+        GameService gameService = new GameService(getActivity());
+        gameService.getRankings(token, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray classicRankings = response.getJSONArray("classic");
+                    for (int i = 0; i < classicRankings.length(); i++) {
+                        JSONObject user = classicRankings.getJSONObject(i);
+                        String username = user.getString("username");
+                        int score = user.getInt("total_points");
+                        String profileImageUrl = user.optString("profile_image_url", null);
+
+                        if (i == 0) {
+                            // Primer lugar
+                            updatePodium(avatarFirstPlace, usernameFirstPlace, scoreFirstPlace, username, score, profileImageUrl);
+                        } else if (i == 1) {
+                            // Segundo lugar
+                            updatePodium(avatarSecondPlace, usernameSecondPlace, scoreSecondPlace, username, score, profileImageUrl);
+                        } else if (i == 2) {
+                            // Tercer lugar
+                            updatePodium(avatarThirdPlace, usernameThirdPlace, scoreThirdPlace, username, score, profileImageUrl);
+                        } else {
+                            // Resto del ranking
+                            rankingItems.add(new RankingItem(i + 1, username, score, profileImageUrl));
+                        }
+                    }
+                    rankingAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+    }
+
+    private void updatePodium(ImageView avatarView, TextView usernameView, TextView scoreView, String username, int score, String profileImageUrl) {
+        usernameView.setText(username);
+        scoreView.setText(score + " Pts");
+
+        RequestOptions requestOptions = new RequestOptions()
+                .transform(new CircleCrop());
+        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(BASE_URL + profileImageUrl)
+                    .apply(requestOptions)
+                    .into(avatarView);
+        } else {
+            avatarView.setImageResource(R.drawable.ic_avatar_ranking_green);
+        }
+    }
+}
