@@ -64,18 +64,19 @@ public class MasterFragment extends Fragment {
         usernameThirdPlace = rootView.findViewById(R.id.usernameThirdPlace);
         scoreThirdPlace = rootView.findViewById(R.id.scoreThirdPlace);
 
+        BASE_URL = getContext().getString(R.string.base_url);
+
         // Inicializar el RecyclerView
         rankingRecyclerView = rootView.findViewById(R.id.rankingRecyclerView);
         rankingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Inicializar el RankingAdapter con la lista de items
-        rankingAdapter = new RankingAdapter(rankingItems);
+        rankingAdapter = new RankingAdapter(rankingItems, BASE_URL);
 
         // Establecer el adaptador en el RecyclerView
         rankingRecyclerView.setAdapter(rankingAdapter);
 
         // Obtener los datos del ranking del servidor
-        BASE_URL = getContext().getString(R.string.base_url);
         fetchRankingData();
 
         return rootView;
@@ -131,7 +132,7 @@ public class MasterFragment extends Fragment {
 
         RequestOptions requestOptions = new RequestOptions()
                 .transform(new CircleCrop());
-        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+        if (profileImageUrl != null && !profileImageUrl.isEmpty() && profileImageUrl != "null") {
             Glide.with(this)
                     .load(BASE_URL + profileImageUrl)
                     .apply(requestOptions)

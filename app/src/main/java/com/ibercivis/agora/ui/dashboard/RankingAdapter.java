@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.ibercivis.agora.R;
 
 import java.util.List;
@@ -16,9 +18,11 @@ import java.util.List;
 public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingViewHolder> {
 
     private List<RankingItem> rankingList;
+    private String BASE_URL;
 
-    public RankingAdapter(List<RankingItem> rankingList) {
+    public RankingAdapter(List<RankingItem> rankingList, String BASE_URL) {
         this.rankingList = rankingList;
+        this.BASE_URL = BASE_URL;
     }
 
     @Override
@@ -40,9 +44,13 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingV
             holder.tvScore.setText(currentItem.getScore() + " Pts");
         }
 
-        if (currentItem.getProfileImageUrl() != null && !currentItem.getProfileImageUrl().isEmpty()) {
+        RequestOptions requestOptions = new RequestOptions()
+                .transform(new CircleCrop());
+
+        if (currentItem.getProfileImageUrl() != null && !currentItem.getProfileImageUrl().isEmpty() && currentItem.getProfileImageUrl() != "null") {
             Glide.with(holder.itemView.getContext())
-                    .load(currentItem.getProfileImageUrl())
+                    .load(BASE_URL + currentItem.getProfileImageUrl())
+                    .apply(requestOptions)
                     .into(holder.ivAvatar);
         } else {
             holder.ivAvatar.setImageResource(R.drawable.ic_avatar_ranking_orange);
@@ -76,6 +84,8 @@ class RankingItem {
     private int score; // For classic
     private int maxTimeTrialTime; // For time_trial
     private String profileImageUrl;
+
+    private String baseURL;
 
     public RankingItem(int rank, String username, int score, String profileImageUrl) {
         this.rank = rank;
