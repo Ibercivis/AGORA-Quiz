@@ -84,7 +84,6 @@ public class HomeFragment extends Fragment {
     private void loadUserProfile() {
         SessionManager sessionManager = new SessionManager(getContext());
         String token = sessionManager.getToken();
-        String username = sessionManager.getUsername();
 
         String url = BASE_URL + "/api/users/profile/";
 
@@ -97,8 +96,9 @@ public class HomeFragment extends Fragment {
                         int totalGamesAbandoned = response.getInt("total_games_abandoned");
                         int totalCorrectAnswers = response.getInt("total_correct_answers");
                         int totalIncorrectAnswers = response.getInt("total_incorrect_answers");
+                        String username = response.getString("username");
                         String profileImageUrl = response.optString("profile_image", null);
-
+                        sessionManager.createLoginSession(username, token);
                         updateUI(new UserProfile(
                                 totalPoints,
                                 totalGamesPlayed,
@@ -161,6 +161,13 @@ public class HomeFragment extends Fragment {
 
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        loadUserProfile();
     }
 
     @Override

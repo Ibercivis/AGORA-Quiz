@@ -1,6 +1,8 @@
 package com.ibercivis.agora.classes;
 
 public class UserProfile {
+    private String username;
+    private String email;
     private int totalPoints;
     private int totalGamesPlayed;
     private int totalGamesAbandoned;
@@ -17,6 +19,21 @@ public class UserProfile {
         this.totalCorrectAnswers = totalCorrectAnswers;
         this.totalIncorrectAnswers = totalIncorrectAnswers;
         this.profileImageUrl = profileImageUrl;
+    }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getTotalPoints() {

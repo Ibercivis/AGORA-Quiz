@@ -28,6 +28,11 @@ public class SessionManager {
         return prefs.getString(KEY_USERNAME, null);
     }
 
+    public void setKeyUsername(String username) {
+        editor.putString(KEY_USERNAME, username);
+        editor.commit();
+    }
+
     public String getToken() {
         return prefs.getString(KEY_TOKEN, null);
     }

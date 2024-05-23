@@ -1,56 +1,50 @@
-package com.ibercivis.agora.ui.notifications;
+package com.ibercivis.agora;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ibercivis.agora.LoginActivity;
-import com.ibercivis.agora.MainActivity;
-import com.ibercivis.agora.R;
-import com.ibercivis.agora.SessionManager;
-import com.ibercivis.agora.SettingsBottomSheetFragment;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputEditText;
 import com.ibercivis.agora.classes.UserProfile;
-import com.ibercivis.agora.databinding.FragmentNotificationsBinding;
+import com.ibercivis.agora.services.RetrofitApiService;
+import com.ibercivis.agora.services.RetrofitClient;
+import com.ibercivis.agora.services.UserProfileUpdateRequest;
 
 import org.json.JSONException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
-import android.app.Activity;
-import android.net.Uri;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.ibercivis.agora.services.RetrofitApiService;
-import com.ibercivis.agora.services.RetrofitClient;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -59,62 +53,91 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import org.json.JSONObject;
+// SettingsBottomSheetFragment.java
+public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-
-public class NotificationsFragment extends Fragment {
-
-    private static final int PICK_IMAGE_REQUEST = 1;
-
-    private FragmentNotificationsBinding binding;
+    private View mainView;
+    private View editProfileView;
+    private ImageView backButton, imgProfile;
+    private TextInputEditText usernameEditText;
+    private TextInputEditText emailEditText;
+    private AppCompatButton saveChangesButton;
+    private String token;
+    private RetrofitApiService apiService;
     private String BASE_URL;
 
-    private RetrofitApiService apiService;
-
+    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        mainView = view.findViewById(R.id.main_view);
+        editProfileView = view.findViewById(R.id.edit_profile_view);
+
+        usernameEditText = view.findViewById(R.id.usernameEditText);
+        emailEditText = view.findViewById(R.id.emailSignUpEditText);
+        saveChangesButton = view.findViewById(R.id.saveChangesButton);
+        backButton = view.findViewById(R.id.backButton);
+        imgProfile = view.findViewById(R.id.imgProfile);
+
+        mainView.setVisibility(View.VISIBLE);
+        backButton.setVisibility(View.GONE);
+
+        view.findViewById(R.id.tvEditProfile).setOnClickListener(v -> showEditProfileView());
+        view.findViewById(R.id.backButton).setOnClickListener(v -> showMainView());
+
+        // Initialize API service and token
         BASE_URL = getString(R.string.base_url);
         SessionManager sessionManager = new SessionManager(getContext());
-        String token = sessionManager.getToken();
-
+        token = sessionManager.getToken();
         apiService = RetrofitClient.getClient(BASE_URL, token).create(RetrofitApiService.class);
 
-
-        // Cargar los datos del perfil de usuario
+        // Load current user profile
         loadUserProfile();
 
-        return root;
+        // Set save changes button click listener
+        saveChangesButton.setOnClickListener(v -> saveUserProfileChanges());
+
+        // Set image profile click listener
+        imgProfile.setOnClickListener(v -> showImagePickerOptions());
+
+        return view;
+    }
+
+    public interface OnSettingsClosedListener {
+        void onSettingsClosed();
+    }
+
+    private OnSettingsClosedListener listener;
+
+    public void setOnSettingsClosedListener(OnSettingsClosedListener listener) {
+        this.listener = listener;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.btnLogout.setOnClickListener(v -> logoutUser());
-
-        binding.imgProfile.setOnClickListener(v -> showImagePickerOptions());
-
-        binding.icSettings.setOnClickListener(v -> showSettingsBottomSheet());
-
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (listener != null) {
+            listener.onSettingsClosed();
+        }
     }
 
-    private void showSettingsBottomSheet() {
-        SettingsBottomSheetFragment bottomSheet = new SettingsBottomSheetFragment();
-        bottomSheet.setOnSettingsClosedListener(() -> loadUserProfile());
-        bottomSheet.show(getChildFragmentManager(), bottomSheet.getTag());
+    private void showEditProfileView() {
+        mainView.setVisibility(View.GONE);
+        backButton.setVisibility(View.VISIBLE);
+        editProfileView.setVisibility(View.VISIBLE);
+    }
+
+    private void showMainView() {
+        editProfileView.setVisibility(View.GONE);
+        backButton.setVisibility(View.GONE);
+        mainView.setVisibility(View.VISIBLE);
     }
 
     private void loadUserProfile() {
         SessionManager sessionManager = new SessionManager(getContext());
         String token = sessionManager.getToken();
-
+        String username = sessionManager.getUsername();
 
         String url = BASE_URL + "/api/users/profile/";
 
@@ -122,22 +145,27 @@ public class NotificationsFragment extends Fragment {
                 Request.Method.GET, url, null,
                 response -> {
                     try {
-                        String username = response.getString("username");
-                        int totalPoints = response.getInt("total_points");
-                        int totalGamesPlayed = response.getInt("total_games_played");
-                        int totalGamesAbandoned = response.getInt("total_games_abandoned");
-                        int totalCorrectAnswers = response.getInt("total_correct_answers");
-                        int totalIncorrectAnswers = response.getInt("total_incorrect_answers");
+                        String user_name = response.getString("username");
+                        String email = response.getString("email");
                         String profileImageUrl = response.optString("profile_image", null);
 
-                        updateUI(new UserProfile(
-                                totalPoints,
-                                totalGamesPlayed,
-                                totalGamesAbandoned,
-                                totalCorrectAnswers,
-                                totalIncorrectAnswers,
-                                profileImageUrl
-                        ), username);
+                        usernameEditText.setText(user_name);
+                        emailEditText.setText(email);
+
+                        RequestOptions requestOptions = new RequestOptions()
+                                .transform(new CircleCrop());
+
+                        if (profileImageUrl != null && !profileImageUrl.equals("null")) {
+                            Glide.with(SettingsBottomSheetFragment.this)
+                                    .load(profileImageUrl)
+                                    .apply(requestOptions)
+                                    .into(imgProfile);
+                        } else {
+                            Glide.with(SettingsBottomSheetFragment.this)
+                                    .load(R.drawable.ic_avatar_ranking_yellow)
+                                    .apply(requestOptions)
+                                    .into(imgProfile);
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -155,29 +183,30 @@ public class NotificationsFragment extends Fragment {
         Volley.newRequestQueue(this.getActivity()).add(jsonObjectRequest);
     }
 
-    private void updateUI(UserProfile userProfile, String username) {
-        binding.tvUsername.setText(username);
-        binding.tvPoints.setText(String.format(Locale.getDefault(), "%d Points", userProfile.getTotalPoints()));
-        binding.ptCorrectAnswers.setText(String.valueOf(userProfile.getTotalCorrectAnswers()));
-        binding.ptIncorrectAnswers.setText(String.valueOf(userProfile.getTotalIncorrectAnswers()));
-        binding.ptTotalQuestions.setText(String.valueOf(userProfile.getTotalGamesPlayed()));
-        binding.ptTotalGames.setText(String.valueOf(userProfile.getTotalGamesPlayed() - userProfile.getTotalGamesAbandoned()));
-        binding.ptTotalPoints.setText(String.valueOf(userProfile.getTotalPoints()));
+    private void saveUserProfileChanges() {
+        String newUsername = usernameEditText.getText().toString().trim();
+        String newEmail = emailEditText.getText().toString().trim();
 
-        RequestOptions requestOptions = new RequestOptions()
-                .transform(new CircleCrop());
+        UserProfileUpdateRequest updateRequest = new UserProfileUpdateRequest(newUsername, newEmail);
+        Call<UserProfile> call = apiService.updateUserProfile("Token " + token, updateRequest);
+        call.enqueue(new Callback<UserProfile>() {
+            @Override
+            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+                if (response.isSuccessful()) {
+                    SessionManager sessionManager = new SessionManager(getContext());
+                    sessionManager.setKeyUsername(updateRequest.getUsername());
+                    showToast("Profile updated successfully");
+                    showMainView();
+                } else {
+                    showToast("Failed to update profile");
+                }
+            }
 
-        if (!userProfile.getProfileImageUrl().equalsIgnoreCase("null") && !userProfile.getProfileImageUrl().isEmpty()) {
-            Glide.with(this)
-                    .load(userProfile.getProfileImageUrl())
-                    .apply(requestOptions)
-                    .into(binding.imgProfile);
-        } else {
-            Glide.with(this)
-                    .load(R.drawable.ic_avatar_ranking_yellow)
-                    .apply(requestOptions)
-                    .into(binding.imgProfile);
-        }
+            @Override
+            public void onFailure(Call<UserProfile> call, Throwable t) {
+                showToast("Error: " + t.getMessage());
+            }
+        });
     }
 
     private void showImagePickerOptions() {
@@ -186,11 +215,9 @@ public class NotificationsFragment extends Fragment {
         builder.setItems(new CharSequence[]{"Change Profile Image", "Remove Profile Image"}, (dialog, which) -> {
             switch (which) {
                 case 0:
-                    // Cambiar imagen de perfil
                     pickImage();
                     break;
                 case 1:
-                    // Eliminar imagen de perfil
                     deleteProfileImage();
                     break;
             }
@@ -213,7 +240,6 @@ public class NotificationsFragment extends Fragment {
                     if (data != null && data.getData() != null) {
                         Uri imageUri = data.getData();
                         try {
-                            // Toma la persistencia del permiso para acceder al archivo después de cerrar el selector
                             getActivity().getContentResolver().takePersistableUriPermission(imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             uploadProfileImage(imageUri);
                         } catch (Exception e) {
@@ -287,6 +313,10 @@ public class NotificationsFragment extends Fragment {
         return byteArrayOutputStream.toByteArray();
     }
 
+    private void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
     private void handleError(VolleyError error) {
         String errorMessage;
         if (error instanceof NetworkError || error instanceof NoConnectionError) {
@@ -302,25 +332,4 @@ public class NotificationsFragment extends Fragment {
         }
         showToast(errorMessage);
     }
-
-    private void logoutUser() {
-        SessionManager sessionManager = new SessionManager(getContext());
-        sessionManager.logoutUser();
-        if (getActivity() != null) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivity(intent);
-            getActivity().finish();
-        }
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
 }
