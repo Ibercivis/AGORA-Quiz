@@ -21,5 +21,6 @@ struct URLs {
         static let abandonGame = "/api/games/%d/abandon/"
         static let finishGame = "/api/games/%d/finish_game/"
         static let getProfile = "/api/users/profile/"
+        static let rankings = "/api/users/rankings/"
     }
 }

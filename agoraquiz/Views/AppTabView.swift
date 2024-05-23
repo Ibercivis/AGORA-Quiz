@@ -23,15 +23,15 @@ struct AppTabView: View {
                         Text("Home")
                     }
                     .tag(0)
-                    .edgesIgnoringSafeArea(.all) // Asegúrate de que cada vista tenga esto
+                    .edgesIgnoringSafeArea(.all)
 
-                Text("Settings")
+                RankingView()
                     .tabItem {
-                        Image(systemName: "gear")
-                        Text("Settings")
+                        Image(systemName: "trophy.fill")
+                        Text("Ranking")
                     }
                     .tag(1)
-                    .edgesIgnoringSafeArea(.all) // Asegúrate de que cada vista tenga esto
+                    .edgesIgnoringSafeArea(.all)
 
                 ProfileView()
                     .environmentObject(navigationManager)
@@ -41,9 +41,9 @@ struct AppTabView: View {
                         Text("Profile")
                     }
                     .tag(2)
-                    .edgesIgnoringSafeArea(.all) // Asegúrate de que cada vista tenga esto
+                    .edgesIgnoringSafeArea(.all)
             }
         }
-        .edgesIgnoringSafeArea(.all) // Este también es necesario
+        .edgesIgnoringSafeArea(.all)
     }
 }

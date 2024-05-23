@@ -268,6 +268,30 @@ class GameService: ObservableObject {
             .eraseToAnyPublisher()
         }
     
+    func getRankings() -> AnyPublisher<RankingsResponse, Error> {
+            guard let url = URL(string: URLs.APIPath.rankings, relativeTo: URLs.baseURL) else {
+                return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            if let token = SessionManager.shared.token {
+                request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                return Fail(error: NetworkError.noToken).eraseToAnyPublisher()
+            }
+            
+            return session.dataTaskPublisher(for: request)
+                .tryMap { result -> RankingsResponse in
+                    let decoder = JSONDecoder()
+                    return try decoder.decode(RankingsResponse.self, from: result.data)
+                }
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+    }
+    
     func uploadProfileImage(image: UIImage, token: String) -> AnyPublisher<Void, Error> {
         guard let url = URL(string: URLs.APIPath.getProfile, relativeTo: URLs.baseURL) else {
             return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
