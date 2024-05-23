@@ -99,7 +99,7 @@ class ProfileViewModel: ObservableObject {
     
     func logout() {
         SessionManager.shared.logoutUser()
-        // Logic to navigate back to login screen can be added here
+        navigationManager?.navigateToLogin()
     }
     
     private func handleError(error: Error) -> String {

@@ -17,18 +17,24 @@ struct RankingView: View {
     var body: some View {
         VStack {
             header
+            
 
             if selectedRanking == .classic {
                 RankingPodiumView(rankingItems: $viewModel.classicRanking, selectedRanking: selectedRanking)
+                    .padding(.top, 140)
                 RankingListView(rankingItems: $viewModel.classicRanking, selectedRanking: selectedRanking)
             } else {
                 RankingPodiumView(rankingItems: $viewModel.timeTrialRanking, selectedRanking: selectedRanking)
+                    .padding(.top, 140)
                 RankingListView(rankingItems: $viewModel.timeTrialRanking, selectedRanking: selectedRanking)
             }
+            
+            Spacer()
         }
         .onAppear {
             viewModel.fetchRankings(gameService: gameService)
         }
+        .edgesIgnoringSafeArea(.all)
     }
 
     private var header: some View {

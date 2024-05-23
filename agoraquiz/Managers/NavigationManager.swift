@@ -48,7 +48,11 @@ class NavigationManager: ObservableObject {
         currentPage = .classicGame(gameData)
     }
 
-    func navigateToTimeTrialGame(gameData: GameResponse) { // Añadir esta función
+    func navigateToTimeTrialGame(gameData: GameResponse) {
         currentPage = .timeTrialGame(gameData)
+    }
+    
+    func navigateToLogin(){
+        currentPage = .login
     }
 }
