@@ -4,7 +4,7 @@ from dj_rest_auth.views import PasswordResetConfirmView, PasswordResetView
 from dj_rest_auth.registration.views import VerifyEmailView, ConfirmEmailView
 from django.conf import settings
 from django.conf.urls.static import static
-from users.api.views import EmailRecoveryView, ActivateAccountView, CustomConfirmEmailView, RecoverySuccess, UserProfileView, RankingViewSet
+from users.api.views import EmailRecoveryView, ActivateAccountView, CustomConfirmEmailView, RecoverySuccess, UserProfileView, RankingViewSet, UserUpdateView
 
 
 urlpatterns = [
@@ -18,5 +18,6 @@ urlpatterns = [
     path('users/email_recovery/', EmailRecoveryView.as_view(), name='email_recovery'),
     path('users/recovery_success/', RecoverySuccess.as_view(), name='recovery_success'),
     path('users/profile/', UserProfileView.as_view(), name='user-profile'),
+    path('users/profile/update/', UserUpdateView.as_view(), name='user-profile-update'),
     path('users/rankings/', RankingViewSet.as_view({'get': 'get_rankings'}), name='game-rankings'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

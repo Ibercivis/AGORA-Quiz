@@ -14,8 +14,11 @@ from django.views import View
 from django.http import HttpResponse
 from rest_framework.permissions import AllowAny
 from dj_rest_auth.registration.views import ConfirmEmailView
+from dj_rest_auth.views import LoginView
 from rest_framework import generics
 from users.models import UserProfile
+from django.contrib.auth.models import User
+from users.api.serializers import UserUpdateSerializer
 from users.api.serializers import UserProfileSerializer, UserRankingSerializer
 import re
 
@@ -88,6 +91,21 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user.profile
+
+class UserUpdateView(generics.UpdateAPIView):
+    serializer_class = UserUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RankingViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'])

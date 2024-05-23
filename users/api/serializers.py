@@ -1,11 +1,26 @@
 from rest_framework import serializers
 from users.models import UserProfile
 from django.core.files.storage import default_storage
+from django.contrib.auth.models import User
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+
     class Meta:
         model = UserProfile
-        fields = ['profile_image', 'total_points', 'total_games_played', 'total_games_abandoned', 'total_correct_answers', 'total_incorrect_answers']
+        fields = ['username', 'email', 'profile_image', 'total_points', 'total_games_played', 'total_games_abandoned', 'total_correct_answers', 'total_incorrect_answers']
+
+    def get_username(self, obj):
+        return obj.user.username
+
+    def get_email(self, obj):
+        return obj.user.email
 
     def update(self, instance, validated_data):
         profile_image = validated_data.get('profile_image')
