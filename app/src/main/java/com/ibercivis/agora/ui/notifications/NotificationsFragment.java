@@ -115,44 +115,48 @@ public class NotificationsFragment extends Fragment {
         SessionManager sessionManager = new SessionManager(getContext());
         String token = sessionManager.getToken();
 
+        if (token != null && !token.equals("")){
 
-        String url = BASE_URL + "/api/users/profile/";
+            String url = BASE_URL + "/api/users/profile/";
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        String username = response.getString("username");
-                        int totalPoints = response.getInt("total_points");
-                        int totalGamesPlayed = response.getInt("total_games_played");
-                        int totalGamesAbandoned = response.getInt("total_games_abandoned");
-                        int totalCorrectAnswers = response.getInt("total_correct_answers");
-                        int totalIncorrectAnswers = response.getInt("total_incorrect_answers");
-                        String profileImageUrl = response.optString("profile_image", null);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.GET, url, null,
+                    response -> {
+                        try {
+                            String username = response.getString("username");
+                            int totalPoints = response.getInt("total_points");
+                            int totalGamesPlayed = response.getInt("total_games_played");
+                            int totalGamesAbandoned = response.getInt("total_games_abandoned");
+                            int totalCorrectAnswers = response.getInt("total_correct_answers");
+                            int totalIncorrectAnswers = response.getInt("total_incorrect_answers");
+                            String profileImageUrl = response.optString("profile_image", null);
 
-                        updateUI(new UserProfile(
-                                totalPoints,
-                                totalGamesPlayed,
-                                totalGamesAbandoned,
-                                totalCorrectAnswers,
-                                totalIncorrectAnswers,
-                                profileImageUrl
-                        ), username);
+                            updateUI(new UserProfile(
+                                    totalPoints,
+                                    totalGamesPlayed,
+                                    totalGamesAbandoned,
+                                    totalCorrectAnswers,
+                                    totalIncorrectAnswers,
+                                    profileImageUrl
+                            ), username);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                },
-                this::handleError) {
-            @Override
-            public Map<String, String> getHeaders() {
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Token " + token);
-                return headers;
-            }
-        };
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    },
+                    this::handleError) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Token " + token);
+                    return headers;
+                }
+            };
 
-        Volley.newRequestQueue(this.getActivity()).add(jsonObjectRequest);
+            Volley.newRequestQueue(this.getActivity()).add(jsonObjectRequest);
+
+        }
+
     }
 
     private void updateUI(UserProfile userProfile, String username) {

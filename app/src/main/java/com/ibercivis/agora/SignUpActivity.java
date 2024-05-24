@@ -16,7 +16,16 @@ import com.google.android.material.textfield.TextInputLayout;
 import android.util.Patterns;
 import android.widget.Toast;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements PrivacyPolicyDialogFragment.PrivacyPolicyDialogListener {
+
+    private TextInputLayout usernameSignUpTextInputLayout;
+    private TextInputLayout emailSignUpTextInputLayout;
+    private TextInputLayout passwordSignUpTextInputLayout;
+    private TextInputLayout confirmPasswordSignUpTextInputLayout;
+    private String username;
+    private String email;
+    private String password1;
+    private String password2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +33,10 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         // Inicializar TextInputLayouts y botones
-        TextInputLayout usernameSignUpTextInputLayout = findViewById(R.id.usernameSignUpTextInputLayout);
-        TextInputLayout emailSignUpTextInputLayout = findViewById(R.id.emailSignUpTextInputLayout);
-        TextInputLayout passwordSignUpTextInputLayout = findViewById(R.id.passwordSignUpTextInputLayout);
-        TextInputLayout confirmPasswordSignUpTextInputLayout = findViewById(R.id.confirmPasswordSignUpTextInputLayout);
+        usernameSignUpTextInputLayout = findViewById(R.id.usernameSignUpTextInputLayout);
+        emailSignUpTextInputLayout = findViewById(R.id.emailSignUpTextInputLayout);
+        passwordSignUpTextInputLayout = findViewById(R.id.passwordSignUpTextInputLayout);
+        confirmPasswordSignUpTextInputLayout = findViewById(R.id.confirmPasswordSignUpTextInputLayout);
         Button createAccountButton = findViewById(R.id.createAccountButton);
         TextView backToLoginText = findViewById(R.id.backToLoginText);
         Button loginButton = findViewById(R.id.loginButton);
@@ -35,10 +44,10 @@ public class SignUpActivity extends AppCompatActivity {
         // Manejar clic del botón de crear cuenta
         createAccountButton.setOnClickListener(view -> {
             // Obtener los valores ingresados por el usuario
-            String username = usernameSignUpTextInputLayout.getEditText().getText().toString().trim();
-            String email = emailSignUpTextInputLayout.getEditText().getText().toString().trim();
-            String password1 = passwordSignUpTextInputLayout.getEditText().getText().toString();
-            String password2 = confirmPasswordSignUpTextInputLayout.getEditText().getText().toString();
+            username = usernameSignUpTextInputLayout.getEditText().getText().toString().trim();
+            email = emailSignUpTextInputLayout.getEditText().getText().toString().trim();
+            password1 = passwordSignUpTextInputLayout.getEditText().getText().toString();
+            password2 = confirmPasswordSignUpTextInputLayout.getEditText().getText().toString();
 
             // Validar que las entradas no estén vacías y sean correctas
             if (username.isEmpty() || !isValidEmail(email) || !arePasswordsValid(password1, password2)) {
@@ -52,12 +61,8 @@ public class SignUpActivity extends AppCompatActivity {
                     showErrorToastAndHighlight("Passwords do not match", passwordSignUpTextInputLayout, confirmPasswordSignUpTextInputLayout);
                 }
             } else {
-                // Si todo es válido, intenta registrar al usuario
-                try {
-                    registerNewUser(username, email, password1, password2);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                // Mostrar el diálogo de la política de privacidad
+                showPrivacyPolicyDialog();
             }
         });
 
@@ -83,7 +88,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private void registerNewUser(String username, String email, String password1, String password2) throws JSONException {
+    private void registerNewUser() throws JSONException {
         String url = getString(R.string.base_url) + "/api/users/registration/";
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -127,6 +132,21 @@ public class SignUpActivity extends AppCompatActivity {
         };
 
         queue.add(stringRequest);
+    }
+
+    private void showPrivacyPolicyDialog() {
+        PrivacyPolicyDialogFragment dialog = new PrivacyPolicyDialogFragment();
+        dialog.show(getSupportFragmentManager(), "PrivacyPolicyDialog");
+    }
+
+    @Override
+    public void onPrivacyPolicyAccepted() {
+        // El usuario aceptó la política de privacidad, proceder con el registro
+        try {
+            registerNewUser();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
 

@@ -3,11 +3,14 @@ package com.ibercivis.agora;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -17,6 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -30,18 +37,28 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.shape.CornerFamily;
+import com.google.android.material.shape.MaterialShapeDrawable;
+import com.google.android.material.shape.ShapeAppearanceModel;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ibercivis.agora.classes.UserProfile;
 import com.ibercivis.agora.services.RetrofitApiService;
 import com.ibercivis.agora.services.RetrofitClient;
 import com.ibercivis.agora.services.UserProfileUpdateRequest;
+import com.ibercivis.agora.ui.ViewPagerAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,33 +75,60 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
 
     private View mainView;
     private View editProfileView;
+    private View changePasswordView, aboutUsView, faqView;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
     private ImageView backButton, imgProfile;
     private TextInputEditText usernameEditText;
     private TextInputEditText emailEditText;
-    private AppCompatButton saveChangesButton;
+    private AppCompatButton saveChangesButton, submitChangePasswordButton;
     private String token;
     private RetrofitApiService apiService;
     private String BASE_URL;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        // Configurar el fondo del diálogo completo para que sea transparente
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
         mainView = view.findViewById(R.id.main_view);
         editProfileView = view.findViewById(R.id.edit_profile_view);
+        changePasswordView = view.findViewById(R.id.change_password_view);
+        aboutUsView = view.findViewById(R.id.about_us_view);
+        faqView = view.findViewById(R.id.faq_view);
 
         usernameEditText = view.findViewById(R.id.usernameEditText);
         emailEditText = view.findViewById(R.id.emailSignUpEditText);
         saveChangesButton = view.findViewById(R.id.saveChangesButton);
+        saveChangesButton = view.findViewById(R.id.saveChangesButton);
+        submitChangePasswordButton = view.findViewById(R.id.submitChangePasswordButton);
         backButton = view.findViewById(R.id.backButton);
         imgProfile = view.findViewById(R.id.imgProfile);
+
+        tabLayout = view.findViewById(R.id.tabLayout);
+        viewPager = view.findViewById(R.id.viewPager);
 
         mainView.setVisibility(View.VISIBLE);
         backButton.setVisibility(View.GONE);
 
-        view.findViewById(R.id.tvEditProfile).setOnClickListener(v -> showEditProfileView());
         view.findViewById(R.id.backButton).setOnClickListener(v -> showMainView());
+        view.findViewById(R.id.tvEditProfile).setOnClickListener(v -> showEditProfileView());
+        view.findViewById(R.id.tvChangePassword).setOnClickListener(v -> showChangePasswordView());
+        view.findViewById(R.id.tvAboutUs).setOnClickListener(v -> showAboutUsView());
+        view.findViewById(R.id.tvFAQ).setOnClickListener(v -> showFaqView());
+        view.findViewById(R.id.tvLogout).setOnClickListener(v -> logOut());
+        setupViewPager();
 
         // Initialize API service and token
         BASE_URL = getString(R.string.base_url);
@@ -101,7 +145,34 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
         // Set image profile click listener
         imgProfile.setOnClickListener(v -> showImagePickerOptions());
 
+        // Set submit change password button click listener
+        submitChangePasswordButton.setOnClickListener(v -> submitChangePassword());
+
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+        FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+        if (bottomSheet != null) {
+            bottomSheet.setBackground(new ColorDrawable(Color.TRANSPARENT));
+            applyRoundedCorners(bottomSheet);
+        }
+    }
+
+    private void applyRoundedCorners(View view) {
+        MaterialShapeDrawable shapeDrawable = new MaterialShapeDrawable(
+                ShapeAppearanceModel.builder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 48f)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 48f)
+                        .setBottomLeftCorner(CornerFamily.ROUNDED, 0f)
+                        .setBottomRightCorner(CornerFamily.ROUNDED, 0f)
+                        .build()
+        );
+        shapeDrawable.setFillColor(ContextCompat.getColorStateList(requireContext(), android.R.color.white));
+        ViewCompat.setBackground(view, shapeDrawable);
     }
 
     public interface OnSettingsClosedListener {
@@ -128,10 +199,50 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
         editProfileView.setVisibility(View.VISIBLE);
     }
 
+    private void showChangePasswordView() {
+        mainView.setVisibility(View.GONE);
+        editProfileView.setVisibility(View.GONE);
+        backButton.setVisibility(View.VISIBLE);
+        changePasswordView.setVisibility(View.VISIBLE);
+    }
+
+    private void showAboutUsView() {
+        mainView.setVisibility(View.GONE);
+        editProfileView.setVisibility(View.GONE);
+        backButton.setVisibility(View.VISIBLE);
+        aboutUsView.setVisibility(View.VISIBLE);
+    }
+
+    private void showFaqView() {
+        faqView.setVisibility(View.VISIBLE);
+        mainView.setVisibility(View.GONE);
+        editProfileView.setVisibility(View.GONE);
+        backButton.setVisibility(View.VISIBLE);
+        aboutUsView.setVisibility(View.GONE);
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, new FaqFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
     private void showMainView() {
         editProfileView.setVisibility(View.GONE);
         backButton.setVisibility(View.GONE);
+        changePasswordView.setVisibility(View.GONE);
+        aboutUsView.setVisibility(View.GONE);
+        faqView.setVisibility(View.GONE);
         mainView.setVisibility(View.VISIBLE);
+    }
+
+    private void setupViewPager() {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
+        adapter.addFragment(new AgoraProjectFragment(), "Agora Project");
+        adapter.addFragment(new ContactUsFragment(), "Contact Us");
+        viewPager.setAdapter(adapter);
+
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(adapter.getPageTitle(position))).attach();
     }
 
     private void loadUserProfile() {
@@ -250,6 +361,16 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
             }
     );
 
+    private void logOut(){
+        SessionManager sessionManager = new SessionManager(getContext());
+        sessionManager.logoutUser();
+        if (getActivity() != null) {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        }
+    }
+
     private void uploadProfileImage(Uri imageUri) {
         try {
             byte[] fileData = getFileDataFromUri(imageUri);
@@ -311,6 +432,58 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
             }
         }
         return byteArrayOutputStream.toByteArray();
+    }
+
+    private void submitChangePassword() {
+        String email = ((TextInputEditText) changePasswordView.findViewById(R.id.emailEditText)).getText().toString().trim();
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/api/users/authentication/password/reset/",
+                null,
+                response -> showToast("Password reset email sent successfully"),
+                error -> {
+                    String errorMessage = "An error occurred";
+                    if (error.networkResponse != null && error.networkResponse.data != null) {
+                        try {
+                            String errorResponse = new String(error.networkResponse.data, "UTF-8");
+                            JSONObject errorObject = new JSONObject(errorResponse);
+                            // Assuming the error message is within the "email" field
+                            if (errorObject.has("email")) {
+                                JSONArray emailErrors = errorObject.getJSONArray("email");
+                                if (emailErrors.length() > 0) {
+                                    errorMessage = emailErrors.getString(0);
+                                }
+                            }
+                        } catch (UnsupportedEncodingException | JSONException e) {
+                            errorMessage = "An error occurred";
+                        }
+                    } else {
+                        errorMessage = "Failed to send password reset email";
+                    }
+                    showToast(errorMessage);
+                }) {
+            @Override
+            public byte[] getBody() {
+                try {
+                    JSONObject jsonBody = new JSONObject();
+                    jsonBody.put("email", email);
+                    return jsonBody.toString().getBytes("UTF-8");
+                } catch (UnsupportedEncodingException | JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
     }
 
     private void showToast(String message) {
