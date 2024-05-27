@@ -67,6 +67,8 @@ public class HomeFragment extends Fragment {
                 } else if (position == 1) { // Posición 0 para el modo "Time trial"
                     Intent intent = new Intent(getActivity(), TimeTrialGameActivity.class);
                     startActivity(intent);
+                } else {
+                    showToast("Game mode not available yet");
                 }
             }
         });

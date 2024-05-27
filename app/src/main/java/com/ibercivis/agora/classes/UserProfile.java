@@ -8,9 +8,23 @@ public class UserProfile {
     private int totalGamesAbandoned;
     private int totalCorrectAnswers;
     private int totalIncorrectAnswers;
+    private int maxTimeTrialTime;
+    private int maxTimeTrialPoints;
     private String profileImageUrl;
 
     // Constructor, getters y setters
+    public UserProfile(int totalPoints, int totalGamesPlayed, int totalGamesAbandoned,
+                       int totalCorrectAnswers, int totalIncorrectAnswers, int maxTimeTrialTime, int maxTimeTrialPoints, String profileImageUrl) {
+        this.totalPoints = totalPoints;
+        this.totalGamesPlayed = totalGamesPlayed;
+        this.totalGamesAbandoned = totalGamesAbandoned;
+        this.totalCorrectAnswers = totalCorrectAnswers;
+        this.totalIncorrectAnswers = totalIncorrectAnswers;
+        this.maxTimeTrialTime = maxTimeTrialTime;
+        this.maxTimeTrialPoints = maxTimeTrialPoints;
+        this.profileImageUrl = profileImageUrl;
+    }
+
     public UserProfile(int totalPoints, int totalGamesPlayed, int totalGamesAbandoned,
                        int totalCorrectAnswers, int totalIncorrectAnswers, String profileImageUrl) {
         this.totalPoints = totalPoints;
@@ -38,6 +52,22 @@ public class UserProfile {
 
     public int getTotalPoints() {
         return totalPoints;
+    }
+
+    public int getMaxTimeTrialPoints() {
+        return maxTimeTrialPoints;
+    }
+
+    public void setMaxTimeTrialPoints(int maxTimeTrialPoints) {
+        this.maxTimeTrialPoints = maxTimeTrialPoints;
+    }
+
+    public int getMaxTimeTrialTime() {
+        return maxTimeTrialTime;
+    }
+
+    public void setMaxTimeTrialTime(int maxTimeTrialTime) {
+        this.maxTimeTrialTime = maxTimeTrialTime;
     }
 
     public void setTotalPoints(int totalPoints) {

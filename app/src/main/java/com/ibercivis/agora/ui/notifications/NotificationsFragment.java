@@ -129,6 +129,8 @@ public class NotificationsFragment extends Fragment {
                             int totalGamesAbandoned = response.getInt("total_games_abandoned");
                             int totalCorrectAnswers = response.getInt("total_correct_answers");
                             int totalIncorrectAnswers = response.getInt("total_incorrect_answers");
+                            int maxTimeTrialTime = response.getInt("max_time_trial_time");
+                            int maxTimeTrialPoints = response.getInt("max_time_trial_points");
                             String profileImageUrl = response.optString("profile_image", null);
 
                             updateUI(new UserProfile(
@@ -137,6 +139,8 @@ public class NotificationsFragment extends Fragment {
                                     totalGamesAbandoned,
                                     totalCorrectAnswers,
                                     totalIncorrectAnswers,
+                                    maxTimeTrialTime,
+                                    maxTimeTrialPoints,
                                     profileImageUrl
                             ), username);
 
@@ -167,6 +171,8 @@ public class NotificationsFragment extends Fragment {
         binding.ptTotalQuestions.setText(String.valueOf(userProfile.getTotalGamesPlayed()));
         binding.ptTotalGames.setText(String.valueOf(userProfile.getTotalGamesPlayed() - userProfile.getTotalGamesAbandoned()));
         binding.ptTotalPoints.setText(String.valueOf(userProfile.getTotalPoints()));
+        binding.ptBestGame.setText(String.valueOf(userProfile.getMaxTimeTrialPoints()));
+        binding.ptBestTime.setText(formatTime(userProfile.getMaxTimeTrialTime()));
 
         RequestOptions requestOptions = new RequestOptions()
                 .transform(new CircleCrop());
@@ -305,6 +311,12 @@ public class NotificationsFragment extends Fragment {
             errorMessage = "An unknown error occurred. Please try again later.";
         }
         showToast(errorMessage);
+    }
+
+    private String formatTime(int seconds) {
+        int minutes = seconds / 60;
+        int remainingSeconds = seconds % 60;
+        return String.format("%02d:%02d", minutes, remainingSeconds);
     }
 
     private void logoutUser() {
