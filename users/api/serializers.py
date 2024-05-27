@@ -14,7 +14,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['username', 'email', 'profile_image', 'total_points', 'total_games_played', 'total_games_abandoned', 'total_correct_answers', 'total_incorrect_answers']
+        fields = ['username', 'email', 'profile_image', 'total_points', 'total_games_played', 'total_games_abandoned', 'total_correct_answers', 'total_incorrect_answers', 'max_time_trial_time', 'max_time_trial_points']
 
     def get_username(self, obj):
         return obj.user.username
