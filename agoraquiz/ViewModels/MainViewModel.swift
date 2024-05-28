@@ -14,6 +14,7 @@ class MainViewModel: ObservableObject {
     @Published var toastMessage: String = ""
     @Published var profileImageUrl: String?
     @Published var userPoints: Int = 0
+    @Published var username: String = "username"
 
     var gameService: GameService?
     var navigationManager: NavigationManager?
@@ -70,6 +71,7 @@ class MainViewModel: ObservableObject {
     private func updateUI(userProfile: UserProfile) {
         self.profileImageUrl = userProfile.profileImageUrl
         self.userPoints = userProfile.totalPoints
+        self.username = userProfile.username
     }
 
     func startNewGame() {
@@ -77,7 +79,7 @@ class MainViewModel: ObservableObject {
         gameService.startGame()
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
-                    print("Error starting new game: \(error)")
+                    self.showToastWithMessage(self.handleError(error: error))
                 }
             }, receiveValue: { [weak self] gameResponse in
                 self?.navigationManager?.navigateToClassicGame(gameData: gameResponse)
@@ -90,12 +92,20 @@ class MainViewModel: ObservableObject {
         gameService.startTimeTrialGame()
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
-                    print("Error starting new time trial game: \(error)")
+                    self.showToastWithMessage(self.handleError(error: error))
                 }
             }, receiveValue: { [weak self] gameResponse in
                 self?.navigationManager?.navigateToTimeTrialGame(gameData: gameResponse)
             })
             .store(in: &cancellables)
+    }
+    
+    private func showToastWithMessage(_ message: String) {
+        self.toastMessage = message
+        self.showToast = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.showToast = false
+        }
     }
 
     func showUnavailableToast() {

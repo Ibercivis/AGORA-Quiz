@@ -10,6 +10,8 @@ import SwiftUI
 struct SignUpView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @StateObject private var viewModel = SignUpViewModel()
+    @State private var showPrivacyPolicy = false
+    @State private var privacyPolicyAccepted = false
 
     var body: some View {
         ScrollView {
@@ -22,6 +24,7 @@ struct SignUpView: View {
                 if !viewModel.errorMessage.isEmpty {
                     Text(viewModel.errorMessage)
                         .foregroundColor(.red)
+                        .padding(.horizontal)
                 }
                 signUpButton
                 Button("Already have an account? Login") {
@@ -36,6 +39,15 @@ struct SignUpView: View {
         .navigationBarTitle("Sign Up", displayMode: .inline)
         .navigationBarBackButtonHidden(true)
         .edgesIgnoringSafeArea(.all)
+        .sheet(isPresented: $showPrivacyPolicy) {
+            PrivacyPolicyView(isPresented: $showPrivacyPolicy, isAccepted: $privacyPolicyAccepted)
+             .onDisappear {
+                if privacyPolicyAccepted {
+                    viewModel.signUp()
+                }
+            }
+        }
+        .toast(isPresented: $viewModel.showToast, message: viewModel.toastMessage)
     }
     
     var header: some View {
@@ -55,7 +67,10 @@ struct SignUpView: View {
     
     var signUpButton: some View {
         Button("Sign Up") {
-            viewModel.signUp()
+            if viewModel.validateFields() {
+                showPrivacyPolicy = true
+                viewModel.errorMessage = ""
+            }
         }
         .buttonStyle(FilledButton())
         .padding(.top, 24)

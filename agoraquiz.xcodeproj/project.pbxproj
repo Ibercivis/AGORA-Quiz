@@ -38,8 +38,19 @@
 		974CE1C22BF529DB001967B8 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1C12BF529DB001967B8 /* Question.swift */; };
 		974CE1C42BF529EF001967B8 /* GameResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1C32BF529EF001967B8 /* GameResponse.swift */; };
 		974CE1C62BF52A07001967B8 /* AnswerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CE1C52BF52A07001967B8 /* AnswerResponse.swift */; };
+		9757A73A2C05C6D7005AAB4C /* UserProfileUpdateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A7392C05C6D7005AAB4C /* UserProfileUpdateResponse.swift */; };
+		9757A73D2C05DFB3005AAB4C /* AgoraProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A73C2C05DFB3005AAB4C /* AgoraProjectView.swift */; };
+		9757A73F2C05DFD0005AAB4C /* AboutUsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A73E2C05DFD0005AAB4C /* AboutUsView.swift */; };
+		9757A7412C05EA25005AAB4C /* FAQItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A7402C05EA25005AAB4C /* FAQItem.swift */; };
+		9757A7432C05EA4C005AAB4C /* FAQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A7422C05EA4C005AAB4C /* FAQView.swift */; };
+		9757A7452C062655005AAB4C /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A7442C062655005AAB4C /* ResetPasswordView.swift */; };
+		9757A7472C062FE5005AAB4C /* ResetPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A7462C062FE5005AAB4C /* ResetPasswordViewModel.swift */; };
+		9757A7492C063A6E005AAB4C /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A7482C063A6E005AAB4C /* PrivacyPolicyView.swift */; };
+		9757A74B2C063DCE005AAB4C /* HTMLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A74A2C063DCE005AAB4C /* HTMLTextView.swift */; };
+		9757A74D2C064B82005AAB4C /* SignUpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9757A74C2C064B82005AAB4C /* SignUpResponse.swift */; };
 		979275352BF28043009ACAF9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979275342BF28043009ACAF9 /* MainView.swift */; };
 		979275372BF28A59009ACAF9 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979275362BF28A59009ACAF9 /* AppTabView.swift */; };
+		979BF77A2C0490D80019DEF2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979BF7792C0490D80019DEF2 /* SettingsView.swift */; };
 		97A580632BFA102200F1F836 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A580622BFA102200F1F836 /* ImageLoader.swift */; };
 		97A580652BFA104700F1F836 /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A580642BFA104700F1F836 /* URLImage.swift */; };
 		97DDE69F2BFCDEB5009BE308 /* TimeTrialGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DDE69E2BFCDEB5009BE308 /* TimeTrialGameView.swift */; };
@@ -110,8 +121,19 @@
 		974CE1C12BF529DB001967B8 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		974CE1C32BF529EF001967B8 /* GameResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameResponse.swift; sourceTree = "<group>"; };
 		974CE1C52BF52A07001967B8 /* AnswerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerResponse.swift; sourceTree = "<group>"; };
+		9757A7392C05C6D7005AAB4C /* UserProfileUpdateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileUpdateResponse.swift; sourceTree = "<group>"; };
+		9757A73C2C05DFB3005AAB4C /* AgoraProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraProjectView.swift; sourceTree = "<group>"; };
+		9757A73E2C05DFD0005AAB4C /* AboutUsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUsView.swift; sourceTree = "<group>"; };
+		9757A7402C05EA25005AAB4C /* FAQItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQItem.swift; sourceTree = "<group>"; };
+		9757A7422C05EA4C005AAB4C /* FAQView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQView.swift; sourceTree = "<group>"; };
+		9757A7442C062655005AAB4C /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
+		9757A7462C062FE5005AAB4C /* ResetPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewModel.swift; sourceTree = "<group>"; };
+		9757A7482C063A6E005AAB4C /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		9757A74A2C063DCE005AAB4C /* HTMLTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLTextView.swift; sourceTree = "<group>"; };
+		9757A74C2C064B82005AAB4C /* SignUpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpResponse.swift; sourceTree = "<group>"; };
 		979275342BF28043009ACAF9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		979275362BF28A59009ACAF9 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
+		979BF7792C0490D80019DEF2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		97A580622BFA102200F1F836 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		97A580642BFA104700F1F836 /* URLImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
 		97DDE69E2BFCDEB5009BE308 /* TimeTrialGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTrialGameView.swift; sourceTree = "<group>"; };
@@ -183,6 +205,7 @@
 				973945C52BFE4DE4008F1DB8 /* RankingPodiumView.swift */,
 				973945C72BFE4DFF008F1DB8 /* RankingListView.swift */,
 				973945C92BFE4E12008F1DB8 /* RankingItem.swift */,
+				9757A74A2C063DCE005AAB4C /* HTMLTextView.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -215,8 +238,21 @@
 				972983F62BF7ABFA009086AE /* GameMode.swift */,
 				9716CFAF2BF88E3100909484 /* UserProfile.swift */,
 				973945CD2BFE4E6D008F1DB8 /* RankingResponse.swift */,
+				9757A7392C05C6D7005AAB4C /* UserProfileUpdateResponse.swift */,
+				9757A7402C05EA25005AAB4C /* FAQItem.swift */,
+				9757A74C2C064B82005AAB4C /* SignUpResponse.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		9757A73B2C05DF9A005AAB4C /* ContentSettingsViews */ = {
+			isa = PBXGroup;
+			children = (
+				9757A73C2C05DFB3005AAB4C /* AgoraProjectView.swift */,
+				9757A73E2C05DFD0005AAB4C /* AboutUsView.swift */,
+				9757A7422C05EA4C005AAB4C /* FAQView.swift */,
+			);
+			path = ContentSettingsViews;
 			sourceTree = "<group>";
 		};
 		97E9AE292BEA340C0057A835 = {
@@ -287,6 +323,7 @@
 		97E9AE5F2BEA3B800057A835 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9757A73B2C05DF9A005AAB4C /* ContentSettingsViews */,
 				97E9AE602BEA3BAD0057A835 /* LoginView.swift */,
 				97124C8E2BEB774E00E65467 /* SignUpView.swift */,
 				979275342BF28043009ACAF9 /* MainView.swift */,
@@ -297,6 +334,9 @@
 				9716CFAB2BF8828800909484 /* ProfileView.swift */,
 				97DDE69E2BFCDEB5009BE308 /* TimeTrialGameView.swift */,
 				973945C32BFE4981008F1DB8 /* RankingView.swift */,
+				979BF7792C0490D80019DEF2 /* SettingsView.swift */,
+				9757A7442C062655005AAB4C /* ResetPasswordView.swift */,
+				9757A7482C063A6E005AAB4C /* PrivacyPolicyView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -311,6 +351,7 @@
 				9716CFAD2BF88C2900909484 /* ProfileViewModel.swift */,
 				97DDE6A02BFCE532009BE308 /* TimeTrialGameViewModel.swift */,
 				973945CB2BFE4E2E008F1DB8 /* RankingViewModel.swift */,
+				9757A7462C062FE5005AAB4C /* ResetPasswordViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -535,6 +576,7 @@
 				97E9AE642BEA3BCF0057A835 /* LoginViewModel.swift in Sources */,
 				97A580632BFA102200F1F836 /* ImageLoader.swift in Sources */,
 				974CE1BB2BF51B50001967B8 /* GameService.swift in Sources */,
+				9757A74B2C063DCE005AAB4C /* HTMLTextView.swift in Sources */,
 				9716CFAE2BF88C2900909484 /* ProfileViewModel.swift in Sources */,
 				97124C982BEB7EC000E65467 /* FilledButton.swift in Sources */,
 				973945CA2BFE4E12008F1DB8 /* RankingItem.swift in Sources */,
@@ -543,23 +585,31 @@
 				974CE1BD2BF51B9A001967B8 /* ClassicGameViewModel.swift in Sources */,
 				97A580652BFA104700F1F836 /* URLImage.swift in Sources */,
 				97DDE6A12BFCE532009BE308 /* TimeTrialGameViewModel.swift in Sources */,
+				9757A7432C05EA4C005AAB4C /* FAQView.swift in Sources */,
+				9757A7472C062FE5005AAB4C /* ResetPasswordViewModel.swift in Sources */,
 				973945CC2BFE4E2E008F1DB8 /* RankingViewModel.swift in Sources */,
 				970704822BF60E1100073C4C /* PauseView.swift in Sources */,
+				9757A7412C05EA25005AAB4C /* FAQItem.swift in Sources */,
+				9757A73D2C05DFB3005AAB4C /* AgoraProjectView.swift in Sources */,
 				97124C8F2BEB774E00E65467 /* SignUpView.swift in Sources */,
 				97E9AE612BEA3BAD0057A835 /* LoginView.swift in Sources */,
 				970704842BF647FA00073C4C /* GameCompletedView.swift in Sources */,
 				972983F92BF7AFB9009086AE /* SessionManager.swift in Sources */,
+				9757A73A2C05C6D7005AAB4C /* UserProfileUpdateResponse.swift in Sources */,
 				974CE1C42BF529EF001967B8 /* GameResponse.swift in Sources */,
 				97124C9D2BEB8C9400E65467 /* URLs.swift in Sources */,
 				9716CFAC2BF8828800909484 /* ProfileView.swift in Sources */,
+				9757A7492C063A6E005AAB4C /* PrivacyPolicyView.swift in Sources */,
 				97DDE69F2BFCDEB5009BE308 /* TimeTrialGameView.swift in Sources */,
 				973945CE2BFE4E6D008F1DB8 /* RankingResponse.swift in Sources */,
 				9716CFB02BF88E3100909484 /* UserProfile.swift in Sources */,
+				979BF77A2C0490D80019DEF2 /* SettingsView.swift in Sources */,
 				972C4E412BF9FDFA00777AB2 /* ImagePicker.swift in Sources */,
 				979275372BF28A59009ACAF9 /* AppTabView.swift in Sources */,
 				972983F72BF7ABFA009086AE /* GameMode.swift in Sources */,
 				97E9AE382BEA340C0057A835 /* ContentView.swift in Sources */,
 				979275352BF28043009ACAF9 /* MainView.swift in Sources */,
+				9757A74D2C064B82005AAB4C /* SignUpResponse.swift in Sources */,
 				97124C962BEB7D8100E65467 /* CustomTextInput.swift in Sources */,
 				97124C912BEB776A00E65467 /* SignUpViewModel.swift in Sources */,
 				97E9AE362BEA340C0057A835 /* agoraquizApp.swift in Sources */,
@@ -567,6 +617,8 @@
 				970704862BF657E300073C4C /* Toast.swift in Sources */,
 				974CE1B92BF4A512001967B8 /* ClassicGameView.swift in Sources */,
 				973945C42BFE4981008F1DB8 /* RankingView.swift in Sources */,
+				9757A73F2C05DFD0005AAB4C /* AboutUsView.swift in Sources */,
+				9757A7452C062655005AAB4C /* ResetPasswordView.swift in Sources */,
 				970704882BF6605900073C4C /* MainViewModel.swift in Sources */,
 				974CE1C02BF529C4001967B8 /* Game.swift in Sources */,
 			);

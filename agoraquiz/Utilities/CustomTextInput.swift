@@ -20,12 +20,12 @@ struct CustomTextInput: View {
                 .padding(.leading, 10)
             if isSecure {
                 SecureField(placeholder, text: $text)
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
             } else {
                 TextField(placeholder, text: $text)
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
             }

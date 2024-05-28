@@ -268,6 +268,75 @@ class GameService: ObservableObject {
             .eraseToAnyPublisher()
         }
     
+    func updateProfile(username: String, email: String, token: String) -> AnyPublisher<UserProfileUpdateResponse, Error> {
+        guard let url = URL(string: URLs.APIPath.updateProfile, relativeTo: URLs.baseURL) else {
+            print("Invalid URL")
+            return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+
+        let parameters: [String: Any] = [
+            "username": username,
+            "email": email
+        ]
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        } catch {
+            print("Error serializing JSON: \(error)")
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+
+        print("URL: \(url)")
+        print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
+        print("Request Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? "")")
+
+        return session.dataTaskPublisher(for: request)
+                .tryMap { result -> UserProfileUpdateResponse in
+                    guard let httpResponse = result.response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                        throw NetworkError.unexpectedResponse
+                    }
+                    let decoder = JSONDecoder()
+                    return try decoder.decode(UserProfileUpdateResponse.self, from: result.data)
+                }
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+    }
+    
+    func resetPassword(email: String) -> AnyPublisher<Void, Error> {
+        guard let url = URL(string: URLs.APIPath.resetPassword, relativeTo: URLs.baseURL) else {
+            return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let parameters: [String: Any] = ["email": email]
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        } catch {
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+
+        return session.dataTaskPublisher(for: request)
+            .tryMap { result in
+                guard let httpResponse = result.response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                    if let errorResponse = try? JSONSerialization.jsonObject(with: result.data, options: []) as? [String: Any],
+                       let errorMessage = (errorResponse["email"] as? [String])?.first {
+                        throw NetworkError.serverError(errorMessage)
+                    }
+                    throw NetworkError.unexpectedResponse
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    
     func getRankings() -> AnyPublisher<RankingsResponse, Error> {
             guard let url = URL(string: URLs.APIPath.rankings, relativeTo: URLs.baseURL) else {
                 return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()

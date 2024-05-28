@@ -16,29 +16,51 @@ struct ProfileView: View {
     @State private var image: UIImage?
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                headerView
-                profileSection
-                statsSection
-                Spacer()
-            }.edgesIgnoringSafeArea(.all)
-        }
-        .edgesIgnoringSafeArea(.top)
-        .navigationBarTitle("Home", displayMode: .inline)
-        .navigationBarHidden(true)
-        .navigationViewStyle(StackNavigationViewStyle())
-        .toast(isPresented: $viewModel.showToast, message: viewModel.errorMessage ?? "")
-        .onAppear {
-            viewModel.configure(gameService: gameService, navigationManager: navigationManager)
-        }
-        .actionSheet(isPresented: $showActionSheet) {
-            ActionSheet(title: Text("Profile Image"), message: Text("Choose an option"), buttons: actionSheetButtons())
-        }
-        .sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
-            ImagePicker(image: self.$image)
-        }
-        
+        ZStack {
+                    NavigationView {
+                        VStack(spacing: 0) {
+                            headerView
+                            profileSection
+                            statsSection
+                            Spacer()
+                        }.edgesIgnoringSafeArea(.all)
+                    }
+                    .edgesIgnoringSafeArea(.top)
+                    .navigationBarTitle("Home", displayMode: .inline)
+                    .navigationBarHidden(true)
+                    .navigationViewStyle(StackNavigationViewStyle())
+                    .toast(isPresented: $viewModel.showToast, message: viewModel.errorMessage ?? "")
+                    .onAppear {
+                        viewModel.configure(gameService: gameService, navigationManager: navigationManager)
+                    }
+                    .actionSheet(isPresented: $showActionSheet) {
+                        ActionSheet(title: Text("Profile Image"), message: Text("Choose an option"), buttons: actionSheetButtons())
+                    }
+                    .sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
+                        ImagePicker(image: self.$image)
+                    }
+
+            if viewModel.isSettingsViewVisible {
+                        Color.black.opacity(0.4)
+                            .edgesIgnoringSafeArea(.all)
+                            .onTapGesture {
+                                withAnimation {
+                                    viewModel.isSettingsViewVisible = false
+                                }
+                            }
+
+                        VStack {
+                            Spacer()
+                            SettingsView(viewModel: viewModel)
+                                .background(Color.white)
+                                .cornerRadius(16)
+                                .frame(height: UIScreen.main.bounds.height * 0.8)
+                                .transition(.move(edge: .bottom))
+                                .animation(.easeInOut, value: viewModel.isSettingsViewVisible)
+                        }
+                        .edgesIgnoringSafeArea(.bottom)
+                    }
+                }
     }
 
     var headerView: some View {
@@ -105,13 +127,24 @@ struct ProfileView: View {
                     HStack {
                         Image(systemName: "trophy.fill")
                             .foregroundColor(.blue)
-                        Text("Master Level")
+                        Text("Tester Level")
                             .font(.subheadline)
                     }
                 }
                 .padding(.leading, 16)
 
                 Spacer()
+                
+                Button(action: {
+                    withAnimation {
+                        viewModel.isSettingsViewVisible.toggle()
+                    }
+                }) {
+                    Image(systemName: "gear")
+                        .foregroundColor(.gray)
+                        .padding()
+                }
+                
             }
             .padding()
             .background(Color.white)
@@ -134,8 +167,8 @@ struct ProfileView: View {
                 ])
 
                 statsCardView(title: "Time trial", items: [
-                    ("Best game", "00"),
-                    ("Best time", "00:00:00")
+                    ("Best game", "\(viewModel.bestGame)"),
+                    ("Best time", "\(viewModel.bestTime.formattedTime)")
                 ])
 
             }

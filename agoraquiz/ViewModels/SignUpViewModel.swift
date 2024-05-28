@@ -14,6 +14,10 @@ class SignUpViewModel: ObservableObject {
     @Published var password = ""
     @Published var confirmPassword = ""
     @Published var errorMessage = ""
+    @Published var showToast = false
+    @Published var toastMessage = ""
+    
+    private var cancellables = Set<AnyCancellable>()
 
     // Función para validar los campos antes de intentar registrar al usuario
     func validateFields() -> Bool {
@@ -26,7 +30,7 @@ class SignUpViewModel: ObservableObject {
             return false
         }
         guard arePasswordsValid(password, confirmPassword) else {
-            errorMessage = "Passwords do not match or are empty"
+            errorMessage = "Passwords do not match or do not meet the criteria (must include uppercase, lowercase, and numbers)"
             return false
         }
         return true
@@ -34,6 +38,8 @@ class SignUpViewModel: ObservableObject {
 
     func signUp() {
         guard validateFields() else { return }
+        
+        errorMessage = ""
 
         let url = URLs.baseURL.appendingPathComponent(URLs.APIPath.signUp)
         var request = URLRequest(url: url)
@@ -41,23 +47,41 @@ class SignUpViewModel: ObservableObject {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let body: [String: Any] = [
-            "username": username,
-            "email": email,
-            "password1": password,
-            "password2": confirmPassword
-        ]
-        
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if let data = data, let response = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                    self.errorMessage = "Account created. Please check your email to activate the account."
-                } else {
-                    self.errorMessage = "Registration failed. Please try again later."
-                }
-            }
-        }.resume()
+                    "username": username,
+                    "email": email,
+                    "password1": password,
+                    "password2": confirmPassword
+                ]
+                
+                request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+                
+        URLSession.shared.dataTaskPublisher(for: request)
+                    .tryMap { result -> Data in
+                        guard let httpResponse = result.response as? HTTPURLResponse else {
+                            throw NetworkError.unexpectedResponse
+                        }
+                        if httpResponse.statusCode == 204 {
+                            return result.data
+                        } else if httpResponse.statusCode == 400 {
+                            throw try JSONDecoder().decode(SignUpErrorResponse.self, from: result.data)
+                        } else {
+                            throw NetworkError.serverError("Unexpected server error.")
+                        }
+                    }
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveCompletion: { completion in
+                        switch completion {
+                        case .finished:
+                            self.showToastWithMessage("Account created. Please check your email to activate the account.")
+                        case .failure(let error):
+                            if let signUpError = error as? SignUpErrorResponse {
+                                self.showToastWithMessage(signUpError.message)
+                            } else {
+                                self.showToastWithMessage(error.localizedDescription)
+                            }
+                        }
+                    }, receiveValue: { _ in })
+                    .store(in: &cancellables)
     }
 
     private func isValidEmail(_ email: String) -> Bool {
@@ -65,9 +89,44 @@ class SignUpViewModel: ObservableObject {
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailPattern)
         return emailPred.evaluate(with: email)
     }
+    
+    private func isValidPassword(_ password: String) -> Bool {
+        let passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$"
+        let passwordPred = NSPredicate(format: "SELF MATCHES %@", passwordPattern)
+        return passwordPred.evaluate(with: password)
+    }
 
     private func arePasswordsValid(_ password1: String, _ password2: String) -> Bool {
-        return password1 == password2 && !password1.isEmpty
+        return password1 == password2 && !password1.isEmpty && isValidPassword(password1)
+    }
+    
+    struct SignUpErrorResponse: Decodable, Error {
+        let username: [String]?
+        let email: [String]?
+
+        var message: String {
+            var messages = [String]()
+            if let usernameErrors = username {
+                messages.append(contentsOf: usernameErrors)
+            }
+            if let emailErrors = email {
+                messages.append(contentsOf: emailErrors)
+            }
+            return messages.joined(separator: "\n")
+        }
+    }
+
+    enum NetworkError: Error {
+        case unexpectedResponse
+        case serverError(String)
+    }
+    
+    private func showToastWithMessage(_ message: String) {
+        self.toastMessage = message
+        self.showToast = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.showToast = false
+        }
     }
 }
 

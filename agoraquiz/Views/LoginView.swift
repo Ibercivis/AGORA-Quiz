@@ -7,8 +7,10 @@
 import SwiftUI
 
 struct LoginView: View {
-    @EnvironmentObject var navigationManager: NavigationManager  // Inyección del NavigationManager
+    @EnvironmentObject var navigationManager: NavigationManager
+    @EnvironmentObject var gameService: GameService
     @StateObject private var viewModel = LoginViewModel()
+    @State private var showResetPassword = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -37,7 +39,7 @@ struct LoginView: View {
                     Spacer()
                     
                     Button("Forgot password?") {
-                        // TODO: Implementar acción
+                        showResetPassword.toggle()
                     }
                     .foregroundColor(.blue)
                     
@@ -61,6 +63,10 @@ struct LoginView: View {
             }
             .padding()
         }
+        .sheet(isPresented: $showResetPassword) {
+            ResetPasswordView(gameService: gameService)
+                        .environmentObject(gameService)
+                }
         .onAppear {
                     viewModel.navigationManager = navigationManager
                 }
@@ -74,7 +80,10 @@ import SwiftUI
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         let navigationManager = NavigationManager()
+        let gameService = GameService()
+
         LoginView()
-            .environmentObject(navigationManager) 
+            .environmentObject(navigationManager)
+            .environmentObject(gameService)
     }
 }

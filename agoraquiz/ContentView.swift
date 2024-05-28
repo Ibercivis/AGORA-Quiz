@@ -16,9 +16,11 @@ struct ContentView: View {
         case .login:
             LoginView()
                 .environmentObject(navigationManager)
+                .environmentObject(gameService)
         case .signUp:
             SignUpView()
                 .environmentObject(navigationManager)
+                .environmentObject(gameService)
         case .mainTab, .settings, .profile:
             AppTabView(selectedTab: $navigationManager.selectedTab)
                 .environmentObject(navigationManager)

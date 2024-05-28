@@ -49,7 +49,7 @@ struct MainView: View {
                     Spacer()
                     
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Hi \(SessionManager.shared.username ?? "user name"),")
+                        Text("Hi \(viewModel.username),")
                             .font(.title)
                             .foregroundColor(.white)
                         Text("Great to see you again!")

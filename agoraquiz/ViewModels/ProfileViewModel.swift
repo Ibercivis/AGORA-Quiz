@@ -10,20 +10,29 @@ import SwiftUI
 
 class ProfileViewModel: ObservableObject {
     @Published var username: String = "username"
+    @Published var usernameEditText: String = "username"
+    @Published var emailEditText: String = "example@example.com"
     @Published var totalPoints: Int = 0
     @Published var totalGamesPlayed: Int = 0
     @Published var totalGamesAbandoned: Int = 0
     @Published var totalCorrectAnswers: Int = 0
     @Published var totalIncorrectAnswers: Int = 0
     @Published var bestGame: Int = 0
-    @Published var bestTime: String = "00:00:00"
+    @Published var bestTime: Int = 0
     @Published var wins: Int = 0
     @Published var defeats: Int = 0
     @Published var totalMultiplayerGames: Int = 0
     @Published var profileImageUrl: String?
     
+    @Published var isSettingsViewVisible = false
+    @Published var isEditingProfile = false
+    @Published var isChangingPassword = false
+    @Published var isViewingAboutUs = false
+    @Published var isViewingFAQ = false
+    
     @Published var errorMessage: String?
     @Published var showToast: Bool = false
+    
     
     var gameService: GameService?
     var navigationManager: NavigationManager?
@@ -35,6 +44,30 @@ class ProfileViewModel: ObservableObject {
         loadUserProfile()
     }
     
+    func updateProfile() {
+        guard let gameService = gameService, let token = SessionManager.shared.token else { return }
+
+        gameService.updateProfile(username: usernameEditText, email: emailEditText, token: token)
+            .sink(receiveCompletion: { completion in
+                print(completion)
+                switch completion {
+                case .finished:
+                    self.showToastWithMessage("Profile updated succesfully")
+                case .failure(let error):
+                    self.showToastWithMessage(self.handleError(error: error))
+                }
+            }, receiveValue: { updatedProfile in
+                DispatchQueue.main.async {
+                    self.username = updatedProfile.username
+                    self.emailEditText = updatedProfile.email
+                    self.usernameEditText = updatedProfile.username
+                    self.showToastWithMessage("Profile updated successfully")
+                    self.isEditingProfile = false
+                }
+            })
+            .store(in: &cancellables)
+        }
+    
     func loadUserProfile() {
         guard let gameService = gameService, let token = SessionManager.shared.token else { return }
         
@@ -44,8 +77,7 @@ class ProfileViewModel: ObservableObject {
                 case .finished:
                     break
                 case .failure(let error):
-                    self.errorMessage = self.handleError(error: error)
-                    self.showToast = true
+                    self.showToastWithMessage(self.handleError(error: error))
                 }
             }, receiveValue: { userProfile in
                 DispatchQueue.main.async {
@@ -56,13 +88,17 @@ class ProfileViewModel: ObservableObject {
     }
     
     private func updateUI(userProfile: UserProfile) {
-        self.username = SessionManager.shared.username ?? "Username"
+        self.username = userProfile.username
+        self.usernameEditText = userProfile.username
+        self.emailEditText = userProfile.email
         self.totalPoints = userProfile.totalPoints
         self.totalGamesPlayed = userProfile.totalGamesPlayed
         self.totalGamesAbandoned = userProfile.totalGamesAbandoned
         self.totalCorrectAnswers = userProfile.totalCorrectAnswers
         self.totalIncorrectAnswers = userProfile.totalIncorrectAnswers
         self.profileImageUrl = userProfile.profileImageUrl
+        self.bestGame = userProfile.maxTimeTrialPoints
+        self.bestTime = userProfile.maxTimeTrialTime
     }
     
     func uploadProfileImage(_ image: UIImage) {
@@ -73,9 +109,9 @@ class ProfileViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     self.loadUserProfile()  // Reload profile to get updated image
+                    self.showToastWithMessage("Avatar updated succesfully")
                 case .failure(let error):
-                    self.errorMessage = self.handleError(error: error)
-                    self.showToast = true
+                    self.showToastWithMessage(self.handleError(error: error))
                 }
             }, receiveValue: { _ in })
             .store(in: &cancellables)
@@ -88,18 +124,42 @@ class ProfileViewModel: ObservableObject {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    self.loadUserProfile()  // Reload profile to remove deleted image
+                    self.loadUserProfile()
+                    self.showToastWithMessage("Avatar deleted succesfully")
                 case .failure(let error):
-                    self.errorMessage = self.handleError(error: error)
-                    self.showToast = true
+                    self.showToastWithMessage(self.handleError(error: error))
                 }
             }, receiveValue: { _ in })
             .store(in: &cancellables)
     }
     
+    func submitChangePassword(email: String) {
+            guard let gameService = gameService else { return }
+
+            gameService.resetPassword(email: email)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .finished:
+                        self.showToastWithMessage("Password reset email sent succesfully")
+                        self.isChangingPassword = false
+                    case .failure(let error):
+                        self.showToastWithMessage(self.handleError(error: error))
+                    }
+                }, receiveValue: { _ in })
+                .store(in: &cancellables)
+        }
+    
     func logout() {
         SessionManager.shared.logoutUser()
         navigationManager?.navigateToLogin()
+    }
+    
+    private func showToastWithMessage(_ message: String) {
+        self.errorMessage = message
+        self.showToast = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.showToast = false
+        }
     }
     
     private func handleError(error: Error) -> String {

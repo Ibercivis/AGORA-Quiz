@@ -13,26 +13,31 @@ struct Toast<Presenting>: View where Presenting: View {
     let message: String
 
     var body: some View {
-        if isPresented {
-            return VStack {
-                self.presenting()
-                Text(message)
-                    .padding()
-                    .background(Color.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-                    .transition(.slide)
-                    .onTapGesture {
-                        withAnimation {
-                            self.isPresented = false
+        ZStack(alignment: .bottom) {
+                    self.presenting()
+                    if isPresented {
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Text(message)
+                                    .foregroundColor(.white)
+                                    .padding()
+                            }
+                            .background(Color.blue.opacity(0.8))
+                            .cornerRadius(8)
+                            .padding(.bottom, 150)
+                            .padding(.horizontal)
+                        }
+                        .transition(.move(edge: .bottom))
+                        .animation(.easeInOut)
+                        .onTapGesture {
+                            withAnimation {
+                                self.isPresented = false
+                            }
                         }
                     }
+                }
             }
-            .eraseToAnyView()
-        } else {
-            return presenting().eraseToAnyView()
-        }
-    }
 }
 
 extension View {
