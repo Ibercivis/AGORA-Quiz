@@ -1,7 +1,9 @@
+from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 from users.models import UserProfile
 from django.core.files.storage import default_storage
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:

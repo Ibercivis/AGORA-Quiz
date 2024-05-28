@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 import os 
 
 def user_profile_image_path(instance, filename):
