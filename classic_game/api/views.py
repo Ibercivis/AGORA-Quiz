@@ -280,7 +280,7 @@ class GameViewSet(viewsets.ModelViewSet):
             max_time = request.data.get('max_time_trial_time')
             if max_time:
                 profile = UserProfile.objects.get(user=game.player)
-                profile.update_max_time_trial_points(int(game.total_points))
+                profile.update_max_time_trial_points(int(game.score))
                 profile.update_max_time_trial_time(int(max_time))
                 game.update_max_time_trial_time(int(max_time))
 

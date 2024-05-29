@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Question(models.Model):
@@ -21,7 +22,7 @@ class Game(models.Model):
         ('time_trial', 'Time Trial'),
     ]
 
-    player = models.ForeignKey('auth.User', related_name='games', on_delete=models.CASCADE)
+    player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='games', on_delete=models.CASCADE)
     questions = models.ManyToManyField(Question)
     score = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
