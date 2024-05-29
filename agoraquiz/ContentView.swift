@@ -12,28 +12,32 @@ struct ContentView: View {
     @EnvironmentObject var gameService: GameService
 
     var body: some View {
-        switch navigationManager.currentPage {
-        case .login:
-            LoginView()
-                .environmentObject(navigationManager)
-                .environmentObject(gameService)
-        case .signUp:
-            SignUpView()
-                .environmentObject(navigationManager)
-                .environmentObject(gameService)
-        case .mainTab, .settings, .profile:
-            AppTabView(selectedTab: $navigationManager.selectedTab)
-                .environmentObject(navigationManager)
-                .environmentObject(gameService)
-        case .classicGame(let gameData):
-            ClassicGameView(viewModel: ClassicGameViewModel(gameData: gameData))
-                .environmentObject(navigationManager)
-                .environmentObject(gameService)
-        case .timeTrialGame(let gameData):
-            TimeTrialGameView(viewModel: TimeTrialGameViewModel(gameData: gameData))
-                .environmentObject(navigationManager)
-                .environmentObject(gameService)
-        }
+        
+            switch navigationManager.currentPage {
+            case .splash:
+                SplashView()
+                    .environmentObject(navigationManager)
+            case .login:
+                LoginView()
+                    .environmentObject(navigationManager)
+                    .environmentObject(gameService)
+            case .signUp:
+                SignUpView()
+                    .environmentObject(navigationManager)
+                    .environmentObject(gameService)
+            case .mainTab, .settings, .profile:
+                AppTabView(selectedTab: $navigationManager.selectedTab)
+                    .environmentObject(navigationManager)
+                    .environmentObject(gameService)
+            case .classicGame(let gameData):
+                ClassicGameView(viewModel: ClassicGameViewModel(gameData: gameData))
+                    .environmentObject(navigationManager)
+                    .environmentObject(gameService)
+            case .timeTrialGame(let gameData):
+                TimeTrialGameView(viewModel: TimeTrialGameViewModel(gameData: gameData))
+                    .environmentObject(navigationManager)
+                    .environmentObject(gameService)
+            }
     }
 }
 

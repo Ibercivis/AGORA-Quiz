@@ -82,58 +82,65 @@ struct ProfileView: View {
 
     var profileSection: some View {
         VStack(spacing: 16) {
-            HStack {
-                VStack(spacing: 8) {
-                    if let profileImageUrl = viewModel.profileImageUrl, let url = URL(string: profileImageUrl) {
-                        URLImage(url: url)
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .onTapGesture {
-                                self.showActionSheet = true
-                            }
-                    } else {
-                        Image("avatarPlain")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .onTapGesture {
-                                self.showActionSheet = true
-                            }
+            ZStack(alignment: .topTrailing) {
+                HStack {
+                    VStack(spacing: 8) {
+                        if let profileImageUrl = viewModel.profileImageUrl, let url = URL(string: profileImageUrl) {
+                            URLImage(url: url)
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    self.showActionSheet = true
+                                }
+                        } else {
+                            Image("avatarPlain")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    self.showActionSheet = true
+                                }
+                        }
+
+                        Button(action: {
+                            viewModel.logout()
+                        }) {
+                            Text("Logout")
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                                .frame(width: 100, height: 32)
+                                .background(Color.black)
+                                .cornerRadius(16)
+                        }
                     }
 
-                    Button(action: {
-                        viewModel.logout()
-                    }) {
-                        Text("Logout")
-                            .font(.subheadline)
-                            .foregroundColor(.white)
-                            .frame(width: 100, height: 32)
-                            .background(Color.black)
-                            .cornerRadius(16)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("\(viewModel.username)")
+                            .font(.headline)
+
+                        HStack {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                            Text("\(viewModel.totalPoints) Points")
+                                .font(.subheadline)
+                        }
+
+                        HStack {
+                            Image(systemName: "trophy.fill")
+                                .foregroundColor(.blue)
+                            Text("Tester Level")
+                                .font(.subheadline)
+                        }
                     }
+                    .padding(.leading, 16)
+
+                    Spacer()
                 }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("\(viewModel.username)")
-                        .font(.headline)
-
-                    HStack {
-                        Image(systemName: "star.fill")
-                            .foregroundColor(.yellow)
-                        Text("\(viewModel.totalPoints) Points")
-                            .font(.subheadline)
-                    }
-
-                    HStack {
-                        Image(systemName: "trophy.fill")
-                            .foregroundColor(.blue)
-                        Text("Tester Level")
-                            .font(.subheadline)
-                    }
-                }
-                .padding(.leading, 16)
-
-                Spacer()
+                .padding()
+                .background(Color.white)
+                .cornerRadius(12)
+                .shadow(radius: 4)
+                .padding(.horizontal, 16)
                 
                 Button(action: {
                     withAnimation {
@@ -144,13 +151,8 @@ struct ProfileView: View {
                         .foregroundColor(.gray)
                         .padding()
                 }
-                
+                .padding(.trailing, 20)
             }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(12)
-            .shadow(radius: 4)
-            .padding(.horizontal, 16)
         }
         .offset(y: -30)
     }
@@ -182,7 +184,7 @@ struct ProfileView: View {
                 .font(.headline)
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.blue)
+                .background(Color.primaryColor)
                 .foregroundColor(.white)
 
             ForEach(items, id: \.0) { item in

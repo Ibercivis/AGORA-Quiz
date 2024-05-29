@@ -57,8 +57,7 @@ class MainViewModel: ObservableObject {
                 case .finished:
                     break
                 case .failure(let error):
-                    self.toastMessage = self.handleError(error: error)
-                    self.showToast = true
+                    self.showToastWithMessage(self.handleError(error: error))
                 }
             }, receiveValue: { userProfile in
                 DispatchQueue.main.async {

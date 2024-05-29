@@ -16,6 +16,9 @@ struct agoraquizApp: App {
             ContentView()
                 .environmentObject(gameService)
                 .environmentObject(navigationManager)
+                .onAppear{
+                    print("App started, currentPage: \(navigationManager.currentPage)")
+                }
         }
     }
 }

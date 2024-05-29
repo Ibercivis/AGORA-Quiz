@@ -13,24 +13,24 @@ struct MainView: View {
     @StateObject private var viewModel = MainViewModel()
 
     var body: some View {
-            NavigationView {
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        header
-                        userInfo
-                        gameModesSection
-                    }
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    header
+                    userInfo
+                    gameModesSection
                 }
-                .navigationBarTitle("Home", displayMode: .inline)
-                .navigationBarHidden(true)
-                .edgesIgnoringSafeArea(.all)
             }
-            .navigationViewStyle(StackNavigationViewStyle())
-            .toast(isPresented: $viewModel.showToast, message: viewModel.toastMessage)
+            .navigationBarTitle("Home", displayMode: .inline)
+            .navigationBarHidden(true)
+            .edgesIgnoringSafeArea(.all)
+            .background(Color.white)
             .onAppear {
                 viewModel.configure(gameService: gameService, navigationManager: navigationManager)
             }
-        
+            .toast(isPresented: $viewModel.showToast, message: viewModel.toastMessage)
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 
     var header: some View {
@@ -43,7 +43,6 @@ struct MainView: View {
             
             VStack{
                 Spacer()
-                
                 
                 HStack{
                     Spacer()
@@ -74,9 +73,7 @@ struct MainView: View {
                 }
                 
                 Spacer()
-                
             }
-            
         }.edgesIgnoringSafeArea(.all)
     }
 
@@ -128,9 +125,9 @@ struct MainView: View {
                     .foregroundColor(.blue)
                 Text(title)
                     .font(.title3)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.black)
                 Text(subtitle)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.gray)
             }
             .padding()
         }

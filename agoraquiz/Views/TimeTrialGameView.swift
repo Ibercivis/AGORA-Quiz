@@ -17,8 +17,12 @@ struct TimeTrialGameView: View {
             headerView
             Spacer()
             questionTextView
-            Spacer()
-            answerOptionsView
+            ScrollView{
+                answerOptionsView
+                    .padding()
+            }
+            .padding(.top, 20)
+            
             Spacer()
         }
         .navigationBarBackButtonHidden(true)
@@ -114,25 +118,33 @@ struct TimeTrialGameView: View {
 
                 GeometryReader { geometry in
                     HStack {
-                        Text(formatTime(seconds: timeLeft))
-                            .foregroundColor(.white)
-                            .padding(.leading, 36)
-
-                        ProgressBar(value: CGFloat(currentQuestionIndex - 1) / CGFloat(totalQuestions))
-                            .frame(width: geometry.size.width * 0.5, height: 10)
-                            .padding(.horizontal, 4)
-
-                        HStack(spacing: 8) {
+                        HStack {
+                            Text(formatTime(seconds: timeLeft))
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                                .padding(.leading, 24)
+                            Spacer()
+                        }
+                        
+                        HStack {
+                            Spacer()
+                            ProgressBar(value: CGFloat(currentQuestionIndex - 1) / CGFloat(totalQuestions))
+                                .frame(width: geometry.size.width * 0.5, height: 10)
+                                .padding(.horizontal, 4)
+                            Spacer()
+                        }
+                        
+                        HStack {
+                            Spacer()
                             Image(systemName: "checkmark.circle")
                                 .foregroundColor(.green)
-
                             Text("\(correctAnswersCount)")
                                 .foregroundColor(.white)
+                                .padding(.trailing, 24)
                         }
-                        .padding(.trailing, 24)
                     }
                 }
-                .frame(height: 20) // Ajusta según sea necesario
+                .frame(height: 20)
             }
         }
 
@@ -157,7 +169,7 @@ struct TimeTrialGameView: View {
                         .font(.title)
                         .foregroundColor(.white)
                         .padding()
-                    Text("+5 Pts")
+                    Text("+5 secs")
                         .font(.headline)
                         .foregroundColor(.black)
                         .padding([.leading, .trailing], 20)
@@ -183,7 +195,7 @@ struct TimeTrialGameView: View {
                         .font(.title)
                         .foregroundColor(.white)
                         .padding()
-                    Text("-3 Pts")
+                    Text("-3 secs")
                         .font(.headline)
                         .foregroundColor(.black)
                         .padding([.leading, .trailing], 20)

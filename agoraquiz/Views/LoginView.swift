@@ -13,56 +13,76 @@ struct LoginView: View {
     @State private var showResetPassword = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Cabecera con imagen
-            ZStack {
-                Image("headerPrimary")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: UIScreen.main.bounds.width)
-                    .clipped()
-                
-                // Título de la pantalla sobre la cabecera
-                Text("Login")
-                    .font(.largeTitle)
-                    .foregroundColor(.white)
-                    .padding(.top, 20)
-            }
+        ZStack {
+            Color.white
+                .onTapGesture {
+                    UIApplication.shared.endEditing(true)
+                }
             
-            VStack(spacing: 20) {
-                Spacer()
+            VStack(spacing: 0){
+                ZStack {
+                    Image("headerPrimary")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: UIScreen.main.bounds.width)
+                        .clipped()
+                    
+                    Text("Login")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .padding(.top, 20)
+                }
                 
-                CustomTextInput(placeholder: "Username", text: $viewModel.username, systemImage: "person.fill")
-                CustomTextInput(placeholder: "Password", text: $viewModel.password, systemImage: "lock.fill", isSecure: true)
-                
-                HStack(spacing: 20) {
+                VStack(spacing: 20) {
                     Spacer()
                     
-                    Button("Forgot password?") {
-                        showResetPassword.toggle()
-                    }
-                    .foregroundColor(.blue)
+                    Spacer()
                     
-                }.padding(.horizontal)
-                
-                // Botón de login
-                Button("Login") {
-                    viewModel.navigationManager = navigationManager
-                    viewModel.login()
+                    CustomTextInput(placeholder: "Username", text: $viewModel.username, systemImage: "person.fill")
+                    CustomTextInput(placeholder: "Password", text: $viewModel.password, systemImage: "lock.fill", isSecure: true)
+                    
+                    Button("Login") {
+                        viewModel.navigationManager = navigationManager
+                        viewModel.login()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.primaryColor)
+                    .foregroundColor(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.horizontal)
+                    .padding(.top, 10)
+                    
+                    HStack(spacing: 20) {
+                        Spacer()
+                        
+                        Button("Forgot password?") {
+                            showResetPassword.toggle()
+                        }
+                        .foregroundColor(.blue)
+                        
+                    }.padding(.horizontal)
+                    
+                    Spacer()
+                    
+                    Spacer()
+                    
+                    Button("Sign Up") {
+                        navigationManager.currentPage = .signUp
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.horizontal)
+                    
+                    Spacer()
                 }
-                .buttonStyle(FilledButton())
-                .padding(.top, 20)
-                
-                Spacer()
-                
-                // Enlace de navegación a SignUpView
-                Button("Sign Up") {
-                    navigationManager.currentPage = .signUp  // Cambio a SignUpView utilizando NavigationManager
-                }
-                .buttonStyle(FilledButton())
+                .padding()
             }
-            .padding()
         }
+        .background(Color.white)
         .sheet(isPresented: $showResetPassword) {
             ResetPasswordView(gameService: gameService)
                         .environmentObject(gameService)
@@ -74,7 +94,6 @@ struct LoginView: View {
     }
 }
 
-// Vista previa para Xcode
 import SwiftUI
 
 struct LoginView_Previews: PreviewProvider {

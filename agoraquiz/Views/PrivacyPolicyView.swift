@@ -59,12 +59,15 @@ struct PrivacyPolicyView: View {
             }
             
             Text("Privacy Policy")
-                .font(.headline)
                 .padding()
 
             HTMLTextView(htmlContent: privacyPolicyHTML)
                 .frame(height: 300)
                 .padding()
+                .overlay(
+                        RoundedRectangle(cornerRadius: 0)
+                            .stroke(Color.gray, lineWidth: 1)
+                    )
 
             Toggle(isOn: $isAccepted) {
                 Text("I accept the Privacy Policy")
@@ -76,11 +79,11 @@ struct PrivacyPolicyView: View {
                     isPresented = false
                 }
             }) {
-                Text("ACCEPT")
+                Text("SIGN UP")
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(isAccepted ? Color.blue : Color.gray)
+                    .background(isAccepted ? Color.primaryColor : Color.gray)
                     .cornerRadius(8)
             }
             .disabled(!isAccepted)

@@ -12,13 +12,17 @@ struct RankingListView: View {
     let selectedRanking: RankingType
 
     var body: some View {
-        List {
-            if rankingItems.count > 3 {
-                ForEach(3..<rankingItems.count, id: \.self) { index in
-                    RankingListItemView(rank: index + 1, rankingItem: rankingItems[index], selectedRanking: selectedRanking)
+        ZStack{
+            List {
+                if rankingItems.count > 3 {
+                    ForEach(3..<rankingItems.count, id: \.self) { index in
+                        RankingListItemView(rank: index + 1, rankingItem: rankingItems[index], selectedRanking: selectedRanking)
+                    }
                 }
             }
         }
+        .background(Color.white)
+        
     }
 }
 struct RankingListItemView: View {

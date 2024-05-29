@@ -12,24 +12,32 @@ class NavigationManager: ObservableObject {
     @Published var selectedTab: Int = 0
 
     init() {
-        if SessionManager.shared.isLogged {
-            currentPage = .mainTab
-        } else {
-            currentPage = .login
+        print("NavigationManager initialized")
+        currentPage = .splash
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            if SessionManager.shared.isLogged {
+                print("User logged, navigating to main")
+                self.currentPage = .mainTab
+                print(self.currentPage)
+            } else {
+                self.currentPage = .login
+            }
         }
     }
 
     enum Page {
+        case splash
         case login
         case signUp
         case mainTab
         case settings
         case profile
         case classicGame(GameResponse)
-        case timeTrialGame(GameResponse) // Añadir esta línea
+        case timeTrialGame(GameResponse)
     }
 
     func navigateToHome() {
+        print("Navigating to Home")
         currentPage = .mainTab
         selectedTab = 0 // 'Main'
     }

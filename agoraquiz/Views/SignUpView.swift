@@ -14,28 +14,36 @@ struct SignUpView: View {
     @State private var privacyPolicyAccepted = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                header
-                CustomTextInput(placeholder: "Username", text: $viewModel.username, systemImage: "person.fill")
-                CustomTextInput(placeholder: "Email", text: $viewModel.email, systemImage: "envelope.fill")
-                CustomTextInput(placeholder: "Password", text: $viewModel.password, systemImage: "lock.fill", isSecure: true)
-                CustomTextInput(placeholder: "Confirm Password", text: $viewModel.confirmPassword, systemImage: "lock.fill", isSecure: true)
-                if !viewModel.errorMessage.isEmpty {
-                    Text(viewModel.errorMessage)
-                        .foregroundColor(.red)
-                        .padding(.horizontal)
+        ZStack {
+            Color.white
+                .onTapGesture {
+                    UIApplication.shared.endEditing(true)
                 }
-                signUpButton
-                Button("Already have an account? Login") {
-                    navigationManager.currentPage = .login
+            ScrollView{
+                VStack(spacing: 20) {
+                    header
+                    Spacer()
+                    CustomTextInput(placeholder: "Username", text: $viewModel.username, systemImage: "person.fill")
+                    CustomTextInput(placeholder: "Email", text: $viewModel.email, systemImage: "envelope.fill")
+                    CustomTextInput(placeholder: "Password", text: $viewModel.password, systemImage: "lock.fill", isSecure: true)
+                    CustomTextInput(placeholder: "Confirm Password", text: $viewModel.confirmPassword, systemImage: "lock.fill", isSecure: true)
+                    if !viewModel.errorMessage.isEmpty {
+                        Text(viewModel.errorMessage)
+                            .foregroundColor(.red)
+                            .padding(.horizontal)
+                    }
+                    signUpButton
+                    Button("Already have an account? Login") {
+                        navigationManager.currentPage = .login
+                    }
+                    .foregroundColor(.blue)
+                    .padding(.top, 24)
                 }
-                .foregroundColor(.blue)
-                .padding(.top, 24)
+                .padding(.horizontal, 24)
             }
-            .padding(.horizontal, 24)
+            
         }
-        .background(Color(.systemBackground))
+        .background(Color.white)
         .navigationBarTitle("Sign Up", displayMode: .inline)
         .navigationBarBackButtonHidden(true)
         .edgesIgnoringSafeArea(.all)
@@ -72,7 +80,12 @@ struct SignUpView: View {
                 viewModel.errorMessage = ""
             }
         }
-        .buttonStyle(FilledButton())
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.primaryColor)
+        .foregroundColor(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(.horizontal)
         .padding(.top, 24)
     }
 }

@@ -61,9 +61,10 @@ struct SettingsView: View {
                 showEditProfileView()
             }) {
                 HStack {
-                    Image(systemName: "person.crop.circle")
-                        .foregroundColor(.blue)
+                    Image("ic_edit_profile")
+                        .padding(.trailing, 10)
                     Text("Edit Profile")
+                        .foregroundColor(.black)
                     Spacer()
                     Image(systemName: "chevron.right")
                         .foregroundColor(.gray)
@@ -77,9 +78,10 @@ struct SettingsView: View {
                 viewModel.isChangingPassword = true
             }) {
                 HStack {
-                    Image(systemName: "lock.circle")
-                        .foregroundColor(.blue)
+                    Image("ic_change_password")
+                        .padding(.trailing, 10)
                     Text("Change Password")
+                        .foregroundColor(.black)
                     Spacer()
                     Image(systemName: "chevron.right")
                         .foregroundColor(.gray)
@@ -93,9 +95,10 @@ struct SettingsView: View {
                 viewModel.isViewingAboutUs = true
             }) {
                 HStack {
-                    Image(systemName: "info.circle")
-                        .foregroundColor(.blue)
+                    Image("ic_about_us")
+                        .padding(.trailing, 10)
                     Text("About Us")
+                        .foregroundColor(.black)
                     Spacer()
                     Image(systemName: "chevron.right")
                         .foregroundColor(.gray)
@@ -109,9 +112,10 @@ struct SettingsView: View {
                 viewModel.isViewingFAQ = true
             }) {
                 HStack {
-                    Image(systemName: "questionmark.circle")
-                        .foregroundColor(.blue)
+                    Image("ic_faq")
+                        .padding(.trailing, 10)
                     Text("FAQ")
+                        .foregroundColor(.black)
                     Spacer()
                     Image(systemName: "chevron.right")
                         .foregroundColor(.gray)
@@ -126,8 +130,8 @@ struct SettingsView: View {
                 presentationMode.wrappedValue.dismiss()
             }) {
                 HStack {
-                    Image(systemName: "arrow.right.circle")
-                        .foregroundColor(.red)
+                    Image("ic_logout")
+                        .padding(.trailing, 10)
                     Text("Logout")
                         .foregroundColor(.red)
                     Spacer()
@@ -198,16 +202,16 @@ struct SettingsView: View {
                         
                         Spacer()
                         
-                        Button(action: {
+                        Button("Save Changes") {
                             viewModel.updateProfile()
-                        }) {
-                            Text("Save Changes")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(8)
                         }
-                        .padding(.top)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.primaryColor)
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding(.horizontal)
+                        .padding(.top, 10)
                         
                         Spacer()
                         
@@ -252,16 +256,16 @@ struct SettingsView: View {
                         
                         Spacer()
                         
-                        Button(action: {
+                        Button("Submit") {
                             viewModel.submitChangePassword(email: emailForPasswordReset)
-                        }) {
-                            Text("Submit")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(8)
                         }
-                        .padding(.top)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.primaryColor)
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding(.horizontal)
+                        .padding(.top, 10)
                     }
                     .padding()
                 }
@@ -306,11 +310,16 @@ struct SettingsView: View {
                             .foregroundColor(.blue)
                     }
                     Spacer()
+                    
+                }
+                .padding()
+                
+                HStack{
+                    Spacer()
                     Text("FAQ")
                         .font(.headline)
                     Spacer()
                 }
-                .padding()
 
                 FAQView()
             }

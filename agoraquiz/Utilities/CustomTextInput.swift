@@ -17,22 +17,42 @@ struct CustomTextInput: View {
         HStack {
             Image(systemName: systemImage)
                 .foregroundColor(.gray)
-                .padding(.leading, 10)
+                .frame(width: 20, height: 20)
             if isSecure {
-                SecureField(placeholder, text: $text)
+                SecureField("", text: $text)
+                    .placeholder(when: text.isEmpty) {
+                        Text(placeholder).foregroundColor(.gray)
+                    }
+                    .padding(.leading, 10)
                     .foregroundColor(.black)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
             } else {
-                TextField(placeholder, text: $text)
+                TextField("", text: $text)
+                    .placeholder(when: text.isEmpty) {
+                        Text(placeholder).foregroundColor(.gray)
+                    }
+                    .padding(.leading, 10)
                     .foregroundColor(.black)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
             }
         }
         .padding()
-        .background(Color.secondary.opacity(0.2))
+        .background(Color.backgroundButton.opacity(0.2))
         .cornerRadius(10)
         .padding(.horizontal)
+    }
+}
+
+extension View {
+    func placeholder<Content: View>(
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content) -> some View {
+        ZStack(alignment: alignment) {
+            placeholder().opacity(shouldShow ? 1 : 0)
+            self
+        }
     }
 }

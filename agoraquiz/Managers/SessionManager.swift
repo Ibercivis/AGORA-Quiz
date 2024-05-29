@@ -19,6 +19,7 @@ class SessionManager {
     private init() {}
     
     func createLoginSession(username: String, token: String) {
+        print("Creating login session for username: \(username)")
         defaults.set(username, forKey: keyUsername)
         defaults.set(token, forKey: keyToken)
         defaults.set(true, forKey: keyIsLogged)

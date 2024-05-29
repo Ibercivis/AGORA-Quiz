@@ -26,7 +26,18 @@ struct HTMLTextView: UIViewRepresentable {
                 .documentType: NSAttributedString.DocumentType.html,
                 .characterEncoding: String.Encoding.utf8.rawValue
             ]
-            if let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) {
+            if let attributedString = try? NSMutableAttributedString(data: data, options: options, documentAttributes: nil) {
+                let range = NSRange(location: 0, length: attributedString.length)
+                
+                // Enumerar todos los atributos y aplicar la fuente predeterminada de iOS manteniendo otros estilos
+                attributedString.enumerateAttribute(.font, in: range, options: []) { value, range, _ in
+                    if let currentFont = value as? UIFont {
+                        let newFontDescriptor = currentFont.fontDescriptor.withFamily(UIFont.preferredFont(forTextStyle: .body).familyName)
+                        let newFont = UIFont(descriptor: newFontDescriptor, size: 12)
+                        attributedString.addAttribute(.font, value: newFont, range: range)
+                    }
+                }
+                
                 uiView.attributedText = attributedString
             }
         }

@@ -248,12 +248,15 @@ struct AnswerOptionView: View {
         Button(action: action) {
             HStack {
                 Text("\(Character(UnicodeScalar(65 + index)!))")
-                    .font(.title3)
+                    .font(.subheadline)
                     .padding(.horizontal, 8)
                     .foregroundColor(.gray)
                 Text(text)
+                    .font(.subheadline)
                     .padding(.horizontal, 8)
                     .foregroundColor(.black)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
                 Spacer()
             }
             .padding()

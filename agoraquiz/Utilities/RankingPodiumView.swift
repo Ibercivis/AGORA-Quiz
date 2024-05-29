@@ -68,6 +68,8 @@ struct RankingPodiumItemView: View {
                         .frame(width: 60, height: 60)
                 }
                 Text(selectedRanking == .classic ? "\(rankingItem.totalPoints) Pts" : rankingItem.maxTimeTrialTime.formattedTime)
+                    .foregroundColor(.black)
+                    .font(.subheadline)
                     .bold()
                     .padding(4)
                     .background(Color.white)
@@ -76,6 +78,8 @@ struct RankingPodiumItemView: View {
                     .shadow(color: .gray, radius: 2, x: 0, y: 2)
             }
             Text(rankingItem.username)
+                .foregroundColor(.black)
+                .font(.subheadline)
         }
     }
 }

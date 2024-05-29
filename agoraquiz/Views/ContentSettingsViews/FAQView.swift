@@ -59,12 +59,13 @@ struct FAQItemView: View {
                     .foregroundColor(isSelected ? .white : .gray)
             }
             .padding()
-            .background(isSelected ? Color.blue : Color.white)
+            .background(isSelected ? Color.primaryColor : Color.white)
             .cornerRadius(isSelected ? 8 : 8, corners: isSelected ? [.topLeft, .topRight] : .allCorners)
             .shadow(radius: 4)
             
             if isSelected {
                 Text(item.answer)
+                    .font(.subheadline)
                     .padding()
                     .background(Color.white)
                     .cornerRadius(8, corners: [.bottomLeft, .bottomRight])

@@ -14,11 +14,15 @@ struct RankingView: View {
 
     @State private var selectedRanking: RankingType = .classic
 
+    init() {
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
+    }
+    
     var body: some View {
         VStack {
             header
             
-
             if selectedRanking == .classic {
                 RankingPodiumView(rankingItems: $viewModel.classicRanking, selectedRanking: selectedRanking)
                     .padding(.top, 140)
@@ -31,6 +35,7 @@ struct RankingView: View {
             
             Spacer()
         }
+        .background(Color.white)
         .onAppear {
             viewModel.fetchRankings(gameService: gameService)
         }
@@ -49,6 +54,7 @@ struct RankingView: View {
                     .font(.largeTitle)
                     .bold()
                     .foregroundColor(.white)
+                    .padding(.top, 20)
                 
                 Picker("", selection: $selectedRanking) {
                     Text("Classic").tag(RankingType.classic)
@@ -57,7 +63,6 @@ struct RankingView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
             }
-            
         }
     }
 }
