@@ -3,9 +3,11 @@
     <string name="title_home">Home</string>
     <string name="title_ranking">Ranking</string>
     <string name="title_profile">Profile</string>
-    <string name="base_url">http://dev.ibercivis.es:10002</string>
+    <string name="base_url">https://agora.ibercivis.es</string>
 
     <string name="change_password">Enter your email address and you will receive a link to change your password.</string>
+
+    <string name="delete_account">You are one step away from deleting your account along with all its associated statistics and data. Are you sure you want to do this? This action is irreversible.</string>
 
     <string name="about_us_title">About Us</string>
     <string name="agora_project_intro">The Agora Quiz game has been co-designed and co-developed within the AGORA project.</string>

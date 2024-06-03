@@ -306,14 +306,88 @@
             android:id="@+id/saveChangesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="144dp"
-            android:text="Save Changes"
-            android:layout_below="@id/signUpContainer"
+            android:layout_marginTop="48dp"
+            android:text="Save changes"
             android:layout_marginHorizontal="24dp"
             android:background="@drawable/background_login_button"
             android:textColor="@color/content_secondary"
+            android:textAllCaps="false"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/deleteUserButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Delete account"
+            android:layout_marginHorizontal="24dp"
+            android:background="@drawable/background_login_button"
+            android:backgroundTint="@color/semantic_danger"
+            android:textColor="@color/content_secondary"
             android:textAllCaps="false"
-            android:layout_marginBottom="48dp"/>
+            android:layout_marginBottom="32dp"/>
+
+    </LinearLayout>
+
+    <!-- Delete account view -->
+    <LinearLayout
+        android:id="@+id/delete_account_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_edit_profile"
+                android:contentDescription="Edit Profile Icon"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Edit Profile"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/content_primary"
+                android:paddingStart="16dp"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="24dp"
+            android:textColor="@color/content_primary"
+            android:textAlignment="center"
+            android:layout_marginTop="48dp"
+            android:text="@string/delete_account"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/deleteConfirmButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="Yes, I want to delete my account"
+            android:layout_marginHorizontal="24dp"
+            android:background="@drawable/background_login_button"
+            android:backgroundTint="@color/semantic_danger"
+            android:textColor="@color/content_secondary"
+            android:textAllCaps="false"
+            android:layout_marginBottom="32dp"/>
 
     </LinearLayout>
 

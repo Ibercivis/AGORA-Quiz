@@ -75,13 +75,13 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
 
     private View mainView;
     private View editProfileView;
-    private View changePasswordView, aboutUsView, faqView;
+    private View changePasswordView, aboutUsView, faqView, deleteAccountView;
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private ImageView backButton, imgProfile;
     private TextInputEditText usernameEditText;
     private TextInputEditText emailEditText;
-    private AppCompatButton saveChangesButton, submitChangePasswordButton;
+    private AppCompatButton saveChangesButton, submitChangePasswordButton, deleteAccountButton, deleteConfirmButton;
     private String token;
     private RetrofitApiService apiService;
     private String BASE_URL;
@@ -107,12 +107,15 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
         changePasswordView = view.findViewById(R.id.change_password_view);
         aboutUsView = view.findViewById(R.id.about_us_view);
         faqView = view.findViewById(R.id.faq_view);
+        deleteAccountView = view.findViewById(R.id.delete_account_view);
 
         usernameEditText = view.findViewById(R.id.usernameEditText);
         emailEditText = view.findViewById(R.id.emailSignUpEditText);
         saveChangesButton = view.findViewById(R.id.saveChangesButton);
         saveChangesButton = view.findViewById(R.id.saveChangesButton);
         submitChangePasswordButton = view.findViewById(R.id.submitChangePasswordButton);
+        deleteAccountButton = view.findViewById(R.id.deleteUserButton);
+        deleteConfirmButton = view.findViewById(R.id.deleteConfirmButton);
         backButton = view.findViewById(R.id.backButton);
         imgProfile = view.findViewById(R.id.imgProfile);
 
@@ -128,6 +131,7 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
         view.findViewById(R.id.tvAboutUs).setOnClickListener(v -> showAboutUsView());
         view.findViewById(R.id.tvFAQ).setOnClickListener(v -> showFaqView());
         view.findViewById(R.id.tvLogout).setOnClickListener(v -> logOut());
+        view.findViewById(R.id.deleteUserButton).setOnClickListener(v -> showDeleteConfirmAccount());
         setupViewPager();
 
         // Initialize API service and token
@@ -147,6 +151,8 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
 
         // Set submit change password button click listener
         submitChangePasswordButton.setOnClickListener(v -> submitChangePassword());
+
+        deleteConfirmButton.setOnClickListener(v -> deleteUserAccount(token));
 
         return view;
     }
@@ -213,6 +219,13 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
         aboutUsView.setVisibility(View.VISIBLE);
     }
 
+    private void showDeleteConfirmAccount() {
+        mainView.setVisibility(View.GONE);
+        editProfileView.setVisibility(View.GONE);
+        backButton.setVisibility(View.VISIBLE);
+        deleteAccountView.setVisibility(View.VISIBLE);
+    }
+
     private void showFaqView() {
         faqView.setVisibility(View.VISIBLE);
         mainView.setVisibility(View.GONE);
@@ -226,13 +239,13 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
         transaction.commit();
     }
 
-
     private void showMainView() {
         editProfileView.setVisibility(View.GONE);
         backButton.setVisibility(View.GONE);
         changePasswordView.setVisibility(View.GONE);
         aboutUsView.setVisibility(View.GONE);
         faqView.setVisibility(View.GONE);
+        deleteAccountView.setVisibility(View.GONE);
         mainView.setVisibility(View.VISIBLE);
     }
 
@@ -292,6 +305,26 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
         };
 
         Volley.newRequestQueue(this.getActivity()).add(jsonObjectRequest);
+    }
+
+    private void deleteUserAccount(String token) {
+        Call<ResponseBody> call = apiService.deleteUserAccount("Token " + token);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() == 204) {
+                    showToast("User account deleted successfully");
+                    logOut();
+                } else {
+                    showToast("Something goes wrong. Please try again later.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                showToast("Error: " + t.getMessage());
+            }
+        });
     }
 
     private void saveUserProfileChanges() {

@@ -31,4 +31,7 @@ public interface RetrofitApiService {
 
     @PUT("/api/users/profile/update/")
     Call<UserProfile> updateUserProfile(@Header("Authorization") String token, @Body UserProfileUpdateRequest updateRequest);
+
+    @POST("/api/users/delete/")
+    Call<ResponseBody> deleteUserAccount(@Header("Authorization") String token);
 }
