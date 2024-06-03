@@ -107,6 +107,16 @@ class UserUpdateView(generics.UpdateAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@method_decorator(csrf_exempt, name='dispatch')
+class UserDeleteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @method_decorator(csrf_exempt)
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class RankingViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'])
     def get_rankings(self, request):

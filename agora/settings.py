@@ -24,20 +24,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4qngr5=o=(%$fksdfpxgcuyvoa6jfhp1-k3^lsl95rze&axi5^'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['dev.ibercivis.es']
-
 # Environment
 env = environ.Env()
 
 env_file = Path(__file__).resolve().parent / "local.env"
 if env_file.exists():
     environ.Env.read_env(str(env_file))
+
+SECRET_KEY=env("SECRET_KEY")
+DEBUG=env.bool("DEBUG")
+ALLOWED_HOSTS=env.list("ALLOWED_HOSTS")
 
 # For the API
 BASE_URL = env("BASE_URL")
