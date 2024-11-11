@@ -7970,3 +7970,87 @@ django.core.exceptions.ImproperlyConfigured: Set the ALLOWED_HOSTS environment v
 [2024-06-03 09:30:57 +0000] [431340] [INFO] Booting worker with pid: 431340
 [2024-06-03 09:30:57 +0000] [431341] [INFO] Booting worker with pid: 431341
 [2024-06-03 09:30:57 +0000] [431342] [INFO] Booting worker with pid: 431342
+[2024-06-03 15:49:30 +0000] [431340] [INFO] Worker exiting (pid: 431340)
+[2024-06-03 15:49:30 +0000] [431337] [INFO] Handling signal: term
+[2024-06-03 15:49:30 +0000] [431341] [INFO] Worker exiting (pid: 431341)
+[2024-06-03 15:49:30 +0000] [431342] [INFO] Worker exiting (pid: 431342)
+[2024-06-03 15:49:30 +0000] [431337] [ERROR] Worker (pid:431342) was sent SIGTERM!
+[2024-06-03 15:49:30 +0000] [431337] [INFO] Shutting down: Master
+[2024-06-03 15:49:30 +0000] [435063] [INFO] Starting gunicorn 22.0.0
+[2024-06-03 15:49:30 +0000] [435063] [INFO] Listening at: unix:/home/ubuntu/agora-api/agora.sock (435063)
+[2024-06-03 15:49:30 +0000] [435063] [INFO] Using worker: sync
+[2024-06-03 15:49:30 +0000] [435066] [INFO] Booting worker with pid: 435066
+[2024-06-03 15:49:30 +0000] [435067] [INFO] Booting worker with pid: 435067
+[2024-06-03 15:49:30 +0000] [435068] [INFO] Booting worker with pid: 435068
+[2024-06-04 05:52:46 +0000] [435067] [INFO] Worker exiting (pid: 435067)
+[2024-06-04 05:52:46 +0000] [435066] [INFO] Worker exiting (pid: 435066)
+[2024-06-04 05:52:46 +0000] [435068] [INFO] Worker exiting (pid: 435068)
+[2024-06-04 05:52:46 +0000] [435063] [INFO] Handling signal: term
+[2024-06-04 05:52:46 +0000] [435063] [ERROR] Worker (pid:435067) was sent SIGTERM!
+[2024-06-04 05:52:46 +0000] [435063] [ERROR] Worker (pid:435068) was sent SIGTERM!
+[2024-06-04 05:52:46 +0000] [435063] [ERROR] Worker (pid:435066) was sent SIGTERM!
+[2024-06-04 05:52:46 +0000] [435063] [INFO] Shutting down: Master
+[2024-06-04 05:52:46 +0000] [448015] [INFO] Starting gunicorn 22.0.0
+[2024-06-04 05:52:46 +0000] [448015] [INFO] Listening at: unix:/home/ubuntu/agora-api/agora.sock (448015)
+[2024-06-04 05:52:46 +0000] [448015] [INFO] Using worker: sync
+[2024-06-04 05:52:46 +0000] [448018] [INFO] Booting worker with pid: 448018
+[2024-06-04 05:52:46 +0000] [448019] [INFO] Booting worker with pid: 448019
+[2024-06-04 05:52:46 +0000] [448020] [INFO] Booting worker with pid: 448020
+[2024-06-04 06:03:33 +0000] [448020] [INFO] Worker exiting (pid: 448020)
+[2024-06-04 06:03:33 +0000] [448015] [INFO] Handling signal: term
+[2024-06-04 06:03:33 +0000] [448018] [INFO] Worker exiting (pid: 448018)
+[2024-06-04 06:03:33 +0000] [448015] [ERROR] Worker (pid:448020) was sent SIGTERM!
+[2024-06-04 06:03:33 +0000] [448019] [INFO] Worker exiting (pid: 448019)
+[2024-06-04 06:03:34 +0000] [448015] [INFO] Shutting down: Master
+[2024-06-04 06:03:34 +0000] [449701] [INFO] Starting gunicorn 22.0.0
+[2024-06-04 06:03:34 +0000] [449701] [INFO] Listening at: unix:/home/ubuntu/agora-api/agora.sock (449701)
+[2024-06-04 06:03:34 +0000] [449701] [INFO] Using worker: sync
+[2024-06-04 06:03:34 +0000] [449704] [INFO] Booting worker with pid: 449704
+[2024-06-04 06:03:34 +0000] [449705] [INFO] Booting worker with pid: 449705
+[2024-06-04 06:03:34 +0000] [449706] [INFO] Booting worker with pid: 449706
+[2024-09-06 08:21:36 +0000] [449706] [WARNING] Invalid request from ip=: Request Line is too large (7771 > 4094)
+[2024-09-06 11:09:09 +0000] [449706] [WARNING] Invalid request from ip=: Request Line is too large (7775 > 4094)
+[2024-09-06 15:43:58 +0000] [449706] [WARNING] Invalid request from ip=: Request Line is too large (7775 > 4094)
+[2024-09-06 20:42:10 +0000] [449705] [WARNING] Invalid request from ip=: Request Line is too large (7775 > 4094)
+[2024-10-08 15:30:22 +0000] [449704] [INFO] Worker exiting (pid: 449704)
+[2024-10-08 15:30:22 +0000] [449701] [INFO] Handling signal: term
+[2024-10-08 15:30:22 +0000] [449705] [INFO] Worker exiting (pid: 449705)
+[2024-10-08 15:30:22 +0000] [449706] [INFO] Worker exiting (pid: 449706)
+[2024-10-08 15:30:22 +0000] [449701] [ERROR] Worker (pid:449704) was sent SIGTERM!
+[2024-10-08 15:30:22 +0000] [449701] [ERROR] Worker (pid:449705) was sent SIGTERM!
+[2024-10-08 15:30:22 +0000] [449701] [ERROR] Worker (pid:449706) was sent SIGTERM!
+[2024-10-08 15:30:22 +0000] [449701] [INFO] Shutting down: Master
+[2024-10-08 15:30:22 +0000] [3053209] [INFO] Starting gunicorn 22.0.0
+[2024-10-08 15:30:22 +0000] [3053209] [INFO] Listening at: unix:/home/ubuntu/agora-api/agora.sock (3053209)
+[2024-10-08 15:30:22 +0000] [3053209] [INFO] Using worker: sync
+[2024-10-08 15:30:22 +0000] [3053212] [INFO] Booting worker with pid: 3053212
+[2024-10-08 15:30:22 +0000] [3053213] [INFO] Booting worker with pid: 3053213
+[2024-10-08 15:30:22 +0000] [3053214] [INFO] Booting worker with pid: 3053214
+[2024-10-08 15:32:47 +0000] [3053213] [INFO] Worker exiting (pid: 3053213)
+[2024-10-08 15:32:47 +0000] [3053212] [INFO] Worker exiting (pid: 3053212)
+[2024-10-08 15:32:47 +0000] [3053214] [INFO] Worker exiting (pid: 3053214)
+[2024-10-08 15:32:47 +0000] [3053209] [INFO] Handling signal: term
+[2024-10-08 15:32:47 +0000] [3053209] [ERROR] Worker (pid:3053213) was sent SIGTERM!
+[2024-10-08 15:32:47 +0000] [3053209] [ERROR] Worker (pid:3053212) was sent SIGTERM!
+[2024-10-08 15:32:47 +0000] [3053209] [ERROR] Worker (pid:3053214) was sent SIGTERM!
+[2024-10-08 15:32:47 +0000] [3053209] [INFO] Shutting down: Master
+[2024-10-08 15:32:48 +0000] [3053291] [INFO] Starting gunicorn 22.0.0
+[2024-10-08 15:32:48 +0000] [3053291] [INFO] Listening at: unix:/home/ubuntu/agora-api/agora.sock (3053291)
+[2024-10-08 15:32:48 +0000] [3053291] [INFO] Using worker: sync
+[2024-10-08 15:32:48 +0000] [3053293] [INFO] Booting worker with pid: 3053293
+[2024-10-08 15:32:48 +0000] [3053294] [INFO] Booting worker with pid: 3053294
+[2024-10-08 15:32:48 +0000] [3053295] [INFO] Booting worker with pid: 3053295
+[2024-10-08 15:36:17 +0000] [3053294] [INFO] Worker exiting (pid: 3053294)
+[2024-10-08 15:36:17 +0000] [3053293] [INFO] Worker exiting (pid: 3053293)
+[2024-10-08 15:36:17 +0000] [3053295] [INFO] Worker exiting (pid: 3053295)
+[2024-10-08 15:36:17 +0000] [3053291] [INFO] Handling signal: term
+[2024-10-08 15:36:17 +0000] [3053291] [ERROR] Worker (pid:3053294) was sent SIGTERM!
+[2024-10-08 15:36:17 +0000] [3053291] [ERROR] Worker (pid:3053293) was sent SIGTERM!
+[2024-10-08 15:36:17 +0000] [3053291] [ERROR] Worker (pid:3053295) was sent SIGTERM!
+[2024-10-08 15:36:17 +0000] [3053291] [INFO] Shutting down: Master
+[2024-10-08 15:36:17 +0000] [3053370] [INFO] Starting gunicorn 22.0.0
+[2024-10-08 15:36:17 +0000] [3053370] [INFO] Listening at: unix:/home/ubuntu/agora-api/agora.sock (3053370)
+[2024-10-08 15:36:17 +0000] [3053370] [INFO] Using worker: sync
+[2024-10-08 15:36:17 +0000] [3053374] [INFO] Booting worker with pid: 3053374
+[2024-10-08 15:36:17 +0000] [3053375] [INFO] Booting worker with pid: 3053375
+[2024-10-08 15:36:17 +0000] [3053376] [INFO] Booting worker with pid: 3053376

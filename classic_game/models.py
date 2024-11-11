@@ -1,14 +1,24 @@
+# classic_game/models.py
 from django.db import models
 from django.conf import settings
 
 # Create your models here.
 class Question(models.Model):
+    CATEGORY_CHOICES = [
+        ('Climate change fundamentals', 'Climate change fundamentals'),
+        ('Climate change disinformation', 'Climate change disinformation'),
+        ('Climate change communication and narratives', 'Climate change communication and narratives'),
+        ('Media literacy', 'Media literacy'),
+    ]
+
     question_text = models.CharField(max_length=255)
     answer1 = models.CharField(max_length=255)
     answer2 = models.CharField(max_length=255)
     answer3 = models.CharField(max_length=255)
     answer4 = models.CharField(max_length=255)
     correct_answer = models.IntegerField()
+    reference = models.TextField(blank=True, null=True)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
 
 class Game(models.Model):
     STATUS_CHOICES = [
@@ -20,6 +30,7 @@ class Game(models.Model):
     GAME_TYPE_CHOICES = [
         ('classic', 'Classic'),
         ('time_trial', 'Time Trial'),
+        ('category', 'Category'),
     ]
 
     player = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='games', on_delete=models.CASCADE)

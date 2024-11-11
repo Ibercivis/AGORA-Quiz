@@ -1,17 +1,15 @@
+# classic_game/api/views.py
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
 from django.http import Http404
-
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-
 from classic_game.models import Question, Game
 from .serializers import QuestionSerializer, GameSerializer  
 from users.models import UserProfile
-
 import random
 
 
@@ -63,6 +61,31 @@ class GameViewSet(viewsets.ModelViewSet):
         'next_question': QuestionSerializer(next_question).data if next_question else None,
         'current_question_index': 1,
         'correct_answers_count': 0,
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['post'])
+    def start_category_game(self, request, *args, **kwargs):
+        category = request.data.get('category')
+        if category not in [choice[0] for choice in Question.CATEGORY_CHOICES]:
+            return Response({'detail': 'Categoría no válida.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Selecciona preguntas aleatorias solo de la categoría elegida
+        questions = random.sample(list(Question.objects.filter(category=category)), 9)
+        game = Game.objects.create(player=request.user, game_type='category')
+        game.questions.set(questions)
+        game.status = 'in_progress'
+        game.save()
+
+        # Encuentra la primera pregunta
+        next_question = questions[0] if questions else None
+        response_data = {
+            'game': GameSerializer(game).data,
+            'score': game.score,
+            'status': game.status,
+            'next_question': QuestionSerializer(next_question).data if next_question else None,
+            'current_question_index': 1,
+            'correct_answers_count': 0,
         }
         return Response(response_data, status=status.HTTP_200_OK)
 

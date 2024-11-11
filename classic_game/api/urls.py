@@ -1,3 +1,4 @@
+# classic_game/api/urls.py
 from django.urls import path
 from .views import GameViewSet
 
@@ -20,6 +21,12 @@ urlpatterns = [
         'post': 'start_game'
     }), name='game-start'),
 
+    # Ruta para iniciar un juego de categoría
+    path('games/start_category/', GameViewSet.as_view({
+        'post': 'start_category_game'
+    }), name='game-start-category'),
+
+    # Ruta para iniciar un juego contrarreloj
     path('games/start_time_trial/', GameViewSet.as_view({
         'post': 'start_time_trial'
     }), name='game-start-time-trial'),
