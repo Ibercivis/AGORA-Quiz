@@ -11,6 +11,8 @@ struct MainView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @EnvironmentObject var gameService: GameService
     @StateObject private var viewModel = MainViewModel()
+    
+    @State private var isCategorySelectionPresented = false
 
     var body: some View {
         NavigationView {
@@ -29,6 +31,10 @@ struct MainView: View {
                 viewModel.configure(gameService: gameService, navigationManager: navigationManager)
             }
             .toast(isPresented: $viewModel.showToast, message: viewModel.toastMessage)
+            .fullScreenCover(isPresented: $isCategorySelectionPresented) {
+                            CategorySelectionView(onCategorySelected: handleCategorySelected)
+                        }
+            
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
@@ -102,7 +108,7 @@ struct MainView: View {
                     case .timeTrial:
                         viewModel.startNewTimeTrialGame()
                     case .categories:
-                        viewModel.showUnavailableToast()
+                        isCategorySelectionPresented = true
                     case .multiplayer:
                         viewModel.showUnavailableToast()
                     }
@@ -112,6 +118,11 @@ struct MainView: View {
             }
         }
     }
+    
+    private func handleCategorySelected(_ category: String) {
+            // Aquí iniciamos el juego de la categoría seleccionada
+            viewModel.startCategoryGame(with: category)
+        }
 
     struct UserStatView: View {
         var iconName: String

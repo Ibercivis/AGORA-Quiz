@@ -59,6 +59,37 @@ class GameService: ObservableObject {
             .eraseToAnyPublisher()
     }
     
+    func startCategoryGame(category: String) -> AnyPublisher<GameResponse, Error> {
+            guard let url = URL(string: URLs.APIPath.startCategoryGame, relativeTo: URLs.baseURL) else {
+                return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            if let token = SessionManager.shared.token {
+                request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                return Fail(error: NetworkError.noToken).eraseToAnyPublisher()
+            }
+
+            // Añadimos el cuerpo de la solicitud con la categoría seleccionada
+            let parameters: [String: Any] = ["category": category]
+            request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
+
+            return session.dataTaskPublisher(for: request)
+                .tryMap { result -> GameResponse in
+                    guard let httpResponse = result.response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                        throw NetworkError.unexpectedResponse
+                    }
+                    let decoder = JSONDecoder()
+                    return try decoder.decode(GameResponse.self, from: result.data)
+                }
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()
+        }
+    
     func startTimeTrialGame() -> AnyPublisher<GameResponse, Error> {
             guard let url = URL(string: URLs.APIPath.startTimeTrialGame, relativeTo: URLs.baseURL) else {
                 return Fail(error: NetworkError.invalidURL).eraseToAnyPublisher()

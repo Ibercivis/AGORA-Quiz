@@ -8,12 +8,13 @@
 import Foundation
 
 struct URLs {
-    static let baseURL = URL(string: "http://dev.ibercivis.es:10002")!
+    static let baseURL = URL(string: "http://agora.ibercivis.es:10003")!
     
     struct APIPath {
         static let login = "/api/users/authentication/login/"
         static let signUp = "/api/users/registration/"
         static let startGame = "/api/games/start/"
+        static let startCategoryGame = "/api/games/start_category/"
         static let startTimeTrialGame = "/api/games/start_time_trial/"
         static let answerQuestion = "/api/games/%d/answer/"
         static let answerTimeTrialQuestion = "/api/games/%d/answer_time_trial/"

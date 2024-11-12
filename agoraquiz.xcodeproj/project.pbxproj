@@ -53,6 +53,9 @@
 		979BF77A2C0490D80019DEF2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979BF7792C0490D80019DEF2 /* SettingsView.swift */; };
 		97A580632BFA102200F1F836 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A580622BFA102200F1F836 /* ImageLoader.swift */; };
 		97A580652BFA104700F1F836 /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A580642BFA104700F1F836 /* URLImage.swift */; };
+		97BF351D2CE36F9600946B69 /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97BF351C2CE36F9600946B69 /* CategorySelectionView.swift */; };
+		97BF351F2CE39F9100946B69 /* CategoryGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97BF351E2CE39F9100946B69 /* CategoryGameView.swift */; };
+		97BF35212CE39FAC00946B69 /* CategoryGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97BF35202CE39FAC00946B69 /* CategoryGameViewModel.swift */; };
 		97D0A99D2C06F3F800F6A5B5 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D0A99C2C06F3F800F6A5B5 /* SplashView.swift */; };
 		97D0A99F2C06F9E000F6A5B5 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D0A99E2C06F9E000F6A5B5 /* Color.swift */; };
 		97D0A9A12C070AEB00F6A5B5 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D0A9A02C070AEB00F6A5B5 /* UIApplication.swift */; };
@@ -139,6 +142,9 @@
 		979BF7792C0490D80019DEF2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		97A580622BFA102200F1F836 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		97A580642BFA104700F1F836 /* URLImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
+		97BF351C2CE36F9600946B69 /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
+		97BF351E2CE39F9100946B69 /* CategoryGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryGameView.swift; sourceTree = "<group>"; };
+		97BF35202CE39FAC00946B69 /* CategoryGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryGameViewModel.swift; sourceTree = "<group>"; };
 		97D0A99C2C06F3F800F6A5B5 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		97D0A99E2C06F9E000F6A5B5 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		97D0A9A02C070AEB00F6A5B5 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
@@ -346,6 +352,8 @@
 				9757A7442C062655005AAB4C /* ResetPasswordView.swift */,
 				9757A7482C063A6E005AAB4C /* PrivacyPolicyView.swift */,
 				97D0A99C2C06F3F800F6A5B5 /* SplashView.swift */,
+				97BF351C2CE36F9600946B69 /* CategorySelectionView.swift */,
+				97BF351E2CE39F9100946B69 /* CategoryGameView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -361,6 +369,7 @@
 				97DDE6A02BFCE532009BE308 /* TimeTrialGameViewModel.swift */,
 				973945CB2BFE4E2E008F1DB8 /* RankingViewModel.swift */,
 				9757A7462C062FE5005AAB4C /* ResetPasswordViewModel.swift */,
+				97BF35202CE39FAC00946B69 /* CategoryGameViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -585,10 +594,12 @@
 				97D0A99D2C06F3F800F6A5B5 /* SplashView.swift in Sources */,
 				97E9AE642BEA3BCF0057A835 /* LoginViewModel.swift in Sources */,
 				97A580632BFA102200F1F836 /* ImageLoader.swift in Sources */,
+				97BF351D2CE36F9600946B69 /* CategorySelectionView.swift in Sources */,
 				974CE1BB2BF51B50001967B8 /* GameService.swift in Sources */,
 				9757A74B2C063DCE005AAB4C /* HTMLTextView.swift in Sources */,
 				9716CFAE2BF88C2900909484 /* ProfileViewModel.swift in Sources */,
 				97124C982BEB7EC000E65467 /* FilledButton.swift in Sources */,
+				97BF35212CE39FAC00946B69 /* CategoryGameViewModel.swift in Sources */,
 				973945CA2BFE4E12008F1DB8 /* RankingItem.swift in Sources */,
 				974CE1C22BF529DB001967B8 /* Question.swift in Sources */,
 				972983F52BF7AAD0009086AE /* NavigationManager.swift in Sources */,
@@ -624,6 +635,7 @@
 				9757A74D2C064B82005AAB4C /* SignUpResponse.swift in Sources */,
 				97124C962BEB7D8100E65467 /* CustomTextInput.swift in Sources */,
 				97124C912BEB776A00E65467 /* SignUpViewModel.swift in Sources */,
+				97BF351F2CE39F9100946B69 /* CategoryGameView.swift in Sources */,
 				97E9AE362BEA340C0057A835 /* agoraquizApp.swift in Sources */,
 				973945C62BFE4DE4008F1DB8 /* RankingPodiumView.swift in Sources */,
 				970704862BF657E300073C4C /* Toast.swift in Sources */,
@@ -782,6 +794,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;

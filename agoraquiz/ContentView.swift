@@ -37,6 +37,10 @@ struct ContentView: View {
                 TimeTrialGameView(viewModel: TimeTrialGameViewModel(gameData: gameData))
                     .environmentObject(navigationManager)
                     .environmentObject(gameService)
+            case .categoryGame(let gameData):
+                CategoryGameView(viewModel: CategoryGameViewModel(gameData: gameData))
+                    .environmentObject(navigationManager)
+                    .environmentObject(gameService)
             }
     }
 }

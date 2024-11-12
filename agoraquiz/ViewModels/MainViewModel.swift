@@ -85,6 +85,19 @@ class MainViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
+    
+    func startCategoryGame(with category: String) {
+        guard let gameService = gameService, let token = SessionManager.shared.token else { return }
+        gameService.startCategoryGame(category: category)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    self.showToastWithMessage(self.handleError(error: error))
+                }
+            }, receiveValue: { [weak self] gameResponse in
+                self?.navigationManager?.navigateToCategoryGame(gameData: gameResponse)
+            })
+            .store(in: &cancellables)
+    }
 
     func startNewTimeTrialGame() {
         guard let gameService = gameService, let token = SessionManager.shared.token else { return }

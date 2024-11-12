@@ -34,6 +34,7 @@ class NavigationManager: ObservableObject {
         case profile
         case classicGame(GameResponse)
         case timeTrialGame(GameResponse)
+        case categoryGame(GameResponse) 
     }
 
     func navigateToHome() {
@@ -54,6 +55,10 @@ class NavigationManager: ObservableObject {
 
     func navigateToClassicGame(gameData: GameResponse) {
         currentPage = .classicGame(gameData)
+    }
+    
+    func navigateToCategoryGame(gameData: GameResponse) {
+        currentPage = .categoryGame(gameData)
     }
 
     func navigateToTimeTrialGame(gameData: GameResponse) {
