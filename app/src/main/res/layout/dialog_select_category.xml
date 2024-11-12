@@ -1,6 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="24dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Zona del botón de cierre, anclada en la parte superior -->
+    <LinearLayout
+        android:id="@+id/closeZone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_left" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Close"
+            android:textSize="18sp"
+            android:textColor="@color/content_secondary"
+            android:layout_toEndOf="@id/btnClose"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
+
+    <!-- Texto del título de la categoría, centrado horizontalmente y debajo del botón de cierre -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Category"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/content_secondary"
+        android:layout_marginTop="48dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/closeZone" />
+
+    <!-- Contenedor de botones de categorías, centrado verticalmente y anclado debajo del título -->
+    <LinearLayout
+        android:id="@+id/categoryButtonsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/titleText"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="48dp">
+
+        <!-- Botones de selección de categoría -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnClimateFundamentals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/background_primary"
+            app:cardCornerRadius="4dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Climate change fundamentals"
+                android:textSize="16sp"
+                android:textColor="@color/content_primary"
+                android:textAllCaps="false"
+                android:textAlignment="center"
+                android:padding="10dp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnDisinformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/background_primary"
+            app:cardCornerRadius="4dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Climate change disinformation"
+                android:textSize="16sp"
+                android:textColor="@color/content_primary"
+                android:textAllCaps="false"
+                android:textAlignment="center"
+                android:padding="10dp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnCommunication"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/background_primary"
+            app:cardCornerRadius="4dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Climate change communication and narratives"
+                android:textSize="16sp"
+                android:textColor="@color/content_primary"
+                android:textAllCaps="false"
+                android:textAlignment="center"
+                android:padding="10dp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnMediaLiteracy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/background_primary"
+            app:cardCornerRadius="4dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Media literacy"
+                android:textSize="16sp"
+                android:textColor="@color/content_primary"
+                android:textAllCaps="false"
+                android:textAlignment="center"
+                android:padding="10dp" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</RelativeLayout>

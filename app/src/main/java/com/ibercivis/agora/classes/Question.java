@@ -7,14 +7,16 @@ public class Question {
     private String questionText;
     private List<String> answers;
     private int correctAnswer;
+    private String reference;
 
     // Constructor, getters y setters
 
-    public Question(int id, String questionText, List<String> answers, int correctAnswer) {
+    public Question(int id, String questionText, List<String> answers, int correctAnswer, String reference) {
         this.id = id;
         this.questionText = questionText;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
+        this.reference = reference;
     }
 
     public int getId() {
@@ -47,5 +49,13 @@ public class Question {
 
     public void setCorrectAnswer(int correctAnswer) {
         this.correctAnswer = correctAnswer;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 }

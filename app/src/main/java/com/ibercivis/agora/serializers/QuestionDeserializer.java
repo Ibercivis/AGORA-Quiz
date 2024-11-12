@@ -28,9 +28,12 @@ public class QuestionDeserializer implements JsonDeserializer<Question> {
             }
         }
         JsonElement correctAnswerElement = jsonObject.get("correct_answer");
-        int correctAnswer = correctAnswerElement != null ? correctAnswerElement.getAsInt() : -1; // Asegúrate de que este valor predeterminado tenga sentido en tu contexto
+        int correctAnswer = correctAnswerElement != null ? correctAnswerElement.getAsInt() : -1; // Assure that correctAnswer is always a valid index
 
-        return new Question(id, questionText, answers, correctAnswer);
+        String reference = jsonObject.has("reference") && !jsonObject.get("reference").isJsonNull()
+                ? jsonObject.get("reference").getAsString() : "N/A";
+
+        return new Question(id, questionText, answers, correctAnswer, reference);
     }
 }
 

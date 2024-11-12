@@ -48,6 +48,33 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
+    // Iniciar una partida de tipo categoría
+    public void startCategoryGame(String token, String category, final Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("category", category);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/api/games/start_category/",
+                requestBody,
+                listener,
+                errorListener
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Token " + token);
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
     // Iniciar una partida contrarreloj
     public void startTimeTrialGame(String token, final Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(

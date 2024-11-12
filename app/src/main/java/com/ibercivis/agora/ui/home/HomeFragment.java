@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -25,6 +26,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.ibercivis.agora.CategoryGameActivity;
 import com.ibercivis.agora.ClassicGameActivity;
 import com.ibercivis.agora.R;
 import com.ibercivis.agora.SessionManager;
@@ -38,7 +40,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SelectCategoryDialogFragment.OnCategorySelectedListener {
 
     private FragmentHomeBinding binding;
     private String BASE_URL;
@@ -67,7 +69,11 @@ public class HomeFragment extends Fragment {
                 } else if (position == 1) { // Posición 0 para el modo "Time trial"
                     Intent intent = new Intent(getActivity(), TimeTrialGameActivity.class);
                     startActivity(intent);
-                } else {
+                } else if (position == 2) {
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    SelectCategoryDialogFragment dialog = new SelectCategoryDialogFragment();
+                    dialog.show(getChildFragmentManager(), "SelectCategoryDialog");
+                } else if (position == 3) {
                     showToast("Game mode not available yet");
                 }
             }
@@ -163,6 +169,13 @@ public class HomeFragment extends Fragment {
 
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onCategorySelected(String category) {
+        Intent intent = new Intent(getActivity(), CategoryGameActivity.class);
+        intent.putExtra("CATEGORY", category);
+        startActivity(intent);
     }
 
     @Override

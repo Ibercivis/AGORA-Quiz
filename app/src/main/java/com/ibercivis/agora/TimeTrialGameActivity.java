@@ -264,6 +264,9 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
         headerClassic.setVisibility(View.INVISIBLE);
         headerCorrect.setVisibility(View.VISIBLE);
         try {
+            String reference = currentQuestion.getReference();
+            TextView correctReferenceTextView = findViewById(R.id.correctReference);
+            correctReferenceTextView.setText(reference);
             boolean correct = response.getBoolean("correct");
             int score = response.getInt("score");
             String status = response.getString("status");
@@ -289,6 +292,9 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
         headerIncorrect.setVisibility(View.VISIBLE);
 
         try {
+            String reference = currentQuestion.getReference();
+            TextView incorrectReferenceTextView = findViewById(R.id.incorrectReference);
+            incorrectReferenceTextView.setText(reference);
             boolean correct = response.getBoolean("correct");
             int score = response.getInt("score");
             String status = response.getString("status");

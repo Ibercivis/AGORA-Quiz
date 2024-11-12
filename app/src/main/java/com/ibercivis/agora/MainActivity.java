@@ -77,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
                             } else if (gameType.equals("time_trial")) {
                                 // Pasar Extras a TimeTrialGameActivity
                                 intent = new Intent(this, TimeTrialGameActivity.class);
+                            } else if (gameType.equals("category")) {
+                                // Pasar Extras a CategoryGameActivity
+                                intent = new Intent(this, CategoryGameActivity.class);
                             } else {
                                 showToast("Unknown game type in progress.");
                                 return;

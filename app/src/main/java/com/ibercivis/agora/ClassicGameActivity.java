@@ -278,6 +278,9 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
         headerClassic.setVisibility(View.INVISIBLE);
         headerCorrect.setVisibility(View.VISIBLE);
         try {
+            String reference = currentQuestion.getReference();
+            TextView correctReferenceTextView = findViewById(R.id.correctReference);
+            correctReferenceTextView.setText(reference);
             boolean correct = response.getBoolean("correct");
             int score = response.getInt("score");
             String status = response.getString("status");
@@ -307,6 +310,9 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
         headerIncorrect.setVisibility(View.VISIBLE);
 
         try {
+            String reference = currentQuestion.getReference();
+            TextView incorrectReferenceTextView = findViewById(R.id.incorrectReference);
+            incorrectReferenceTextView.setText(reference);
             boolean correct = response.getBoolean("correct");
             int score = response.getInt("score");
             String status = response.getString("status");
