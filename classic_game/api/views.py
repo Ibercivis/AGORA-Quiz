@@ -23,34 +23,33 @@ class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer
 
     def calculate_current_question_index(self, game):
-        # Calcula el índice de la pregunta actual
+        # Calculate the index of the current question
         answered_questions_count = len(game.responses)
-        return answered_questions_count + 1  # +1 ya que el índice debería comenzar desde 1
-
+        return answered_questions_count + 1  # +1 because the index is 1-based
     def calculate_correct_answers_count(self, game):
-        # Cuenta el número de respuestas correctas
+        # Calculate the number of correct answers
         return sum(1 for response in game.responses if response.get('correct', False))
 
     @action(detail=False, methods=['post'])
     def start_game(self, request, *args, **kwargs):
-        # Verificar si ya existe una partida en progreso
+        # Check if there is already a game in progress for the current user
         if Game.objects.filter(player=request.user, status='in_progress').exists():
             return Response({'detail': 'Ya hay una partida en progreso.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Iniciar un nuevo juego con un conjunto aleatorio de preguntas
+        # Select random questions for the game
         questions = random.sample(list(Question.objects.all()), 9)
         game = Game.objects.create(player=request.user)
         game.questions.set(questions)
         game.status = 'in_progress'
         game.save()
-        # Encuentra la próxima pregunta que no ha sido respondida
+        # Find the first question not answered yet
         next_question = None
         for question in game.questions.all():
             if not any(r['question_id'] == question.id for r in game.responses):
                 next_question = question
                 break
         
-        # Actualizar el perfil del usuario
+        # Update the user profile
         profile = UserProfile.objects.get(user=game.player)
         profile.update_on_game_end(abandoned=False)
 
@@ -70,14 +69,14 @@ class GameViewSet(viewsets.ModelViewSet):
         if category not in [choice[0] for choice in Question.CATEGORY_CHOICES]:
             return Response({'detail': 'Categoría no válida.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Selecciona preguntas aleatorias solo de la categoría elegida
+        # Check if there is already a game in progress for the current user
         questions = random.sample(list(Question.objects.filter(category=category)), 9)
         game = Game.objects.create(player=request.user, game_type='category')
         game.questions.set(questions)
         game.status = 'in_progress'
         game.save()
 
-        # Encuentra la primera pregunta
+        # Find the first question not answered yet
         next_question = questions[0] if questions else None
         response_data = {
             'game': GameSerializer(game).data,
@@ -91,19 +90,19 @@ class GameViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def start_time_trial(self, request, *args, **kwargs):
-        # Verificar si ya existe una partida contrarreloj en progreso
+        # Check if there is already a time trial game in progress for the current user
         if Game.objects.filter(player=request.user, status='in_progress', game_type='time_trial').exists():
             return Response({'detail': 'Ya hay una partida contrarreloj en progreso.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Iniciar un nuevo juego contrarreloj con un conjunto aleatorio de preguntas
+        # Start a new time trial game
         questions = random.sample(list(Question.objects.all()), 79)
         game = Game.objects.create(player=request.user, game_type='time_trial')
         game.questions.set(questions)
         game.status = 'in_progress'
-        game.time_left = 60  # Iniciar con 60 segundos
+        game.time_left = 60  # 60 seconds
         game.save()
 
-        # Encuentra la próxima pregunta que no ha sido respondida
+        # Find the first question not answered yet
         next_question = None
         for question in game.questions.all():
             if not any(r['question_id'] == question.id for r in game.responses):
@@ -125,57 +124,57 @@ class GameViewSet(viewsets.ModelViewSet):
     def answer(self, request, pk=None):
         game = self.get_object()
 
-        # Verifica si el juego ya ha sido completado
+        # Check if the game has already been completed
         if game.status == 'completed':
             return Response({'detail': 'Esta partida ya ha sido completada.', 'status': game.status}, status=status.HTTP_400_BAD_REQUEST)
 
         question_id = request.data.get('question_id')
         answer = request.data.get('answer')
 
-        # Verificar si la pregunta ya ha sido respondida
+        # Check if the question has already been answered
         if any(r['question_id'] == question_id for r in game.responses):
             raise ValidationError('Esta pregunta ya ha sido respondida.')
 
-        # Obtener la pregunta y verificar que pertenezca a la partida actual
+        # Get the question and check if it belongs to the current game
         question = get_object_or_404(Question, id=question_id)
         if question not in game.questions.all():
             raise ValidationError('Esta pregunta no pertenece a la partida actual.')
 
-        # Comprobar si la respuesta es correcta
+        # Check if the answer is correct
         correct = (question.correct_answer == int(answer))
         if correct:
-            game.score += 5  # puntos por respuesta correcta
+            game.score += 5  # points for correct answer
         else:
-            game.score -= 3  # puntos por respuesta incorrecta
-        # Actualizar el perfil del usuario
+            game.score -= 3  # points for incorrect answer
+        # Update the user profile
         profile = UserProfile.objects.get(user=game.player)
         profile.update_on_answer(correct=correct)
 
-        # Registrar la respuesta
+        # Register the response
         game.responses.append({'question_id': question_id, 'answer': answer, 'correct': correct})
 
-        # Comprobar si la partida ha finalizado
+        # Check if the game has finished
         game.status = 'completed' if len(game.responses) >= game.questions.count() else 'in_progress'
         game.save()
 
-        # Calcular preguntas restantes
+        # Calculate remaining questions
         remaining_questions = game.questions.exclude(id__in=[r['question_id'] for r in game.responses])
         remaining_questions_data = QuestionSerializer(remaining_questions, many=True).data
 
-        # Encuentra la próxima pregunta que no ha sido respondida
+        # Find the next question not answered yet
         next_question = None
         for question in game.questions.all():
             if not any(r['question_id'] == question.id for r in game.responses):
                 next_question = question
                 break
 
-        # Calcular el índice de la pregunta actual
+        # Calculate the index of the current question
         current_question_index = self.calculate_current_question_index(game)
 
-        # Calcular el número de respuestas acertadas
+        # Calculate the number of correct answers
         correct_answers_count = self.calculate_correct_answers_count(game)
 
-        # Devolver la respuesta
+        # Return the response
         response_data = {
         'correct': correct,
         'score': game.score,
@@ -190,7 +189,7 @@ class GameViewSet(viewsets.ModelViewSet):
     def answer_time_trial(self, request, pk=None):
         game = self.get_object()
 
-        # Verifica si el juego ya ha sido completado
+        # Check if the game has already been completed
         if game.status == 'completed':
             return Response({'detail': 'Esta partida ya ha sido completada.', 'status': game.status}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -198,57 +197,57 @@ class GameViewSet(viewsets.ModelViewSet):
         answer = request.data.get('answer')
         time_left = request.data.get('time_left')
 
-        # Verificar si la pregunta ya ha sido respondida
+        # Check if the question has already been answered
         if any(r['question_id'] == question_id for r in game.responses):
             raise ValidationError('Esta pregunta ya ha sido respondida.')
 
-        # Obtener la pregunta y verificar que pertenezca a la partida actual
+        # Get the question and check if it belongs to the current game
         question = get_object_or_404(Question, id=question_id)
         if question not in game.questions.all():
             raise ValidationError('Esta pregunta no pertenece a la partida actual.')
 
-        # Comprobar si la respuesta es correcta
+        # Check if the answer is correct
         correct = (question.correct_answer == int(answer))
         if correct:
             game.update_on_correct_answer()
         else:
             game.update_on_incorrect_answer()
 
-        # Actualizar el tiempo restante desde el frontend
-        game.time_left = max(0, int(time_left))  # Asegurar que el tiempo no sea negativo
+        # Update the time left
+        game.time_left = max(0, int(time_left))  # Ensure time_left is not negative
 
         # Actualizar el perfil del usuario
         profile = UserProfile.objects.get(user=game.player)
         profile.update_on_answer(correct=correct)
 
-        # Registrar la respuesta
+        # Register the response
         game.responses.append({'question_id': question_id, 'answer': answer, 'correct': correct})
 
-        # Comprobar si la partida ha finalizado
+        # Check if the game has finished
         if game.is_time_over() or len(game.responses) >= game.questions.count():
             game.status = 'completed'
         else:
             game.status = 'in_progress'
         game.save()
 
-        # Calcular preguntas restantes
+        # Calculate remaining questions
         remaining_questions = game.questions.exclude(id__in=[r['question_id'] for r in game.responses])
         remaining_questions_data = QuestionSerializer(remaining_questions, many=True).data
 
-        # Encuentra la próxima pregunta que no ha sido respondida
+        # Find the next question not answered yet
         next_question = None
         for question in game.questions.all():
             if not any(r['question_id'] == question.id for r in game.responses):
                 next_question = question
                 break
 
-        # Calcular el índice de la pregunta actual
+        # Calculate the index of the current question
         current_question_index = self.calculate_current_question_index(game)
 
-        # Calcular el número de respuestas acertadas
+        # Calculate the number of correct answers
         correct_answers_count = self.calculate_correct_answers_count(game)
 
-        # Devolver la respuesta
+        # Return the response
         response_data = {
             'correct': correct,
             'score': game.score,
@@ -263,12 +262,12 @@ class GameViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def resume(self, request):
-        # Busca un juego en progreso para el usuario actual
+        # Search for the game in progress for the current user
         game = Game.objects.filter(player=request.user, status='in_progress').first()
         if not game:
             return Response({'message': 'No hay juego en progreso.'}, status=status.HTTP_200_OK)
 
-        # Encuentra la próxima pregunta que no ha sido respondida
+        # Find the first question not answered yet
         next_question = None
         for question in game.questions.all():
             if not any(r['question_id'] == question.id for r in game.responses):
@@ -279,7 +278,7 @@ class GameViewSet(viewsets.ModelViewSet):
             raise Http404("No hay más preguntas o el juego está completo.")
         
         current_question_index = self.calculate_current_question_index(game)
-        # Calcular el número de respuestas acertadas
+        # Calculate the number of correct answers
         correct_answers_count = self.calculate_correct_answers_count(game)
 
         response_data = {
@@ -310,7 +309,7 @@ class GameViewSet(viewsets.ModelViewSet):
         game.status = 'completed'
         game.save()
 
-        # Actualizar el perfil del usuario
+        # Update the user profile
         profile = UserProfile.objects.get(user=game.player)
         profile.update_on_game_end(abandoned=False)
 
@@ -322,7 +321,7 @@ class GameViewSet(viewsets.ModelViewSet):
         game.status = 'incomplete'
         game.save()
 
-        # Actualizar el perfil del usuario
+        # Update the user profile
         profile = UserProfile.objects.get(user=game.player)
         profile.update_on_game_end(abandoned=True)
 

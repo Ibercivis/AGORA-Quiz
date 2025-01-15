@@ -25,44 +25,44 @@ import re
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CustomConfirmEmailView(ConfirmEmailView):
-    authentication_classes = []  # Deshabilita todas las clases de autenticación
-    permission_classes = [AllowAny]  # Permite el acceso a cualquier usuario, autenticado o no
+    authentication_classes = [] 
+    permission_classes = [AllowAny] 
 
     @method_decorator(csrf_exempt)
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        # Verifica si la confirmación fue exitosa
-        if response.status_code == 302:  # 302 es un código de redirección
+        # Verify if the response is a redirection
+        if response.status_code == 302:  # 302 is the status code for redirection
             return HttpResponse("Confirmación de correo electrónico exitosa.", status=200)
         else:
             return response
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ActivateAccountView(View):
-    authentication_classes = []  # Deshabilita todas las clases de autenticación
-    permission_classes = [AllowAny]  # Permite el acceso a cualquier usuario, autenticado o no
+    authentication_classes = []  
+    permission_classes = [AllowAny]  
 
     @method_decorator(csrf_exempt)
     def get(self, request, key):
-        # Define la URL de la API para la activación
+        # Define the URL to activate the account
         api_url = f'{settings.BASE_URL}/api/users/registration/account-confirm-email/{key}/'.format(key=key)
 
-        # Realiza la llamada POST al servidor para activar la cuenta
+        # Send a POST request to the API to activate the account
         response = requests.post(api_url, data={'key': key})
 
-        # Comprueba la respuesta y muestra un mensaje adecuado al usuario
+        # Check if the account was activated successfully
         if response.status_code == 200:
-            # La cuenta ha sido activada
+            # Account activated successfully
             return render(request, 'activation_success.html')
         else:
-            # Algo salió mal, maneja el error
+            # Account activation failed
             return render(request, 'activation_fail.html', {'error': response.text})
 
 class EmailRecoveryView(View):
     def get(self, request, *args, **kwargs):
         reset_url = request.GET.get('resetUrl', '')
         
-        # Extraer uid y token usando una expresión regular
+        # Extracts the UID and token from the reset URL
         match = re.search(r'reset/confirm/([^/]+)/([^/]+)$', reset_url)
         if match:
             uid = match.group(1)
@@ -121,11 +121,11 @@ class UserDeleteView(APIView):
 class RankingViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'])
     def get_rankings(self, request):
-        # Obtener los 10 mejores jugadores por puntos totales
+        # Obtains the top 10 players by total points
         top_classic_players = UserProfile.objects.order_by('-total_points')[:10]
         classic_rankings = UserRankingSerializer(top_classic_players, many=True).data
 
-        # Obtener los 10 mejores jugadores por mayor tiempo en el modo "Time Trial"
+        # Obtains the top 10 players by max time trial time
         top_time_trial_players = UserProfile.objects.filter(max_time_trial_time__gt=0).order_by('-max_time_trial_time')[:10]
         time_trial_rankings = UserRankingSerializer(top_time_trial_players, many=True).data
 

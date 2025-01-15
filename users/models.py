@@ -27,10 +27,10 @@ class UserProfile(models.Model):
     def update_on_answer(self, correct):
         if correct:
             self.total_correct_answers += 1
-            self.total_points += 5  # Cantidad de puntos por respuesta correcta
+            self.total_points += 5  
         else:
             self.total_incorrect_answers += 1
-            self.total_points -= 3  # Cantidad de puntos por respuesta incorrecta
+            self.total_points -= 3  
         self.save()
 
     def update_max_time_trial_points(self, new_points):

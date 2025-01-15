@@ -27,12 +27,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         profile_image = validated_data.get('profile_image')
-        if profile_image is None:  # Si se recibe un valor None para la imagen de perfil, eliminar la imagen existente.
+        if profile_image is None: # If profile_image is not present in the validated data, existing image will be deleted
             if instance.profile_image:
-                # Eliminar el archivo de imagen del servidor
+                # Delete the image from the storage
                 if default_storage.exists(instance.profile_image.name):
                     default_storage.delete(instance.profile_image.name)
-                # Eliminar la referencia de la imagen del objeto
+                # Delete the image from the instance
                 instance.profile_image = None
         return super().update(instance, validated_data)
 

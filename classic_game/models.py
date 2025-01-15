@@ -2,7 +2,6 @@
 from django.db import models
 from django.conf import settings
 
-# Create your models here.
 class Question(models.Model):
     CATEGORY_CHOICES = [
         ('Climate change fundamentals', 'Climate change fundamentals'),
@@ -38,9 +37,9 @@ class Game(models.Model):
     score = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=11, choices=STATUS_CHOICES, default='in_progress')
-    responses = models.JSONField(default=list)  # Almacena las respuestas como [{'question_id': x, 'answer': y}]
+    responses = models.JSONField(default=list)  # Store the responses of the player as a list of dictionaries
     game_type = models.CharField(max_length=11, choices=GAME_TYPE_CHOICES, default='classic')
-    time_left = models.IntegerField(default=60)  # Tiempo en segundos para la partida contrarreloj
+    time_left = models.IntegerField(default=60)  # Time left in seconds for Time Trial game
     max_time_trial_time = models.IntegerField(default=0)
 
     def update_on_correct_answer(self):
