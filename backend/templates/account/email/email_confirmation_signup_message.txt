@@ -1,0 +1,11 @@
+Welcome to Agora!
+
+We're delighted to welcome you aboard!
+
+Congratulations on signing up for Ágora! We're excited to have you join our global community where you can have fun while learning about climate change misinformation. Ágora is a gamified quiz app that not only educates but also connects you with a worldwide network of learners.
+
+{{ user.username }}, get ready to challenge yourself, debunk myths, and access a wealth of resources as you navigate through quizzes and engage with others. Your journey into understanding and combating climate change misinformation begins here.
+
+To kickstart your adventure, please click in the follow link to activate your account: {{ request.scheme }}://{{ request.get_host }}/api/users/activate-account/{{ key }}
+
+This is an automated email, please do not reply."
