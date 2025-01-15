@@ -75,7 +75,7 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
 
     private View mainView;
     private View editProfileView;
-    private View changePasswordView, aboutUsView, faqView, deleteAccountView;
+    private View changePasswordView, showTutorial, aboutUsView, faqView, deleteAccountView;
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private ImageView backButton, imgProfile;
@@ -105,6 +105,7 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
         mainView = view.findViewById(R.id.main_view);
         editProfileView = view.findViewById(R.id.edit_profile_view);
         changePasswordView = view.findViewById(R.id.change_password_view);
+        showTutorial = view.findViewById(R.id.tvShowTutorial);
         aboutUsView = view.findViewById(R.id.about_us_view);
         faqView = view.findViewById(R.id.faq_view);
         deleteAccountView = view.findViewById(R.id.delete_account_view);
@@ -133,6 +134,11 @@ public class SettingsBottomSheetFragment extends BottomSheetDialogFragment {
         view.findViewById(R.id.tvLogout).setOnClickListener(v -> logOut());
         view.findViewById(R.id.deleteUserButton).setOnClickListener(v -> showDeleteConfirmAccount());
         setupViewPager();
+
+        showTutorial.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), OnboardingActivity.class);
+            startActivity(intent);
+        });
 
         // Initialize API service and token
         BASE_URL = getString(R.string.base_url);

@@ -28,13 +28,13 @@ public class GameService {
         this.BASE_URL = context.getString(R.string.base_url);
     }
 
-    //Iniciar una partida
+    // Start a game
     public void startGame(String token, final Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 BASE_URL + "/api/games/start/",
                 null,
-                listener, // Devuelve la respuesta como cadena
+                listener, // Pass the listener to the request
                 errorListener
         ) {
             @Override
@@ -48,7 +48,7 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
-    // Iniciar una partida de tipo categoría
+    // Start a game with a specific category
     public void startCategoryGame(String token, String category, final Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JSONObject requestBody = new JSONObject();
         try {
@@ -75,7 +75,7 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
-    // Iniciar una partida contrarreloj
+    // Start a time trial game
     public void startTimeTrialGame(String token, final Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
@@ -95,7 +95,7 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
-    //Responder una pregunta
+    // Answer a question
     public void answerQuestion(String token, int gameId, int questionId, int answer, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) throws JSONException {
         JSONObject requestBody = new JSONObject();
         requestBody.put("question_id", questionId);
@@ -119,7 +119,7 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
-    // Responder una pregunta en partida contrarreloj
+    // Answer a time trial question
     public void answerTimeTrialQuestion(String token, int gameId, int questionId, int answer, long timeLeft, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) throws JSONException {
         JSONObject requestBody = new JSONObject();
         requestBody.put("question_id", questionId);
@@ -144,7 +144,7 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
-    // Comprobar si hay una partida en progreso
+    // Check for an in-progress game
     public void checkForInProgressGame(String token, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -164,7 +164,7 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
-    // Finalizar una partida
+    // Finalize a game
     public void finishGame(String token, int gameId, JSONObject params, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
@@ -184,7 +184,7 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
-    //Abandonar una partida
+    // Abandon a game
     public void abandonGame(String token, int gameId, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
@@ -205,6 +205,7 @@ public class GameService {
         requestQueue.add(jsonObjectRequest);
     }
 
+    // Get rankings
     public void getRankings(String token, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,

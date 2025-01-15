@@ -243,7 +243,7 @@ public class CategoryGameActivity extends AppCompatActivity implements PauseDial
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-                }, 2000); // Espera 2 segundos
+                }, 2000); // Wait 2 seconds
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -275,11 +275,11 @@ public class CategoryGameActivity extends AppCompatActivity implements PauseDial
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-                }, 2000); // Espera 2 segundos
+                }, 2000); // Wait 2 seconds
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            // Manage JSON error
+            // Handle JSON error
         }
     }
 
@@ -312,7 +312,7 @@ public class CategoryGameActivity extends AppCompatActivity implements PauseDial
         lastCorrectAnswersCount = currentQuestionIndex;
 
         ValueAnimator animator = ValueAnimator.ofInt(startValue, endValue);
-        animator.setDuration(500); // Duración en milisegundos
+        animator.setDuration(500); // 0.5 seconds
 
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

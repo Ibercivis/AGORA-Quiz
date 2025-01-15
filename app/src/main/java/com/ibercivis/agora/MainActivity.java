@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         new GameService(this).checkForInProgressGame(token, response -> {
             try {
-                if (response.has("game")) {  // Verifica si la respuesta contiene el objeto 'game'
+                if (response.has("game")) {  // Check if the response contains a game object
                     if (response.has("next_question")) {
                         if (response.has("current_question_index")){
                             JSONObject gameJson = response.getJSONObject("game");
@@ -67,18 +67,18 @@ public class MainActivity extends AppCompatActivity {
                             int correctAnswersCount = response.getInt("correct_answers_count");
                             int timeLeftInSeconds = response.getInt("time_left");
 
-                            // Obtener el tipo de juego desde la respuesta JSON
+                            // Obtain the game type from the game object
                             String gameType = gameJson.getString("game_type");
 
                             Intent intent;
                             if (gameType.equals("classic")) {
-                                // Pasar Extras a ClassicGameActivity
+                                // Add extras to ClassicGameActivity
                                 intent = new Intent(this, ClassicGameActivity.class);
                             } else if (gameType.equals("time_trial")) {
-                                // Pasar Extras a TimeTrialGameActivity
+                                // Add extras to TimeTrialGameActivity
                                 intent = new Intent(this, TimeTrialGameActivity.class);
                             } else if (gameType.equals("category")) {
-                                // Pasar Extras a CategoryGameActivity
+                                // Add extras to CategoryGameActivity
                                 intent = new Intent(this, CategoryGameActivity.class);
                             } else {
                                 showToast("Unknown game type in progress.");
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                // Manejar error
+                // Handle the exception
             }
         }, error -> handleError(error));
     }

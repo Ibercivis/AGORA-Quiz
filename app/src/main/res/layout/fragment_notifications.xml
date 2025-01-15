@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.notifications.NotificationsFragment">
 
-    <!-- Header con imagen de fondo, texto y avatar -->
+    <!-- Header -->
     <RelativeLayout
         android:id="@+id/headerContainer"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:gravity="center"
             android:layout_marginEnd="32dp">
 
-            <!-- Texto principal "Ranking" -->
+            <!-- "Ranking" -->
             <TextView
                 android:id="@+id/textViewRankingTitle"
                 android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
 
     </RelativeLayout>
 
-    <!-- Perfil del Usuario -->
+    <!-- User Profile  -->
     <RelativeLayout
         android:id="@+id/profileSection"
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
         android:layout_below="@id/headerContainer"
         android:layout_marginTop="-92dp">
 
-        <!-- Avatar y Nombre de Usuario -->
+        <!-- Avatar and Name -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,8 +80,6 @@
                         android:padding="0dp"
                         android:background="@drawable/background_button_profile"/>
                 </LinearLayout>
-
-
 
                 <TextView
                     android:id="@+id/tvUsername"
@@ -155,7 +153,7 @@
 
     </RelativeLayout>
 
-    <!-- Aquí comienza la definición del ViewPager -->
+    <!-- ViewPager -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -166,7 +164,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Sección de Stats Generales -->
+            <!-- Statistics Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

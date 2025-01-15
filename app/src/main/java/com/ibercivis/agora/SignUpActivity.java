@@ -32,7 +32,7 @@ public class SignUpActivity extends AppCompatActivity implements PrivacyPolicyDi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        // Inicializar TextInputLayouts y botones
+        // Initialize TextInputLayouts and buttons
         usernameSignUpTextInputLayout = findViewById(R.id.usernameSignUpTextInputLayout);
         emailSignUpTextInputLayout = findViewById(R.id.emailSignUpTextInputLayout);
         passwordSignUpTextInputLayout = findViewById(R.id.passwordSignUpTextInputLayout);
@@ -41,15 +41,15 @@ public class SignUpActivity extends AppCompatActivity implements PrivacyPolicyDi
         TextView backToLoginText = findViewById(R.id.backToLoginText);
         Button loginButton = findViewById(R.id.loginButton);
 
-        // Manejar clic del botón de crear cuenta
+        // Handle click on back to login
         createAccountButton.setOnClickListener(view -> {
-            // Obtener los valores ingresados por el usuario
+            // Get the values from the TextInputLayouts
             username = usernameSignUpTextInputLayout.getEditText().getText().toString().trim();
             email = emailSignUpTextInputLayout.getEditText().getText().toString().trim();
             password1 = passwordSignUpTextInputLayout.getEditText().getText().toString();
             password2 = confirmPasswordSignUpTextInputLayout.getEditText().getText().toString();
 
-            // Validar que las entradas no estén vacías y sean correctas
+            // Validate the input fields
             if (username.isEmpty() || !isValidEmail(email) || !arePasswordsValid(password1, password2)) {
                 if (username.isEmpty()) {
                     showErrorToastAndHighlight("Please enter a username", usernameSignUpTextInputLayout);
@@ -61,14 +61,14 @@ public class SignUpActivity extends AppCompatActivity implements PrivacyPolicyDi
                     showErrorToastAndHighlight("Passwords do not match", passwordSignUpTextInputLayout, confirmPasswordSignUpTextInputLayout);
                 }
             } else {
-                // Mostrar el diálogo de la política de privacidad
+                // Show the privacy policy dialog
                 showPrivacyPolicyDialog();
             }
         });
 
-        // Manejar clic en volver al login
+        // Handle click on back to login
         loginButton.setOnClickListener(view -> {
-            // Finalizar esta actividad para volver al Login
+            // Navigate to LoginActivity
             finish();
         });
     }
@@ -84,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity implements PrivacyPolicyDi
     private void showErrorToastAndHighlight(String message, TextInputLayout... layouts) {
         Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_LONG).show();
         for (TextInputLayout layout : layouts) {
-            layout.setError(message); // Esto marca el campo en rojo y muestra el mensaje de error
+            layout.setError(message); // Show the error message
         }
     }
 
@@ -103,19 +103,19 @@ public class SignUpActivity extends AppCompatActivity implements PrivacyPolicyDi
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                // Registro exitoso
+                // Successful registration
                 Toast.makeText(SignUpActivity.this, "Account created. An email to activate the account has been sent to the address provided.", Toast.LENGTH_LONG).show();
-                // Navegar a LoginActivity
+                // Navigate to LoginActivity
                 startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                 finish();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // Registro fallido, muestra el mensaje de error del servidor
-                String errorMessage = "Registration failed"; // Mensaje por defecto
+                // Failed registration, show error message
+                String errorMessage = "Registration failed";
                 if (error.networkResponse != null && error.networkResponse.data != null) {
-                    errorMessage = new String(error.networkResponse.data); // Obtén el mensaje de error del servidor
+                    errorMessage = new String(error.networkResponse.data); // Get the error message from the server
                 }
                 Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_LONG).show();
             }
@@ -141,7 +141,7 @@ public class SignUpActivity extends AppCompatActivity implements PrivacyPolicyDi
 
     @Override
     public void onPrivacyPolicyAccepted() {
-        // El usuario aceptó la política de privacidad, proceder con el registro
+        // Privacy policy accepted, register the new user
         try {
             registerNewUser();
         } catch (JSONException e) {

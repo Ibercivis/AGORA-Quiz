@@ -36,6 +36,8 @@
         <activity android:name=".ClassicGameActivity"></activity>
         <activity android:name=".TimeTrialGameActivity"></activity>
         <activity android:name=".CategoryGameActivity"></activity>
+        <activity android:name=".OnboardingActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

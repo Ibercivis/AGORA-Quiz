@@ -137,18 +137,25 @@ public class LoginActivity extends AppCompatActivity implements RecoveryDialogFr
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                // Autenticación exitosa
+                // Successful login
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
                     String token = jsonResponse.getString("key");
 
-                    // Guarda el nombre de usuario y el token en SessionManager
+                    // Store the token in the session manager
                     sessionManager.createLoginSession(username, token);
 
-                    // Navegar a MainActivity
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish(); // Finaliza LoginActivity
+                    // Check if the user has completed onboarding
+                    if (!sessionManager.isOnboardingCompleted()) {
+                        // Show onboarding screen
+                        Intent onboardingIntent = new Intent(LoginActivity.this, OnboardingActivity.class);
+                        startActivity(onboardingIntent);
+                    } else {
+                        // Show main activity
+                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(mainIntent);
+                    }
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -156,10 +163,10 @@ public class LoginActivity extends AppCompatActivity implements RecoveryDialogFr
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // Autenticación fallida, mostrar mensaje de error
-                String errorMessage = "Login failed"; // Mensaje por defecto
+                // Failed login, show error message
+                String errorMessage = "Login failed"; // Default error message
                 if (error.networkResponse != null && error.networkResponse.data != null) {
-                    errorMessage = new String(error.networkResponse.data); // Obtén el mensaje de error del servidor
+                    errorMessage = new String(error.networkResponse.data); // Get the error message from the server
                 }
                 Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 error.printStackTrace();

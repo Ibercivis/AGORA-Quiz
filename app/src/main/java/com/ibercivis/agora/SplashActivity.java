@@ -21,11 +21,11 @@ public class SplashActivity extends AppCompatActivity {
             String token = sessionManager.getToken();
 
             if (token != null && !token.isEmpty()) {
-                // Navegar a MainActivity
+                // Navigate to MainActivity
                 Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(mainIntent);
             } else {
-                // Navegar a LoginActivity
+                // Navigate to LoginActivity
                 Intent loginIntent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
             }

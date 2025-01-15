@@ -22,7 +22,7 @@ public class GameCompleteDialogFragment extends DialogFragment {
     private static final String ARG_SCORE = "score";
     private GameCompleteDialogListener listener;
 
-    // Añadir un método estático para instanciar el diálogo con el score como argumento
+    // Add a static method to create a new instance of the dialog
     public static GameCompleteDialogFragment newInstance(int score) {
         GameCompleteDialogFragment fragment = new GameCompleteDialogFragment();
         Bundle args = new Bundle();
@@ -38,19 +38,13 @@ public class GameCompleteDialogFragment extends DialogFragment {
         if (dialog != null) {
             Window window = dialog.getWindow();
             if (window != null) {
-                // Ocupar toda la pantalla
                 window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                // Aplicar transparencia al fondo del diálogo
                 window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                // Comprobar si el dispositivo está ejecutando Android 12 o posterior
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    // Configurar el efecto de desenfoque
                     WindowManager.LayoutParams params = window.getAttributes();
                     params.flags |= WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
 
-                    // Aquí puedes ajustar el nivel de desenfoque según tus necesidades
-                    params.setBlurBehindRadius(50); // Ejemplo de radio de desenfoque
-
+                    params.setBlurBehindRadius(50);
                     window.setAttributes(params);
                 } else {
                     window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#B3091968")));
@@ -62,7 +56,7 @@ public class GameCompleteDialogFragment extends DialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        // Asegúrate de que el host implemente la interfaz de callback
+        // Ensure that the host activity has implemented the callback interface
         try {
             listener = (GameCompleteDialogListener) context;
         } catch (ClassCastException e) {
@@ -75,18 +69,18 @@ public class GameCompleteDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        // Inflar y establecer el layout para el diálogo
-        // Pasar null como padre es aceptable porque este layout va en el diálogo
+        // Inflate the layout for this dialog fragment
+        // Pass null as the parent view because its going in the dialog layout
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_complete, null);
 
-        // Configurar los botones y acciones del diálogo
+        // Configurate the buttons
         dialogView.findViewById(R.id.btnQuit).setOnClickListener(v -> {
-            listener.onCompleteGame(); // Llama al método en la actividad cuando se presiona el botón
-            dismiss(); // Cierra el diálogo
+            listener.onCompleteGame(); // Call the interface method
+            dismiss(); // Close the dialog
         });
 
-        // Aquí establecemos el valor del score en el TextView
+        // Set the score in the dialog
         TextView tvPoints = dialogView.findViewById(R.id.tvPoints);
         int score = getArguments().getInt(ARG_SCORE, 0);
         tvPoints.setText(String.valueOf(score));

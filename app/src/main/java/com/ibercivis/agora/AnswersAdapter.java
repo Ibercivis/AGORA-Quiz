@@ -27,11 +27,11 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.AnswerVi
 
     public void setAnswers(String[] newAnswers) {
         this.answers = newAnswers;
-        notifyDataSetChanged();  // Notificar al adaptador que los datos han cambiado
+        notifyDataSetChanged();  // Notify the adapter that the data has changed
     }
 
     public void setAnswerState(int correctAnswer, int selectedAnswer) {
-        this.correctAnswerIndex = correctAnswer - 1; // Restamos 1 para manejar el índice correcto
+        this.correctAnswerIndex = correctAnswer - 1; // Convert to 0-based index
         this.selectedAnswerIndex = selectedAnswer - 1;
         notifyDataSetChanged();
     }
@@ -85,7 +85,7 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.AnswerVi
     }
 
     static class AnswerViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout answerContainer; // Asegúrate de que este es el ID correcto
+        LinearLayout answerContainer; // The parent layout of the answer
         TextView tvAnswerLetter;
         TextView tvAnswerText;
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.DashboardFragment">
 
-    <!-- Header con imagen de fondo, texto y avatar -->
+    <!-- Header -->
     <RelativeLayout
         android:id="@+id/headerContainer"
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="32dp">
 
-            <!-- Texto principal "Ranking" -->
+            <!-- "Ranking" -->
             <TextView
                 android:id="@+id/textViewRankingTitle"
                 android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/content_secondary" />
 
-            <!-- Tabs para cambiar entre "Master" y "Universal" -->
+            <!-- Tabs "Master" y "Universal" -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
 
     </RelativeLayout>
 
-    <!-- Aquí comienza la definición del ViewPager -->
+    <!-- ViewPager -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"

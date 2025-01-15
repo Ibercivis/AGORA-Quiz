@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <!-- Header con imagen de fondo, texto y avatar -->
+    <!-- Header -->
     <RelativeLayout
         android:id="@+id/headerContainer"
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="32dp">
 
-            <!-- Texto principal "Hi user name," -->
+            <!-- "Hi user name," -->
             <TextView
                 android:id="@+id/textViewUserName"
                 android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/content_secondary" />
 
-            <!-- Texto secundario "Great to see you again" -->
+            <!-- "Great to see you again" -->
             <TextView
                 android:id="@+id/textViewWelcomeBack"
                 android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
 
     </RelativeLayout>
 
-    <!-- Información de usuario: nivel y puntos -->
+    <!-- User info -->
     <LinearLayout
         android:id="@+id/userInfoContainer"
         android:layout_width="match_parent"
@@ -64,7 +64,6 @@
         android:gravity="center"
         android:layout_marginTop="16dp">
 
-        <!-- Nivel del usuario -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -91,7 +90,7 @@
                 android:textColor="@color/content_quaternary" />
         </LinearLayout>
 
-        <!-- Puntos del usuario -->
+        <!-- Points -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -120,7 +119,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Lista de modos de juego -->
+    <!-- Game Modes -->
     <TextView
         android:id="@+id/textViewGameModes"
         android:layout_width="wrap_content"

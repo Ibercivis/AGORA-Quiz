@@ -47,8 +47,7 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
     private TextView questionText, timerTextView;
     private AnswersAdapter answersAdapter;
     private ProgressBar progressBar;
-    private TextView questionCount, txtCurrentQuestionIndex;
-    private ImageView checkImage;
+    private TextView questionCount;
     private GameService gameService;
     private int currentGameId;
     private int currentQuestionIndex = 1;
@@ -60,7 +59,7 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
     private Game game;
     private List<Question> remainingQuestions;
     private CountDownTimer countDownTimer;
-    private long timeLeftInMillis = 60000; // 1 minuto en milisegundos
+    private long timeLeftInMillis = 60000; // 1 minute in milliseconds
     private int maxTimeTrialTime = 60;
 
     @Override
@@ -79,11 +78,12 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
         headerCorrect = findViewById(R.id.headerCorrect);
         headerIncorrect = findViewById(R.id.headerIncorrect);
         questionCount = findViewById(R.id.questionCount);
-        txtCurrentQuestionIndex = findViewById(R.id.txtCurrentQuestionIndex);
-        checkImage = findViewById(R.id.checkImage);
         questionText = findViewById(R.id.questionText);
         progressBar = findViewById(R.id.progressBar);
         timerTextView = findViewById(R.id.timerTextView);
+
+        progressBar.setMax((int) timeLeftInMillis); // Time left in milliseconds
+        progressBar.setProgress((int) timeLeftInMillis); // Innitialize progress bar with time left
 
         ImageView closeButton = findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> showPauseDialog());
@@ -104,7 +104,7 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
                 if (nextQuestionJson != null) {
                     Question nextQuestion = gson.fromJson(nextQuestionJson, Question.class);
                     updateUIWithQuestion(nextQuestion, currentQuestionIndex, correctAnswersCount);
-                    startTimer(); // Iniciar el temporizador con el tiempo restante
+                    startTimer(); // Initialize the timer with the remaining time
                 }
             }
         } else {
@@ -145,7 +145,6 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
 
         this.currentQuestionIndex = currentQuestionIndex;
         animateQuestionCount(correctAnswersCount);
-        animateProgressBar(calculateProgress());
         animateQuestionIndex(currentQuestionIndex);
 
         answersAdapter.setAnswerState(-2, -2);
@@ -153,10 +152,6 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
         if (countDownTimer == null) {
             startTimer();
         }
-    }
-
-    private int calculateProgress() {
-        return (int) ((float) (currentQuestionIndex - 1) / totalQuestions * 100);
     }
 
     private void handleError(VolleyError error) {
@@ -219,12 +214,12 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
                 answersAdapter.setAnswerState(currentQuestion.getCorrectAnswer(), currentQuestion.getCorrectAnswer());
                 showCorrectAnswer(response, currentQuestionIndex, correctAnswersCount);
                 maxTimeTrialTime += 5;
-                updateTimer(5000);  // Añadir 5 segundos al tiempo restante
+                updateTimer(5000);  // Add 5 seconds to the remaining time
             } else {
                 answersAdapter.setAnswerState(currentQuestion.getCorrectAnswer(), selectedAnswer);
                 showIncorrectAnswer(response, currentQuestionIndex, correctAnswersCount);
                 maxTimeTrialTime -= 3;
-                updateTimer(-3000);  // Restar 3 segundos al tiempo restante
+                updateTimer(-3000);  // Subtract 3 seconds from the remaining time
             }
 
         } catch (JSONException e) {
@@ -233,11 +228,11 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
     }
 
     private void finishGame() {
-        // Llamar al endpoint finish_game en el servidor
+        // Call the finishGame endpoint to complete the game
         SessionManager sessionManager = new SessionManager(this);
         String token = sessionManager.getToken();
 
-        if (maxTimeTrialTime < 0){ maxTimeTrialTime = 0; } // Asegurar que maxTimeTrialTime no es negativo
+        if (maxTimeTrialTime < 0){ maxTimeTrialTime = 0; } // Ensure that the maxTimeTrialTime is not negative
 
         JSONObject params = new JSONObject();
         try {
@@ -321,6 +316,9 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
             public void onTick(long millisUntilFinished) {
                 timeLeftInMillis = millisUntilFinished;
                 updateCountDownText();
+
+                // Update the progress bar
+                animateProgressBar((int) millisUntilFinished);
             }
 
             @Override
@@ -341,31 +339,34 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
     }
 
     private void updateTimer(long additionalTimeInMillis) {
-        // Cancelar el temporizador actual
+        // Cancel the current timer
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
 
-        // Actualizar el tiempo restante
+        // Update the time left
         timeLeftInMillis += additionalTimeInMillis;
 
-        // Asegurarse de que el tiempo no sea negativo
+        // Ensure that the time left is not negative
         if (timeLeftInMillis < 0) {
             timeLeftInMillis = 0;
         }
 
-        // Iniciar un nuevo temporizador con el tiempo actualizado
+        // Update the progress bar
+        animateProgressBar((int) timeLeftInMillis);
+
+        // Start a new timer with the updated time
         startTimer();
     }
 
     private void endGame() {
-        // Implementa la lógica para finalizar el juego
+        // Call the finishGame endpoint to complete the game
         finishGame();
     }
 
     private void animateProgressBar(int progress) {
         ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), progress);
-        animation.setDuration(500);
+        animation.setDuration(100);
         animation.setInterpolator(new DecelerateInterpolator());
         animation.start();
     }
@@ -395,7 +396,6 @@ public class TimeTrialGameActivity extends AppCompatActivity implements PauseDia
 
         animator.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
-            txtCurrentQuestionIndex.setText(String.format("%d of %d questions", animatedValue, totalQuestions));
         });
 
         animator.start();

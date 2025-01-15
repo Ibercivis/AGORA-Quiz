@@ -63,11 +63,11 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Establece la vista para la actividad del juego "Classic"
+        // Establish the layout for the activity
         setContentView(R.layout.activity_classic_game);
 
         gameService = new GameService(this);
-        // Se crea el array de respuestas y se carga en el adapter
+        // Create a test list of answers for development
         String[] answers = {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
         answersAdapter = new AnswersAdapter(new String[0], this::onAnswerSelected);
 
@@ -75,31 +75,31 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
         answersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         answersRecyclerView.setAdapter(answersAdapter);
 
-        //Localizamos las cabeceras
+        // Localize the header layouts
         headerClassic = findViewById(R.id.headerClassic);
         headerCorrect = findViewById(R.id.headerCorrect);
         headerIncorrect = findViewById(R.id.headerIncorrect);
-        //Localizamos el contador de preguntas
+        // Localize the question count text view
         questionCount = findViewById(R.id.questionCount);
         txtCurrentQuestionIndex = findViewById(R.id.txtCurrentQuestionIndex);
 
-        //Localizamos la imagen que determina si la pregunta anterior ha sido correcta o incorrecta
+        // Localize the check image view
         checkImage = findViewById(R.id.checkImage);
 
-        //Localizamos el texto de la pregunta
+        // Localize the question text view
         questionText = findViewById(R.id.questionText);
 
-        //Localizamos la progressBar
+        // Localize the progress bar
         progressBar = findViewById(R.id.progressBar);
 
-        //Asignamos funcionalidad al botón de cerrar
+        // Assign the click listener to the close button
         ImageView closeButton = findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> {
-            // Mostrar el DialogFragment
+            // Show the pause dialog
             showPauseDialog();
         });
 
-        // Comprobar si hay un objeto game pasado por la actividad anterior
+        // Check if the activity was started with extras
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey("GAME_OBJECT")) {
             Gson gson = new GsonBuilder()
@@ -131,31 +131,31 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
         gameService = new GameService(this);
         gameService.startGame(token, response -> {
             try {
-                if (response.has("game")) {  // Verifica si la respuesta contiene el objeto 'game'
+                if (response.has("game")) {  // Check if the response contains a game object
                     if (response.has("next_question")) {
                         if (response.has("current_question_index")){
-                            // Configurar gson para que utilize el deserializador personalizado para las Question
+                            // Create a new Gson instance with a custom deserializer
                             Gson gson = new GsonBuilder()
                                     .registerTypeAdapter(Question.class, new QuestionDeserializer())
                                     .create();
-                            // Crear la instancia de game desde la respuesta
+                            // Create the game instance from the response
                             game = gson.fromJson(String.valueOf(response.getJSONObject("game")), Game.class);
-                            // Setear el valor de currentGameId
+                            // Set the current game ID
                             currentGameId = game.getId();
-                            // Crear la instancia de nextquestion desde la respuesta
+                            // Create the next question instance from the response
                             Question nextQuestion = gson.fromJson(String.valueOf(response.getJSONObject("next_question")), Question.class);
-                            // Crear la instancia de currentQuestionIndex desde la respuesta (que siempre debería ser = 1)
+                            // Set the current question index
                             int currentQuestionIndex = response.getInt("current_question_index");
-                            // Setear el valor de correctAnswersCount
+                            // Set the correct answers count
                             correctAnswersCount = response.getInt("correct_answers_count");
-                            // Actualizar la interfaz con la siguiente pregunta
+                            // Update the UI with the next question
                             updateUIWithQuestion(nextQuestion, currentQuestionIndex, correctAnswersCount);
                         }
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                // Manejar error
+                // Handle the exception
             }
         }, error -> handleError(error));
     }
@@ -165,14 +165,14 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
         questionText.setText(question.getQuestionText());
         answersAdapter.setAnswers(question.getAnswers().toArray(new String[0]));
 
-        this.currentQuestionIndex = currentQuestionIndex; // Actualiza el índice actual
+        this.currentQuestionIndex = currentQuestionIndex; // Update the current question index
         //questionCount.setText(String.format("%d/%d", currentQuestionIndex, totalQuestions));
         //progressBar.setProgress(calculateProgress());
         animateQuestionCount(correctAnswersCount);
         animateProgressBar(calculateProgress());
         animateQuestionIndex(currentQuestionIndex);
 
-        // Restablecer el estado del adaptador
+        // Reset the answer state
         answersAdapter.setAnswerState(-2, -2);
     }
 
@@ -220,13 +220,13 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
             }, this::handleError);
         } catch (JSONException e) {
             e.printStackTrace();
-            // Manejar error JSON
+            // Handle the exception
         }
     }
 
     private void handleAnswerResponse(JSONObject response) {
-        // Analizar la respuesta y determinar si la respuesta fue correcta o no
-        // También verifica si el juego ha terminado o no
+        // Analyze the response and update the UI accordingly
+        // Also check if the game is completed
         try {
             boolean correct = response.getBoolean("correct");
             int score = response.getInt("score");
@@ -234,10 +234,10 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
             int currentQuestionIndex = response.getInt("current_question_index");
             correctAnswersCount = response.getInt("correct_answers_count");
 
-            // Seteamos el valor de score
+            // Set the score in the game object
             game.setScore(score);
 
-            // Muestra la animación correspondiente basada en si la respuesta es correcta o incorrecta
+            // Update the UI with the correct or incorrect answer
             if (correct) {
                 answersAdapter.setAnswerState(currentQuestion.getCorrectAnswer(), currentQuestion.getCorrectAnswer());
                 showCorrectAnswer(response, currentQuestionIndex, correctAnswersCount);
@@ -248,12 +248,12 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
 
         } catch (JSONException e) {
             e.printStackTrace();
-            // Manejar error JSON
+            // Handle the exception
         }
     }
 
     private void finishGame() {
-        // Mostrar mensaje de finalización y navegar a MainActivity
+        // Show the game complete dialog
         showToast("Game completed!");
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -261,11 +261,11 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
     }
 
     private void loadNextQuestion(JSONObject response, int currentQuestionIndex, int correctAnswersCount) throws JSONException {
-        // Cargar la próxima pregunta del JSON y actualizar la UI
+        // Uploading the next question
         headerCorrect.setVisibility(View.INVISIBLE);
         headerIncorrect.setVisibility(View.INVISIBLE);
         headerClassic.setVisibility(View.VISIBLE);
-        // Suponiendo que el JSON contiene la próxima pregunta
+        // Create a new Gson instance with a custom deserializer
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Question.class, new QuestionDeserializer())
                 .create();
@@ -274,7 +274,7 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
     }
 
     private void showCorrectAnswer(JSONObject response, int currentQuestionIndex, int correctAnswersCount) {
-        // Hacemos invisible la cabecera de pregunta y hacemos visible la cabecera de respuesta correcta
+        // Make the question header invisible and make the correct answer header visible
         headerClassic.setVisibility(View.INVISIBLE);
         headerCorrect.setVisibility(View.VISIBLE);
         try {
@@ -286,26 +286,26 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
             String status = response.getString("status");
 
             if (status.equals("completed")) {
-                // Agrega una pequeña pausa antes de finalizar la partida
-                new Handler().postDelayed(() -> showGameCompleteDialog(), 2000); // Espera 2 segundos
+                // Add a small pause before finishing the game
+                new Handler().postDelayed(() -> showGameCompleteDialog(), 2000); // Wait 2 seconds
             } else {
-                // Agrega una pequeña pausa antes de cargar la siguiente pregunta
+                // Add a small pause before loading the next question
                 new Handler().postDelayed(() -> {
                     try {
                         loadNextQuestion(response, currentQuestionIndex, correctAnswersCount);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-                }, 2000); // Espera 2 segundos
+                }, 2000); // Wait 2 seconds
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            // Manejar error JSON
+            // Handle JSON error
         }
     }
 
     private void showIncorrectAnswer(JSONObject response, int currentQuestionIndex, int correctAnswersCount) {
-        // Hacemos invisible la cabecera de pregunta y hacemos visible la cabecera de respuesta correcta
+        // Make the question header invisible and make the incorrect answer header visible
         headerClassic.setVisibility(View.INVISIBLE);
         headerIncorrect.setVisibility(View.VISIBLE);
 
@@ -318,27 +318,27 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
             String status = response.getString("status");
 
             if (status.equals("completed")) {
-                // Agrega una pequeña pausa antes de finalizar la partida
-                new Handler().postDelayed(() -> showGameCompleteDialog(), 2000); // Espera 2 segundos
+                // Add a small pause before finishing the game
+                new Handler().postDelayed(() -> showGameCompleteDialog(), 2000); // Wait 2 seconds
             } else {
-                // Agrega una pequeña pausa antes de cargar la siguiente pregunta
+                // Add a small pause before loading the next question
                 new Handler().postDelayed(() -> {
                     try {
                         loadNextQuestion(response, currentQuestionIndex, correctAnswersCount);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-                }, 2000); // Espera 2 segundos
+                }, 2000); // Wait 2 seconds
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            // Manejar error JSON
+            // Handle JSON error
         }
     }
 
     private void animateProgressBar(int progress) {
         ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), progress);
-        animation.setDuration(500); // Duración en milisegundos
+        animation.setDuration(500); // Duration 0.5 seconds
         animation.setInterpolator(new DecelerateInterpolator());
         animation.start();
     }
@@ -349,7 +349,7 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
         lastCorrectAnswersCount = currentQuestionIndex;
 
         ValueAnimator animator = ValueAnimator.ofInt(startValue, endValue);
-        animator.setDuration(500); // Duración en milisegundos
+        animator.setDuration(500); // Duration 0.5 seconds
 
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -367,7 +367,7 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
         final int endValue = currentQuestionIndex;
 
         ValueAnimator animator = ValueAnimator.ofInt(startValue, endValue);
-        animator.setDuration(500); // Duración en milisegundos
+        animator.setDuration(500); // Duration 0.5 seconds
 
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -401,19 +401,18 @@ public class ClassicGameActivity extends AppCompatActivity implements PauseDialo
         String token = sessionManager.getToken();
 
         gameService.abandonGame(token, currentGameId, response -> {
-            // Navegar de vuelta a MainActivity una vez que el juego se haya abandonado con éxito
+            // Navigate to MainActivity
             Intent intent = new Intent(ClassicGameActivity.this, MainActivity.class);
             startActivity(intent);
-            finish();  // Finalizar esta actividad para que el usuario no pueda volver a ella presionando atrás
+            finish();  // Close the current activity so the user cannot return to the game
         }, error -> {
-            // Manejar el error, posiblemente mostrar un mensaje al usuario
+            // Handle the error
         });
     }
 
     @Override
     public void onCompleteGame() {
-
-        // Mostrar mensaje de finalización y navegar a MainActivity
+        // Show the game complete dialog and navigate to MainActivity
         showToast("Game completed!");
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

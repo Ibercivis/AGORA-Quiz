@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Cabecera Pregunta -->
+    <!-- Header -->
     <RelativeLayout
         android:id="@+id/headerClassic"
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="24dp">
-            <!-- Botón de cerrar -->
+            <!-- Close Button -->
             <ImageView
                 android:id="@+id/closeButton"
                 android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
                 android:layout_centerVertical="true"
                 />
 
-            <!-- Icono del juego "Classic" -->
+            <!-- Icon -->
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
                 android:layout_centerVertical="true"
                 />
 
-            <!-- Título del juego "Classic" -->
+            <!-- Title -->
             <TextView
                 android:id="@+id/gameTitle"
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
             android:layout_below="@id/titleContainer"
             android:layout_marginTop="24dp">
 
-            <!-- Icono de nivel -->
+            <!-- Icono -->
             <ImageView
                 android:id="@+id/iconLevel"
                 android:layout_width="40dp"
@@ -70,7 +70,7 @@
                 android:layout_centerVertical="true"
                 android:visibility="invisible"/>
 
-            <!-- Barra de progreso -->
+            <!-- Progress Bar -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
             </LinearLayout>
 
 
-            <!-- Contador de preguntas -->
+            <!-- Counter -->
             <ImageView
                 android:id="@+id/checkImage"
                 android:layout_width="20dp"
@@ -127,7 +127,7 @@
 
     </RelativeLayout>
 
-    <!-- Cabecera Respuesta Correcta -->
+    <!-- Correct Answer Header -->
     <RelativeLayout
         android:id="@+id/headerCorrect"
         android:layout_width="match_parent"
@@ -142,7 +142,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!-- Texto que indica "Correct" -->
             <TextView
                 android:id="@+id/correctTitle"
                 android:layout_width="wrap_content"
@@ -199,7 +198,7 @@
 
     </RelativeLayout>
 
-    <!-- Cabecera Respuesta Incorrecta -->
+    <!-- Incorrect Answer Header -->
     <RelativeLayout
         android:id="@+id/headerIncorrect"
         android:layout_width="match_parent"
@@ -214,7 +213,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!-- Texto que indica "Incorrect" -->
             <TextView
                 android:id="@+id/incorrectTitle"
                 android:layout_width="wrap_content"
@@ -270,7 +268,6 @@
 
     </RelativeLayout>
 
-    <!-- Imagen decorativa -->
     <ImageView
         android:id="@+id/decorativeImage"
         android:layout_width="match_parent"
@@ -283,7 +280,7 @@
         android:scaleType="centerCrop"
         android:visibility="gone"/>
 
-    <!-- Texto de la pregunta -->
+    <!-- Question Text -->
     <TextView
         android:id="@+id/questionText"
         android:layout_width="match_parent"
@@ -295,7 +292,7 @@
         android:gravity="center_horizontal"
         android:padding="16dp" />
 
-    <!-- Opciones de respuesta -->
+    <!-- Answer Options -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/answersRecyclerView"
         android:layout_width="match_parent"

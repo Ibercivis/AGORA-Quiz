@@ -3,7 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_ranking">Ranking</string>
     <string name="title_profile">Profile</string>
-    <string name="base_url">http://agora.ibercivis.es:10003</string>
+    <string name="base_url">https://agora.ibercivis.es</string>
 
     <string name="change_password">Enter your email address and you will receive a link to change your password.</string>
 

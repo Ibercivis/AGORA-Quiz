@@ -8,6 +8,7 @@ public class SessionManager {
     private static final String KEY_USERNAME = "username";
     private static final String KEY_TOKEN = "token";
     private static final String IS_LOGGED = "isLogged";
+    private static final String IS_ONBOARDING_COMPLETED = "isOnboardingCompleted";
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private Context context;
@@ -46,6 +47,15 @@ public class SessionManager {
         editor.remove(KEY_TOKEN);
         editor.putBoolean(IS_LOGGED, false);
         editor.commit();
+    }
+
+    public void setOnboardingCompleted(boolean completed) {
+        editor.putBoolean(IS_ONBOARDING_COMPLETED, completed);
+        editor.commit();
+    }
+
+    public boolean isOnboardingCompleted() {
+        return prefs.getBoolean(IS_ONBOARDING_COMPLETED, false);
     }
 }
 

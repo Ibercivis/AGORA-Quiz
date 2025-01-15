@@ -24,7 +24,7 @@ public class QuestionDeserializer implements JsonDeserializer<Question> {
             if (answerElement != null && !answerElement.isJsonNull()) {
                 answers.add(answerElement.getAsString());
             } else {
-                answers.add(null); // O podría ser una cadena vacía
+                answers.add(null); // Could be null if the answer is not present
             }
         }
         JsonElement correctAnswerElement = jsonObject.get("correct_answer");

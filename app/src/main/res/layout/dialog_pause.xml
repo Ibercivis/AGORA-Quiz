@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true">
 
-            <!-- Círculo con la cantidad de puntos -->
+            <!-- Circle with current points -->
             <TextView
                 android:id="@+id/tvPoints"
                 android:layout_width="100dp"
@@ -59,9 +59,6 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="6dp">
 
-
-
-                <!-- Texto de puntos actuales -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -78,7 +75,7 @@
 
         </RelativeLayout>
 
-        <!-- Botón de salir del juego -->
+        <!-- Quit Game Button -->
         <Button
             android:id="@+id/btnQuit"
             android:layout_width="match_parent"
@@ -88,7 +85,7 @@
             android:layout_above="@id/tvConfirm"
             android:layout_marginBottom="16dp" />
 
-        <!-- Mensaje de confirmación -->
+        <!-- Confirmation Message -->
         <TextView
             android:id="@+id/tvConfirm"
             android:layout_width="match_parent"
