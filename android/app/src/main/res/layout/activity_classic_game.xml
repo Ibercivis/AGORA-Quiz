@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Header -->
+    <RelativeLayout
+        android:id="@+id/headerClassic"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="16dp"
+        android:background="@drawable/header_plain">
+
+            <RelativeLayout
+                android:id="@+id/titleContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp">
+                <!-- Close Button -->
+                <ImageView
+                    android:id="@+id/closeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_close_white"
+                    android:contentDescription="Close"
+                    android:padding="16dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    />
+
+                <!-- "Classic" Icon -->
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_classic_title"
+                    android:layout_toStartOf="@id/gameTitle"
+                    android:padding="8dp"
+                    android:layout_centerVertical="true"
+                    />
+
+                <!-- "Classic" Title -->
+                <TextView
+                    android:id="@+id/gameTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Classic"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:textColor="@color/content_secondary"
+                    android:layout_marginStart="8dp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/progressContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleContainer"
+                android:layout_marginTop="24dp">
+
+                    <ImageView
+                        android:id="@+id/iconLevel"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_level_rookie"
+                        android:layout_marginStart="16dp"
+                        android:layout_centerVertical="true"
+                        android:visibility="invisible"/>
+
+                <!-- Progress Bar -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true">
+
+                        <TextView
+                            android:id="@+id/txtCurrentQuestionIndex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1 of 9 questions"
+                            android:textSize="13sp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="6dp"
+                            android:textColor="@color/content_secondary"/>
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:layout_width="156dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/progress_bar_background"
+                            android:indeterminate="false"
+                            android:max="90"
+                            android:maxHeight="10dp"
+                            android:minHeight="10dp"
+                            android:progress="50"
+                            android:progressDrawable="@drawable/progress_bar_progress" />
+
+                </LinearLayout>
+
+
+                    <!-- Counter -->
+                    <ImageView
+                        android:id="@+id/checkImage"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_check_green"
+                        android:layout_marginEnd="8dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/questionCount"/>
+
+                    <TextView
+                        android:id="@+id/questionCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="@color/content_secondary"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="16dp" />
+
+            </RelativeLayout>
+
+    </RelativeLayout>
+
+    <!-- Correct Answer Header -->
+    <RelativeLayout
+        android:id="@+id/headerCorrect"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="16dp"
+        android:background="@drawable/header_correct"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:id="@+id/correctContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/correctTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Correct!"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/content_secondary"
+                android:layout_marginStart="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/correctPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+5 Pts"
+                android:textSize="14sp"
+                android:background="@drawable/background_button_white"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/content_primary"
+                android:layout_below="@id/correctTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/correctPoints">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:textColor="@color/background_primary"
+                    android:text="Reference: "/>
+
+                <TextView
+                    android:id="@+id/correctReference"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:textStyle="italic"
+                    android:textColor="@color/background_primary"
+                    android:maxLength="240"
+                    android:text="N/A"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <!-- Incorrect Answer Header -->
+    <RelativeLayout
+        android:id="@+id/headerIncorrect"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="16dp"
+        android:background="@drawable/header_incorrect"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:id="@+id/incorrectContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/incorrectTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"
+                android:text="Incorrect"
+                android:textColor="@color/content_secondary"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/incorrectPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-3 Pts"
+                android:textSize="14sp"
+                android:background="@drawable/background_button_white"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/content_primary"
+                android:layout_below="@id/incorrectTitle"
+                android:layout_centerHorizontal="true"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/incorrectPoints">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:textColor="@color/background_primary"
+                    android:text="Reference: "/>
+
+                <TextView
+                    android:id="@+id/incorrectReference"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:textStyle="italic"
+                    android:textColor="@color/background_primary"
+                    android:maxLength="240"
+                    android:text="N/A"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/decorativeImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="-20dp"
+        android:background="@drawable/image_frame"
+        android:src="@drawable/image_example"
+        android:layout_below="@id/headerClassic"
+        android:scaleType="centerCrop"
+        android:visibility="gone"/>
+
+    <!-- Question text -->
+    <TextView
+        android:id="@+id/questionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="18sp"
+        android:textColor="@color/content_primary"
+        android:layout_below="@id/decorativeImage"
+        android:gravity="center_horizontal"
+        android:padding="16dp" />
+
+    <!-- Answer options -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/answersRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/questionText"
+        android:paddingTop="16dp"
+        android:paddingBottom="56dp"
+        android:clipToPadding="false" />
+
+</RelativeLayout>

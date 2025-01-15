@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="64dp">
+
+            <!-- FB -->
+            <LinearLayout
+                android:id="@+id/link_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/background_links"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_marginVertical="12dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_facebook"
+                    android:layout_marginStart="12dp"
+                    android:contentDescription="Facebook Icon"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Facebook"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/content_primary"
+                    android:paddingStart="32dp"/>
+            </LinearLayout>
+
+            <!-- X -->
+            <LinearLayout
+                android:id="@+id/link_x"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/background_links"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_marginVertical="12dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_x"
+                    android:layout_marginStart="12dp"
+                    android:contentDescription="X Icon"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="X"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/content_primary"
+                    android:paddingStart="32dp"/>
+            </LinearLayout>
+
+            <!-- Linkedin -->
+            <LinearLayout
+                android:id="@+id/link_linkedin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/background_links"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_marginVertical="12dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_linkedin"
+                    android:layout_marginStart="12dp"
+                    android:contentDescription="X Icon"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Linkedin"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/content_primary"
+                    android:paddingStart="32dp"/>
+            </LinearLayout>
+
+            <!-- Academies -->
+            <LinearLayout
+                android:id="@+id/link_academies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/background_links"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_marginVertical="12dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_academies"
+                    android:layout_marginStart="12dp"
+                    android:contentDescription="Academies Icon"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Academies"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/content_primary"
+                    android:paddingStart="32dp"/>
+            </LinearLayout>
+
+            <!-- Website -->
+            <LinearLayout
+                android:id="@+id/link_website"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/background_links"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_marginVertical="12dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_website"
+                    android:layout_marginStart="12dp"
+                    android:contentDescription="Website Icon"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Website"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/content_primary"
+                    android:paddingStart="32dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

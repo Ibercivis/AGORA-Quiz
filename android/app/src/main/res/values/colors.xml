@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Background Colors -->
+    <color name="background_primary">#FFFFFF</color>
+    <color name="background_secondary">#091968</color>
+    <color name="background_tertiary">#EF006D</color>
+    <color name="background_quaternary">#0F79D8</color>
+    <color name="background_quaternary_transparent">#4D4D71F1</color>
+
+    <!-- Pop-up Colors -->
+    <color name="popup_primary">#4DFFFFFF</color>
+    <color name="popup_secondary">#33000000</color>
+
+    <!-- Content Colors -->
+    <color name="content_primary">#000000</color>
+    <color name="content_secondary">#FFFFFF</color>
+    <color name="content_tertiary">#EF006D</color>
+    <color name="content_quaternary">#7F7F7F</color>
+
+    <!-- Button Colors -->
+    <color name="button_primary">#091968</color>
+    <color name="button_secondary">#FFFFFF</color>
+    <color name="button_tertiary">#FFFFFF</color>
+    <color name="button_stroke">#808080</color>
+
+    <!-- Semantic Colors -->
+    <color name="semantic_warning">#FF8A00</color>
+    <color name="semantic_danger">#EF1A1A</color>
+    <color name="semantic_incorrect">#FA4B4B</color>
+    <color name="semantic_correct">#2C7A31</color>
+    <color name="semantic_info">#4D71F1</color>
+
+    <!-- Semantic Pressed Colors -->
+    <color name="semantic_warning_pressed_light">#D17D50</color>
+    <color name="semantic_warning_pressed_dark">#FFA133</color>
+    <color name="semantic_danger_pressed_light">#F78C8C</color>
+    <color name="semantic_danger_pressed_dark">#FDA5A5</color>
+    <color name="semantic_success_pressed_light">#9AD9BF</color>
+    <color name="semantic_success_pressed_dark">#A9E9CE</color>
+</resources>

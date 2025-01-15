@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp">
+
+        <!-- Texto de la respuesta -->
+        <LinearLayout
+            android:id="@+id/answerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_answer"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/tvAnswerText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="16dp"
+                android:layout_marginStart="12dp"
+                android:textColor="@color/content_primary"
+                android:text="Answer"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <!-- Letra de la respuesta, como A, B, C, D -->
+        <TextView
+            android:id="@+id/tvAnswerLetter"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text="A"
+            android:textColor="@color/content_secondary"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:background="@drawable/background_circle_solid" />
+
+
+    </RelativeLayout>
+</FrameLayout>

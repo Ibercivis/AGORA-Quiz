@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Agora" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/content_primary</item>
+        <item name="colorPrimaryVariant">@color/content_tertiary</item>
+        <item name="colorOnPrimary">@color/content_secondary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/content_secondary</item>
+        <item name="colorSecondaryVariant">@color/content_quaternary</item>
+        <item name="colorOnSecondary">@color/content_primary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+</resources>

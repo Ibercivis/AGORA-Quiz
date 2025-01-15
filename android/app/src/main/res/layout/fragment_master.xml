@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/podium_design"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <!-- Podium background image -->
+        <ImageView
+            android:id="@+id/podiumBackground"
+            android:src="@drawable/podium_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="Podium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="128dp"/>
+
+        <!-- Guidelines for podium steps -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineFirstPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.33" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSecondPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.50" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineThirdPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <!-- First place -->
+        <FrameLayout
+            android:id="@+id/firstPlaceContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="3"
+            app:layout_constraintStart_toEndOf="@+id/secondPlaceContainer"
+            app:layout_constraintEnd_toStartOf="@+id/thirdPlaceContainer"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineFirstPlace"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_bias="0.33">
+        <!-- ImageView for avatar and TextView for username as is -->
+            <!-- MaterialCardView for score as is -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal">
+                <ImageView
+                    android:id="@+id/avatarFirstPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_avatar_ranking_green"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:paddingBottom="4dp"
+                    />
+
+                <TextView
+                    android:id="@+id/usernameFirstPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Empty"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:textColor="@color/content_primary"
+                    />
+            </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/scoreCardFirstPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="24dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="16dp"
+                >
+
+                <TextView
+                    android:id="@+id/scoreFirstPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00 Pts"
+                    android:textStyle="bold"
+                    android:padding="6dp"
+                    android:gravity="center"
+                    android:textColor="@color/content_primary"/>
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
+
+        <!-- Second place -->
+        <FrameLayout
+            android:id="@+id/secondPlaceContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="8dp"
+            app:layout_constraintVertical_weight="3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineSecondPlace"
+            app:layout_constraintEnd_toStartOf="@+id/firstPlaceContainer"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_bias="0.33">
+            <!-- ImageView for avatar and TextView for username as is -->
+            <!-- MaterialCardView for score as is -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal">
+                <ImageView
+                    android:id="@+id/avatarSecondPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_avatar_ranking_yellow"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:paddingBottom="4dp"
+                    />
+
+                <TextView
+                    android:id="@+id/usernameSecondPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Empty"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:textColor="@color/content_primary"
+                    />
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/scoreCardSecondPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="24dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="16dp"
+                >
+
+                <TextView
+                    android:id="@+id/scoreSecondPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00 Pts"
+                    android:textStyle="bold"
+                    android:padding="6dp"
+                    android:gravity="center"
+                    android:textColor="@color/content_primary"/>
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
+
+        <!-- Third place -->
+        <FrameLayout
+            android:id="@+id/thirdPlaceContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineThirdPlace"
+            app:layout_constraintStart_toEndOf="@+id/firstPlaceContainer">
+            <!-- ImageView for avatar and TextView for username as is -->
+            <!-- MaterialCardView for score as is -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal">
+                <ImageView
+                    android:id="@+id/avatarThirdPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_avatar_ranking_orange"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:paddingBottom="4dp"
+                    />
+
+                <TextView
+                    android:id="@+id/usernameThirdPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Empty"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:textColor="@color/content_primary"
+                    />
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/scoreCardThirdPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="24dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="16dp"
+                >
+
+                <TextView
+                    android:id="@+id/scoreThirdPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00 Pts"
+                    android:textStyle="bold"
+                    android:padding="6dp"
+                    android:gravity="center"
+                    android:textColor="@color/content_primary"/>
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/rankingListCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardElevation="60dp"
+        app:cardCornerRadius="16dp"
+        android:layout_below="@id/podium_design">
+    <!-- Ranking list for other users -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rankingRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="56dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="16dp"
+                android:scrollbars="vertical" />
+    </com.google.android.material.card.MaterialCardView>
+</RelativeLayout>
+
