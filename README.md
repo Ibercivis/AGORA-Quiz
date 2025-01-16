@@ -121,6 +121,6 @@ This project is licensed under the **European Union Public License 1.2 (EUPL 1.2
 You can find the full text of the license [here](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12).
 
 ## ✉️ Contact
-For further information or collaboration inquiries, please contact info[a]ibercivis.es
+For further information or collaboration inquiries, please contact development[a]ibercivis.es
 
 Thank you for your interest in AGORA-Quiz! Together, we can counter disinformation and promote climate literacy.
